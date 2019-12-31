@@ -9,6 +9,7 @@ namespace Editors {
     
         private SerializedProperty overwriteTilesetAssets;
         private SerializedProperty overwriteLevelGrid;
+        private SerializedProperty overwriteSpritesheetSlice;
         private SerializedProperty gridX;
         private SerializedProperty gridY;
         private SerializedProperty gridZ;
@@ -16,6 +17,7 @@ namespace Editors {
         private void OnEnable() {
             overwriteTilesetAssets = serializedObject.FindProperty("overwriteTilesetAssets");
             overwriteLevelGrid = serializedObject.FindProperty("overwriteLevelGrid");
+            overwriteSpritesheetSlice = serializedObject.FindProperty("overwriteSpritesheetSlice");
             gridX = serializedObject.FindProperty("gridX");
             gridY = serializedObject.FindProperty("gridY");
             gridZ = serializedObject.FindProperty("gridZ");
@@ -43,6 +45,7 @@ namespace Editors {
                 
             PropertyField(overwriteLevelGrid, new GUIContent("Overwrite Grid"));
             PropertyField(overwriteTilesetAssets, new GUIContent("Overwrite Tiles"));
+            PropertyField(overwriteSpritesheetSlice, new GUIContent("Re-slice Spritesheet"));
         
             DrawLineAndHeader(style, $"<b>Tiled Tilemap JSON Processing - {importer.Json}.json</b>");
         

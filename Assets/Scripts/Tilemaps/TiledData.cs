@@ -2,13 +2,13 @@
 using static Tilemaps.TiledRenderOrder;
 
 public class TiledData {
-    private TiledInfo tiledInfo;
+    private TiledTilemapInfo _tiledTilemapInfo;
 
     [DisableInspectorEdit] 
     private RenderOrder renderOrder;
 
-    public TiledData(TiledInfo tiledInfo) {
-        this.tiledInfo = tiledInfo;
-        this.renderOrder = GetRenderOrder(tiledInfo.renderorder);
+    public TiledData(TiledTilemapInfo tiledTilemapInfo) {
+        this._tiledTilemapInfo = tiledTilemapInfo;
+        this.renderOrder = GetRenderOrder(tiledTilemapInfo.renderorder);
     }
 }

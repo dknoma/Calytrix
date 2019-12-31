@@ -43,8 +43,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9fb758d53163084e92f23433ccfa616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  json: {fileID: 4900000, guid: 4df67b095e446964db0beeec8f8429d1, type: 3}
-  path: Assets/Tilesets/Testing
-  thisPath: Testing
-  tileSets:
-  - {fileID: 0}
+  json: {fileID: 4900000, guid: f2db7adb4503240bfbfab84ce276ce9b, type: 3}
+  spriteCellX: 16
+  spriteCellY: 16
+  gridX: 1
+  gridY: 1
+  gridZ: 0
+  path: Assets/Tilesets/BlueRuins
+  tilesetFolder: BlueRuins
+  renderOrder: 0
+  tilesets:
+  - {fileID: 11400000, guid: a586558a9b5164a1c8165164365cc206, type: 2}
+  overwriteTilesetAssets: 0
+  overwriteLevelGrid: 1
+  overwriteSpritesheetSlice: 0

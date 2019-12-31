@@ -8,7 +8,7 @@ namespace Tilemaps {
     /// Unity class used for holding serialized Tiled JSON tilemap info.
     /// </summary>
     [Serializable]
-    public class TiledInfo {
+    public class TiledTilemapInfo {
         public int compressionlevel;
         public EditorSettings editorsettings;
         public int height;

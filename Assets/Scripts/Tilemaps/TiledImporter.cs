@@ -8,8 +8,9 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using static Tilemaps.TiledInfo;
-using static Tilemaps.TiledInfo.Layer;
+using static Tilemaps.SpriteSlicer;
+using static Tilemaps.TiledTilemapInfo;
+using static Tilemaps.TiledTilemapInfo.Layer;
 using static Tilemaps.TilemapConstants;
 using static Tilemaps.TiledRenderOrder;
 using static Tilemaps.TilesetFileType;
@@ -18,26 +19,29 @@ using Object = UnityEngine.Object;
 
 namespace Tilemaps {
     public class TiledImporter : MonoBehaviour {
+        // Constants
         private const string GRID_NAME = "Level Grid";
         
         [SerializeField] 
         private TextAsset json;
-
+        
+        // Hide these values from the default drawer so the custom inspector can place them in the right place
         [SerializeField] [HideInInspector]
         private int gridX = 1;
         [SerializeField] [HideInInspector]
         private int gridY = 1;
         [SerializeField] [HideInInspector]
-        private int gridZ = 0;
+        private int gridZ;
         
+        // Show the path, but disable editing it
         [SerializeField] [DisableInspectorEdit] 
         private string path;
 
         [SerializeField] [DisableInspectorEdit] 
         private string tilesetFolder;
 
-        // Tiled
-        private TiledInfo tiledInfo;
+        // Tilemap info from Tiled
+        private TiledTilemapInfo tilemapInfo;
         
         [SerializeField] [DisableInspectorEdit] 
         private RenderOrder renderOrder;
@@ -50,6 +54,8 @@ namespace Tilemaps {
         public bool overwriteTilesetAssets;
         [HideInInspector]
         public bool overwriteLevelGrid = true;
+        [HideInInspector]
+        public bool overwriteSpritesheetSlice;
 
         private GameObject grid;
 
@@ -86,12 +92,12 @@ namespace Tilemaps {
         }
         
         private void LoadFromJson() {
-            this.tiledInfo = new TiledInfo();
+            this.tilemapInfo = new TiledTilemapInfo();
             if(json != null) {
-                JsonUtility.FromJsonOverwrite(json.text, tiledInfo);
-                this.renderOrder = GetRenderOrder(tiledInfo.renderorder);
+                JsonUtility.FromJsonOverwrite(json.text, tilemapInfo);
+                this.renderOrder = GetRenderOrder(tilemapInfo.renderorder);
 
-                Debug.Log(tiledInfo);
+                Debug.Log(tilemapInfo);
             } else {
                 Debug.LogError("Something went wrong. JSON file may be invalid");
             }
@@ -101,7 +107,7 @@ namespace Tilemaps {
         /// Build tileset
         /// </summary>
         public void BuildTileset() {
-            if (tiledInfo != null) {
+            if (tilemapInfo != null) {
                 this.grid = GameObject.FindWithTag(ENVIRONMENT_GRID_TAG);
                 if(grid != null && overwriteLevelGrid) {
 #if DEBUG
@@ -115,7 +121,7 @@ namespace Tilemaps {
                     grid = InstantiateNewGrid();
                 }
                 
-                var layers = tiledInfo.layers;
+                var layers = tilemapInfo.layers;
                 foreach(Layer layer in layers) {
                     ProcessLayer(layer);
                 }
@@ -200,6 +206,12 @@ namespace Tilemaps {
             }
         }
         
+        /// <summary>
+        /// Gets the proper TilesetData based off the tiled tileIndex. The tileIndex gets the TilesetData if it fits
+        /// into the right "bucket" of gid values.
+        /// </summary>
+        /// <param name="tileIndex"></param>
+        /// <returns></returns>
         private TilesetData GetTilesetDataFromIndex(int tileIndex) {
             TilesetData res = null;
 
@@ -216,6 +228,14 @@ namespace Tilemaps {
             return res;
         }
 
+        /// <summary>
+        /// Creates a new Tilemap object for the level. Sets the position to the starting points stated in the Tiled
+        /// tilemap.json file. Initializes the Tilemap to have the proper renderer and collider as well.
+        /// </summary>
+        /// <param name="layerName"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private Tilemap NewTilemap(string layerName, int x, int y) {
             GameObject layer = new GameObject(layerName);
             layer.transform.position = new Vector3(x, y, 0);
@@ -228,6 +248,16 @@ namespace Tilemaps {
             return tilemap;
         }
 
+        /// <summary>
+        /// Advance the current offsets of which coordinate on the tilemap to place a Tile. If a coordinate reaches the
+        /// end chunk, the coordinate advances to the next y value and resets the x value to the chunk start x value.
+        /// </summary>
+        /// <param name="initialX"></param>
+        /// <param name="initialY"></param>
+        /// <param name="width"></param>
+        /// <param name="chunkStartX"></param>
+        /// <returns>(x, y, validCoordinates)</returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private (int, int, bool) AdvanceOffsets(int initialX, int initialY, int width, int chunkStartX) {
             int x = initialX;
             int y = initialY;
@@ -269,6 +299,14 @@ namespace Tilemaps {
             return (x, y, validCoordinates);
         }
 
+        /// <summary>
+        /// Checks to see if the current coordinates that a tile is trying to be placed into is valid.
+        /// </summary>
+        /// <param name="chunkStartX"></param>
+        /// <param name="x"></param>
+        /// <param name="width"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private bool ValidateCoordinates(int chunkStartX, int x, int width) {
             bool valid = true;
             switch(renderOrder) {
@@ -307,19 +345,23 @@ namespace Tilemaps {
         /// </summary>
         private void ParseTilesetFiles() {
             this.tilesets = new List<TilesetData>();
-            var tilesetsInfo = tiledInfo.tilesets;
+            var tilesetsInfo = tilemapInfo.tilesets;
             int tilesetCount = tilesetsInfo.Length;
             
             // Create assets for each tileset
             int i = 0;
             foreach (Tileset tileset in tilesetsInfo) {
                 string tilesetSource = tileset.source;
-                TilesetInfo tilesetInfo = ParseFile(FromAbsolutePath(tilesetSource));
+                string absoluteTilesetSource = FromAbsolutePath(tilesetSource);
+                TilesetInfo tilesetInfo = ParseFile(absoluteTilesetSource);
                 
                 string tilesetName = tilesetInfo.name;
-                string tilesetAssetFilePath = GetAssetPath(TILESETS_PATH, tilesetName);
-                string layerName = tiledInfo.layers[i].name;
                 
+                // Get the full path for the tileset ScriptableObject asset
+                string tilesetAssetFilePath = GetAssetPath(TILESETS_PATH, tilesetName);
+                string layerName = tilemapInfo.layers[i].name;
+                
+                // Check if tileset exists
                 bool tilesetAssetExists = TilesetDataExists(tilesetAssetFilePath);
                 Debug.LogFormat($"{tilesetAssetFilePath} exists = {tilesetAssetExists}");
                 
@@ -328,6 +370,11 @@ namespace Tilemaps {
                     AddExistingTilesetDataAsset(tilesetAssetFilePath);
                 } else {
                     string sheetPath = FromAbsolutePath(tilesetInfo.image);
+                
+                    // If re-slicing sheet, get dimensions via the tileset.json
+                    if(overwriteSpritesheetSlice) {
+                        SliceSprite(sheetPath, tilesetInfo.tilewidth, tilesetInfo.tileheight);
+                    }
 #if DEBUG
                     Debug.LogFormat("sheetPath [{0}]", sheetPath);
 #endif
@@ -336,6 +383,7 @@ namespace Tilemaps {
                     asset.name = layerName;
                     asset.firstGid = tileset.firstgid;
 
+                    // Only overwrite lastGid if more than one tileset. Else default of int.MAX
                     if(tilesetCount > i + 1) {
                         asset.lastGid = tilesetsInfo[i + 1].firstgid - 1;
                     }
@@ -369,6 +417,11 @@ namespace Tilemaps {
             return tilesetInfo;
         }
 
+        /// <summary>
+        /// Read the text from the file at the path into JSON format, then convert that into TilesetInfo
+        /// </summary>
+        /// <param name="sourcePath"></param>
+        /// <returns></returns>
         private static TilesetInfo ParseJson(string sourcePath) {
             string json;
             using(TextReader reader = new StreamReader(sourcePath)) {
@@ -378,10 +431,19 @@ namespace Tilemaps {
             return JsonUtility.FromJson<TilesetInfo>(json);
         }
         
+        /// <summary>
+        /// Check if the asset exists at this path
+        /// </summary>
+        /// <param name="tilesetAssetFilePath"></param>
+        /// <returns></returns>
         private static bool TilesetDataExists(string tilesetAssetFilePath) {
             return File.Exists(tilesetAssetFilePath);
         }
 
+        /// <summary>
+        /// Adds this tileset asset into the list for import
+        /// </summary>
+        /// <param name="filePath"></param>
         private void AddExistingTilesetDataAsset(string filePath) {
             TilesetData tilesetAsset = AssetDatabase.LoadAssetAtPath<TilesetData>(filePath);
     
@@ -452,6 +514,11 @@ namespace Tilemaps {
             asset.tilePrefabs.Add(tile);
         }
         
+        /// <summary>
+        /// Create the Tile assets
+        /// </summary>
+        /// <param name="sprite"></param>
+        /// <returns></returns>
         private static Tile CreateTileAssets(Sprite sprite) {
             Tile tile = ScriptableObject.CreateInstance<Tile>();
             tile.sprite = sprite;
