@@ -151,7 +151,6 @@ namespace Tilemaps {
             Tilemap tilemap = NewTilemap(layerName, layerX, layerY);
             
             // Get 
-//            TilesetData tilesetData = tilesets[id - 1];
             var chunks = layer.chunks;
             
             foreach(Chunk chunk in chunks) {
