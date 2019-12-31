@@ -1,0 +1,14 @@
+{ "columns":16,
+ "image":"blue_ruins.png",
+ "imageheight":64,
+ "imagewidth":256,
+ "margin":0,
+ "name":"ruins_tileset",
+ "spacing":0,
+ "tilecount":64,
+ "tiledversion":"2019.04.25",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":1.2
+}
