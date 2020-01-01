@@ -25,14 +25,17 @@ namespace Characters.Allies {
 		protected override void ComputeVelocity() {
 			Vector2 move = Vector2.zero;
 
-			move.x = ControllerInputManager.OSX() ? -Input.GetAxisRaw(ControllerInputManager.Horizontal()) : 
-				         Input.GetAxisRaw(ControllerInputManager.Horizontal());
+//			move.x = ControllerInputManager.OSX() ? -Input.GetAxisRaw(ControllerInputManager.Horizontal()) : 
+//				         Input.GetAxisRaw(ControllerInputManager.Horizontal());
+			move.x = Input.GetAxisRaw(ControllerInputManager.Horizontal());
 
 			if(Input.GetButtonDown(JUMP_INPUT_NAME) && IsGrounded(state)) {
 				velocity.y = jumpTakeOffSpeed;
+				this.state = Jumping();
 			} else if(Input.GetButtonUp(JUMP_INPUT_NAME)) {
 				if(velocity.y > 0) {
 					velocity.y = velocity.y * 0.5f;
+					this.state = Falling();
 				}
 			}
 
