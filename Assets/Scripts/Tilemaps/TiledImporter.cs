@@ -9,8 +9,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static Tilemaps.SpriteSlicer;
-using static Tilemaps.TiledTilemapInfo;
-using static Tilemaps.TiledTilemapInfo.Layer;
+using static Tilemaps.TiledTilemapJsonInfo;
+using static Tilemaps.TiledTilemapJsonInfo.Layer;
 using static Tilemaps.TilemapConstants;
 using static Tilemaps.TiledRenderOrder;
 using static Tilemaps.TilesetFileType;
@@ -41,7 +41,7 @@ namespace Tilemaps {
         private string tilesetFolder;
 
         // Tilemap info from Tiled
-        private TiledTilemapInfo tilemapInfo;
+        private TiledTilemapJsonInfo tilemapJsonInfo;
         
         [SerializeField] [DisableInspectorEdit] 
         private RenderOrder renderOrder;
@@ -92,12 +92,12 @@ namespace Tilemaps {
         }
         
         private void LoadFromJson() {
-            this.tilemapInfo = new TiledTilemapInfo();
+            this.tilemapJsonInfo = new TiledTilemapJsonInfo();
             if(json != null) {
-                JsonUtility.FromJsonOverwrite(json.text, tilemapInfo);
-                this.renderOrder = GetRenderOrder(tilemapInfo.renderorder);
+                JsonUtility.FromJsonOverwrite(json.text, tilemapJsonInfo);
+                this.renderOrder = GetRenderOrder(tilemapJsonInfo.renderorder);
 
-                Debug.Log(tilemapInfo);
+                Debug.Log(tilemapJsonInfo);
             } else {
                 Debug.LogError("Something went wrong. JSON file may be invalid");
             }
@@ -107,7 +107,7 @@ namespace Tilemaps {
         /// Build tileset
         /// </summary>
         public void BuildTileset() {
-            if (tilemapInfo != null) {
+            if (tilemapJsonInfo != null) {
                 this.grid = GameObject.FindWithTag(ENVIRONMENT_GRID_TAG);
                 if(grid != null && overwriteLevelGrid) {
 #if DEBUG
@@ -121,7 +121,7 @@ namespace Tilemaps {
                     grid = InstantiateNewGrid();
                 }
                 
-                var layers = tilemapInfo.layers;
+                var layers = tilemapJsonInfo.layers;
                 foreach(Layer layer in layers) {
                     ProcessLayer(layer);
                 }
@@ -345,7 +345,7 @@ namespace Tilemaps {
         /// </summary>
         private void ParseTilesetFiles() {
             this.tilesets = new List<TilesetData>();
-            var tilesetsInfo = tilemapInfo.tilesets;
+            var tilesetsInfo = tilemapJsonInfo.tilesets;
             int tilesetCount = tilesetsInfo.Length;
             
             // Create assets for each tileset
@@ -359,7 +359,7 @@ namespace Tilemaps {
                 
                 // Get the full path for the tileset ScriptableObject asset
                 string tilesetAssetFilePath = GetAssetPath(TILESETS_PATH, tilesetName);
-                string layerName = tilemapInfo.layers[i].name;
+                string layerName = tilemapJsonInfo.layers[i].name;
                 
                 // Check if tileset exists
                 bool tilesetAssetExists = TilesetDataExists(tilesetAssetFilePath);
