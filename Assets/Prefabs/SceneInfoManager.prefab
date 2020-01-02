@@ -44,8 +44,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   json: {fileID: 4900000, guid: f2db7adb4503240bfbfab84ce276ce9b, type: 3}
-  spriteCellX: 16
-  spriteCellY: 16
   gridX: 1
   gridY: 1
   gridZ: 0
