@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Characters {
 	public class PhysicsObject : MonoBehaviour {
+		[Header("Physics Variables")]
 		[SerializeField]
 		private float minGroundNormalY = .65f;
 		[SerializeField]
 		private float gravityModifier = 1f;
+		
+		[Header("Layer Physics Interactions")]
 		// Set which layers to hit with rb2d.Raycast
 		[SerializeField]
 		public LayerMask mask;
@@ -14,6 +18,8 @@ namespace Characters {
 		protected Rigidbody2D rb2d;
 		protected Collider2D myCollider;
 		protected ContactFilter2D contactFilter;
+		
+		[Header("Character State")]
 		[SerializeField] [DisableInspectorEdit]
 		protected CharacterState.State state;
 	
@@ -49,7 +55,37 @@ namespace Characters {
 		}
 	
 		private void FixedUpdate() {
-			Vector2 verticalVelocity = Physics2D.gravity * (gravityModifier * Time.deltaTime);
+			Vector2 verticalVelocity = Vector2.zero;
+			switch(state) {
+				case CharacterState.State.DEFAULT:
+				case CharacterState.State.WALKING:
+				case CharacterState.State.KNOCKED_BACK:
+				case CharacterState.State.JUMPING:
+				case CharacterState.State.FALLING:
+					verticalVelocity = Physics2D.gravity * (gravityModifier * Time.deltaTime);
+					break;
+				case CharacterState.State.CLIMBING_IDLE:
+					break;
+				case CharacterState.State.CLIMBING_UP:
+					break;
+				case CharacterState.State.CLIMBING_DOWN:
+					break;
+				case CharacterState.State.P_RIGHT_UP:
+					break;
+				case CharacterState.State.P_RIGHT:
+					break;
+				case CharacterState.State.P_RIGHT_DOWN:
+					break;
+				case CharacterState.State.P_LEFT_UP:
+					break;
+				case CharacterState.State.P_LEFT:
+					break;
+				case CharacterState.State.P_LEFT_DOWN:
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+//			Vector2 verticalVelocity = Physics2D.gravity * (gravityModifier * Time.deltaTime);
 //			Debug.Log($"verticalVelocity={verticalVelocity.y}");
 			
 			velocity += verticalVelocity;
@@ -73,10 +109,12 @@ namespace Characters {
 		private void Movement(Vector2 move, bool yMovement){
 			float distance = move.magnitude;
 
+			// If distance is past threshold
 			if(distance > minMoveDistance) {
 				// Cast rays from body (excluding our own collider)
 				int count = rb2d.Cast(move, contactFilter, hitBuffer, distance + shellRadius);
 				hitBufferList.Clear();
+				// Collect all contacts from raycasts
 				for(int i = 0; i < count; i++) {
 					hitBufferList.Add(hitBuffer[i]);
 				}
