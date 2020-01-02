@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Tilemaps {
-	public class TiledRenderOrder {
+	public static class TiledRenderOrder {
 		public enum RenderOrder {
 			RIGHT_DOWN,
 			RIGHT_UP,
@@ -22,16 +22,19 @@ namespace Tilemaps {
 			return ORDERS.GetOrDefault(order);
 		}
 
-		public bool IsDefault(RenderOrder order) {
+		public static bool IsDefault(RenderOrder order) {
 			return order == default;
 		}
 	}
 
 	public static class TiledExtensions {
-		public static V GetOrDefault<K,V>(this IDictionary<K, V> dictionary, K key) {
+		public static V GetOrDefault<K,V>(this IDictionary<K, V> dictionary, K key, V defaultValue = default) {
 			V ret;
 			// Ignore return value
 			dictionary.TryGetValue(key, out ret);
+			if(ret == null) {
+				ret = defaultValue;
+			}
 			return ret;
 		}
 	}

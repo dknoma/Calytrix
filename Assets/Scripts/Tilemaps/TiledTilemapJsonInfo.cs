@@ -35,7 +35,7 @@ namespace Tilemaps {
             public Export export;
             
             [Serializable]
-            public class Export {
+            public class Export : JsonInfo {
                 public string format;
                 public string target;
             }

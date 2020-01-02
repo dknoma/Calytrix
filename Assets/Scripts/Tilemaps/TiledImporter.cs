@@ -13,9 +13,11 @@ using static Tilemaps.TiledTilemapJsonInfo;
 using static Tilemaps.TiledTilemapJsonInfo.Layer;
 using static Tilemaps.TilemapConstants;
 using static Tilemaps.TiledRenderOrder;
+using static Tilemaps.TilemapConstants.CustomPropertyLabels.ValueType;
 using static Tilemaps.TilesetFileType;
 using static Tilemaps.TilesetFileType.Type;
 using Object = UnityEngine.Object;
+using Type = System.Type;
 
 namespace Tilemaps {
     public class TiledImporter : MonoBehaviour {
@@ -154,7 +156,8 @@ namespace Tilemaps {
             int layerX = layer.x;
             int layerY = layer.y;
 
-            Tilemap tilemap = NewTilemap(layerName, layerX, layerY);
+            IDictionary<string, Property> propertiesByKey = PropertiesArrayToDictionary(layer.properties);
+            Tilemap tilemap = NewTilemap(layerName, layerX, layerY, propertiesByKey);
             
             // Get 
             var chunks = layer.chunks;
@@ -205,6 +208,38 @@ namespace Tilemaps {
                 }
             }
         }
+
+        /// <summary>
+        /// Sets the Tilemap
+        /// </summary>
+        /// <param name="tilemap"></param>
+        /// <param name="property"></param>
+        private static void SetTilemapLayer(Component tilemap, Property property) {
+            if(property == null) return;
+
+            string layerNameValue = property.Value;
+            tilemap.gameObject.layer = LayerMask.NameToLayer(layerNameValue);
+        }
+
+        private static void SetTilemapSortOrder(TilemapRenderer tilemapRenderer, Property property) {
+            if(property == null) return;
+
+            tilemapRenderer.sortingOrder = property.Value;
+        }
+
+        /// <summary>
+        /// Converts Property array to Dictionary for convenience.
+        /// </summary>
+        /// <param name="properties"></param>
+        /// <param name="propertiesByKey"></param>
+        private static IDictionary<string, Property> PropertiesArrayToDictionary(IEnumerable<Layer.Property> properties) {
+            IDictionary<string, Property> propertiesByKey = new Dictionary<string, Property>();
+            foreach(Layer.Property property in properties) {
+                Property prop = Property.GetPropertyByType(property);
+                propertiesByKey.Add(prop.Key, prop);
+            }
+            return propertiesByKey;
+        }
         
         /// <summary>
         /// Gets the proper TilesetData based off the tiled tileIndex. The tileIndex gets the TilesetData if it fits
@@ -235,8 +270,9 @@ namespace Tilemaps {
         /// <param name="layerName"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
+        /// <param name="propertiesByKey"></param>
         /// <returns></returns>
-        private Tilemap NewTilemap(string layerName, int x, int y) {
+        private Tilemap NewTilemap(string layerName, int x, int y, IDictionary<string, Property> propertiesByKey) {
             GameObject layer = new GameObject(layerName);
             layer.transform.position = new Vector3(x, y, 0);
             layer.transform.parent = grid.transform;
@@ -244,7 +280,10 @@ namespace Tilemaps {
             TilemapRenderer tilemapRenderer = layer.AddComponent<TilemapRenderer>();
             TilemapCollider2D coll = layer.AddComponent<TilemapCollider2D>();
             tilemapRenderer.sortOrder = TilemapRenderer.SortOrder.TopRight;
-
+            
+            SetTilemapLayer(tilemap, propertiesByKey.GetOrDefault(CustomPropertyLabels.LAYER_KEY_NAME));
+            SetTilemapSortOrder(tilemapRenderer, propertiesByKey.GetOrDefault(CustomPropertyLabels.SORT_ORDER_KEY_NAME));
+            
             return tilemap;
         }
 
@@ -524,6 +563,51 @@ namespace Tilemaps {
             tile.sprite = sprite;
 
             return tile;
+        }
+
+        private abstract class Property {
+            public abstract string Key { get; }
+            public abstract Type Type { get; }
+            
+            public abstract dynamic Value { get; }
+
+            public static Property GetPropertyByType(Layer.Property prop) {
+                string typeString = prop.type;
+                string key = prop.name;
+                string valueString = prop.value;
+                CustomPropertyLabels.ValueType type = CustomPropertyLabels.GetTypeByString(typeString);
+
+                switch(type) {
+                    case BOOL:
+                        return new Property<bool>(key, bool.Parse(valueString));
+                    case COLOR:
+                        Color color = Color.white;
+                        ColorUtility.TryParseHtmlString(valueString, out color);
+                        return new Property<Color>(key, color);
+                    case FLOAT:
+                        return new Property<float>(key, float.Parse(valueString));
+                    case FILE:
+                        return new Property<FileInfo>(key, new FileInfo(valueString));
+                    case INT:
+                        return new Property<int>(key, int.Parse(valueString));
+                    case STRING:
+                        return new Property<string>(key, valueString);
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        private class Property<T> : Property {
+            public override string Key { get; }
+            public override Type Type => typeof(T);
+            
+            public override dynamic Value { get; }
+
+            public Property(string key, T value) {
+                this.Key = key;
+                this.Value = value;
+            }
         }
     }
 }
