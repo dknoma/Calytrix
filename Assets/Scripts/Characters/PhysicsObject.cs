@@ -22,6 +22,8 @@ namespace Characters {
 		[Header("Character State")]
 		[SerializeField] [DisableInspectorEdit]
 		protected CharacterState.State state;
+		[SerializeField] [DisableInspectorEdit]
+		protected DirectionState.FacingState facingState;
 	
 		protected Vector2 velocity;
 		protected Vector2 targetVelocity;

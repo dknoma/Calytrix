@@ -26,9 +26,31 @@ namespace Characters.Allies {
 		protected override void ComputeVelocity() {
 			Vector2 move = Vector2.zero;
 
-//			move.x = ControllerInputManager.GetHorizontal();
 			move.x = ControllerInputManager.GetRawHorizontal();
 
+			float moveX = move.x;
+			
+			if(moveX > 0) {
+				this.facingState = DirectionState.Right();
+			} else if(moveX < 0) {
+				this.facingState = DirectionState.Left();
+			}
+			
+			OnCharacterState();
+			OnFacingState();
+
+//			bool flipSprite = spriteRenderer.flipX ? moveX > 0.01f : moveX < 0.01f;
+//			if(flipSprite) {
+//				spriteRenderer.flipX = !spriteRenderer.flipX;
+//			}
+
+			animator.SetBool(GROUNDED, IsGrounded(state));
+			animator.SetFloat(VELOCITY_X, Mathf.Abs(velocity.x) / maxSpeed);
+
+			targetVelocity = move * maxSpeed;
+		}
+
+		private void OnCharacterState() {
 			switch(state) {
 				case State.DEFAULT:
 				case State.WALKING:
@@ -74,16 +96,19 @@ namespace Characters.Allies {
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+		}
 
-			bool flipSprite = spriteRenderer.flipX ? move.x > 0.01f : move.x < 0.01f;
-			if(flipSprite) {
-				spriteRenderer.flipX = !spriteRenderer.flipX;
+		private void OnFacingState() {
+			switch(facingState) {
+				case DirectionState.FacingState.RIGHT:
+					spriteRenderer.flipX = false;
+					break;
+				case DirectionState.FacingState.LEFT:
+					spriteRenderer.flipX = true;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
-
-			animator.SetBool(GROUNDED, IsGrounded(state));
-			animator.SetFloat(VELOCITY_X, Mathf.Abs(velocity.x) / maxSpeed);
-
-			targetVelocity = move * maxSpeed;
 		}
 	}
 }
