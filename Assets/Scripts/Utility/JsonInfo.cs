@@ -38,6 +38,7 @@ namespace Utility {
                         if(value.GetType().IsArray) {
                             StringBuilder sb = new StringBuilder();
 	
+                            sb.Append("[");
                             if(value is IEnumerable values) {
                                 foreach(object v in values) {
                                     sb.Append($"{v}, ");
@@ -45,6 +46,7 @@ namespace Utility {
                             }
 	
                             sb.Remove(sb.Length - 2, 2);
+                            sb.Append("]");
                             valueString = sb.ToString();
                         } else {
                             valueString = value.ToString();

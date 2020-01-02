@@ -12,6 +12,14 @@ namespace Characters {
 		private static string submit;
 		private static string cancel;
 
+		public static float GetRawHorizontal() {
+			return Input.GetAxisRaw(Horizontal());
+		}
+		
+		public static float GetHorizontal() {
+			return Input.GetAxis(Horizontal());
+		}
+
 		public static void VerticalControl(bool useController) {
 			vertical = useController ? "PS4_DPadVertical" : "Vertical";
 		}

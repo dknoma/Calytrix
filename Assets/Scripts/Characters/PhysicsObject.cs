@@ -28,11 +28,12 @@ namespace Characters {
 		protected const float minMoveDistance = 0.001f;
 		protected const float shellRadius = 0.01f;
 
-		// TODO - figure out how to get raycasts to ignore multiple layer at once
-		private void Start() {
+		private void OnEnable(){
 			this.rb2d = GetComponent<Rigidbody2D>();
 			this.myCollider = GetComponent<Collider2D>();
-			
+		}
+		
+		private void Start() {
 			// Make Raycasts ignore this layer
 			contactFilter.useTriggers = false;
 			contactFilter.SetLayerMask(mask);
@@ -52,17 +53,11 @@ namespace Characters {
 //			Debug.Log($"verticalVelocity={verticalVelocity.y}");
 			
 			velocity += verticalVelocity;
+			velocity.x = targetVelocity.x;
 
 			if(velocity.y < 0) {
-//				Debug.Log($"");
 				this.state = CharacterState.Falling();
 			}
-			
-//			Debug.Log($"velocity={velocity}");
-			
-			velocity.x = targetVelocity.x;
-	
-//			this.state = CharacterState.Default();
 			
 			Vector2 deltaPosition = velocity * Time.deltaTime;
 			Vector2 moveAlongGround = new Vector2(groundNormal.y, -groundNormal.x);
@@ -87,7 +82,8 @@ namespace Characters {
 				}
 
 				// Check each ray to see if the distance between it and the ground is low enough
-				foreach(RaycastHit2D hit in hitBufferList) {
+				for(int index = 0; index < hitBufferList.Count; index++) {
+					RaycastHit2D hit = hitBufferList[index];
 					Vector2 currentNormal = hit.normal;
 					if(currentNormal.y > minGroundNormalY) {
 						this.state = CharacterState.Default();

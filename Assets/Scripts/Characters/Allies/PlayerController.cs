@@ -3,7 +3,7 @@ using static Characters.CharacterState;
 using static Characters.InputConstants;
 
 namespace Characters.Allies {
-	public class TestPhysicsController : PhysicsObject {
+	public class PlayerController : PhysicsObject {
 
 		[Header("Physics Variables")]
 		[SerializeField]
@@ -14,8 +14,8 @@ namespace Characters.Allies {
 		private SpriteRenderer spriteRenderer;
 		private Animator animator;
 		
-		private static readonly int Grounded = Animator.StringToHash("grounded");
-		private static readonly int VelocityX = Animator.StringToHash("velocityX");
+		private static readonly int GROUNDED = Animator.StringToHash("grounded");
+		private static readonly int VELOCITY_X = Animator.StringToHash("velocityX");
 
 		private void Awake() {
 			spriteRenderer = GetComponent<SpriteRenderer>();    
@@ -25,9 +25,8 @@ namespace Characters.Allies {
 		protected override void ComputeVelocity() {
 			Vector2 move = Vector2.zero;
 
-//			move.x = ControllerInputManager.OSX() ? -Input.GetAxisRaw(ControllerInputManager.Horizontal()) : 
-//				         Input.GetAxisRaw(ControllerInputManager.Horizontal());
-			move.x = Input.GetAxisRaw(ControllerInputManager.Horizontal());
+//			move.x = ControllerInputManager.GetHorizontal();
+			move.x = ControllerInputManager.GetRawHorizontal();
 
 			if(Input.GetButtonDown(JUMP_INPUT_NAME) && IsGrounded(state)) {
 				velocity.y = jumpTakeOffSpeed;
@@ -44,8 +43,8 @@ namespace Characters.Allies {
 				spriteRenderer.flipX = !spriteRenderer.flipX;
 			}
 
-			animator.SetBool(Grounded, IsGrounded(state));
-			animator.SetFloat(VelocityX, Mathf.Abs(velocity.x) / maxSpeed);
+			animator.SetBool(GROUNDED, IsGrounded(state));
+			animator.SetFloat(VELOCITY_X, Mathf.Abs(velocity.x) / maxSpeed);
 
 			targetVelocity = move * maxSpeed;
 		}
