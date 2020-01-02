@@ -26,3 +26,22 @@ For example, `layer_name` allows us to tell Unity which `Layer` this tilemap lay
   - `Decoration`: Tiles that the player should not interact with.
   - `Hazards`: Tiles that are player hazards.
   - `Special`: Not implemented yet, but will be used in conjunction with another custom property to see what the special interactions should be.
+
+
+# Version History
+
+### 1.0.0
+> Initial Version
+
+#### Tiled Importer Script
+- Takes tilemap.json and tileset.json files, parses the data to create objects that contain the same data that Unity can understand
+- Can slice spritesheets/tileset sheets instead of manually having to do that
+- When importing the level tilemap into Unity
+  - it will create the proper Tile assets (if necessary, otherwise will grab existing ones)
+  - will create the Unity Grid object which holds tilemaps (and set the cell size via the importers settings which we set in the Unity inspector. The cell size is how big the cells are that tiles go into)
+  - Create the Unity Tilemap object for each layer (which becomes a child of the Grid)
+    - The tilemap will be given a Renderer (so that the tiles actually render lol)
+    - Its order in layer is assigned via the Tiled custom property: order_in_layer
+    - Its Unity Layer is assigned via the custom property: layer_name
+      - Layer names are specified in: https://github.com/dknoma/Calytrix
+  - each tilemap layer is then used to set the Tile objects in Unity into each tilemap Layer with the right properties
