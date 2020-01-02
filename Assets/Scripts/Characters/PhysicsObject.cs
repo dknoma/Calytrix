@@ -23,7 +23,7 @@ namespace Characters {
 		[SerializeField] [DisableInspectorEdit]
 		protected CharacterState.State state;
 		[SerializeField] [DisableInspectorEdit]
-		protected DirectionState.FacingState facingState;
+		protected DirectionUtility.FacingState facingState;
 	
 		protected Vector2 velocity;
 		protected Vector2 targetVelocity;
@@ -57,38 +57,7 @@ namespace Characters {
 		}
 	
 		private void FixedUpdate() {
-			Vector2 verticalVelocity = Vector2.zero;
-			switch(state) {
-				case CharacterState.State.DEFAULT:
-				case CharacterState.State.WALKING:
-				case CharacterState.State.KNOCKED_BACK:
-				case CharacterState.State.JUMPING:
-				case CharacterState.State.FALLING:
-					verticalVelocity = Physics2D.gravity * (gravityModifier * Time.deltaTime);
-					break;
-				case CharacterState.State.CLIMBING_IDLE:
-					break;
-				case CharacterState.State.CLIMBING_UP:
-					break;
-				case CharacterState.State.CLIMBING_DOWN:
-					break;
-				case CharacterState.State.P_RIGHT_UP:
-					break;
-				case CharacterState.State.P_RIGHT:
-					break;
-				case CharacterState.State.P_RIGHT_DOWN:
-					break;
-				case CharacterState.State.P_LEFT_UP:
-					break;
-				case CharacterState.State.P_LEFT:
-					break;
-				case CharacterState.State.P_LEFT_DOWN:
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-//			Vector2 verticalVelocity = Physics2D.gravity * (gravityModifier * Time.deltaTime);
-//			Debug.Log($"verticalVelocity={verticalVelocity.y}");
+			Vector2 verticalVelocity = ComputeVerticalVelocity();
 			
 			velocity += verticalVelocity;
 			velocity.x = targetVelocity.x;
@@ -101,14 +70,14 @@ namespace Characters {
 			Vector2 moveAlongGround = new Vector2(groundNormal.y, -groundNormal.x);
 			Vector2 move = moveAlongGround * deltaPosition.x;
 			
-			Movement(move, false);
+			DoMovement(move, false);
 
 			move = Vector2.up * deltaPosition.y;
 
-			Movement(move, true);
+			DoMovement(move, true);
 		}
 
-		private void Movement(Vector2 move, bool yMovement){
+		private void DoMovement(Vector2 move, bool yMovement){
 			float distance = move.magnitude;
 
 			// If distance is past threshold
@@ -143,6 +112,42 @@ namespace Characters {
 				}
 			}
 			rb2d.position = rb2d.position + move.normalized * distance;
+		}
+
+		private Vector2 ComputeVerticalVelocity() {
+			Vector2 verticalVelocity = Vector2.zero;
+			
+			switch(state) {
+				case CharacterState.State.DEFAULT:
+				case CharacterState.State.WALKING:
+				case CharacterState.State.KNOCKED_BACK:
+				case CharacterState.State.JUMPING:
+				case CharacterState.State.FALLING:
+					verticalVelocity = Physics2D.gravity * (gravityModifier * Time.deltaTime);
+					break;
+				case CharacterState.State.CLIMBING_IDLE:
+					break;
+				case CharacterState.State.CLIMBING_UP:
+					break;
+				case CharacterState.State.CLIMBING_DOWN:
+					break;
+				case CharacterState.State.P_RIGHT_UP:
+					break;
+				case CharacterState.State.P_RIGHT:
+					break;
+				case CharacterState.State.P_RIGHT_DOWN:
+					break;
+				case CharacterState.State.P_LEFT_UP:
+					break;
+				case CharacterState.State.P_LEFT:
+					break;
+				case CharacterState.State.P_LEFT_DOWN:
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
+			return verticalVelocity;
 		}
 	}
 }

@@ -98,8 +98,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minGroundNormalY: 0.65
   gravityModifier: 5
-  maxSpeed: 7
-  jumpTakeOffSpeed: 21
+  mask:
+    serializedVersion: 2
+    m_Bits: 2304
+  state: 0
+  facingState: 0
+  maxSpeed: 6
+  jumpTakeOffSpeed: 19
 --- !u!50 &6453041447995377866
 Rigidbody2D:
   serializedVersion: 4

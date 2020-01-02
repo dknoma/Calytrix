@@ -31,9 +31,9 @@ namespace Characters.Allies {
 			float moveX = move.x;
 			
 			if(moveX > 0) {
-				this.facingState = DirectionState.Right();
+				this.facingState = DirectionUtility.Right();
 			} else if(moveX < 0) {
-				this.facingState = DirectionState.Left();
+				this.facingState = DirectionUtility.Left();
 			}
 			
 			OnCharacterState();
@@ -100,10 +100,10 @@ namespace Characters.Allies {
 
 		private void OnFacingState() {
 			switch(facingState) {
-				case DirectionState.FacingState.RIGHT:
+				case DirectionUtility.FacingState.RIGHT:
 					spriteRenderer.flipX = false;
 					break;
-				case DirectionState.FacingState.LEFT:
+				case DirectionUtility.FacingState.LEFT:
 					spriteRenderer.flipX = true;
 					break;
 				default:

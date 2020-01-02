@@ -1,5 +1,5 @@
 ﻿namespace Characters {
-	public static class DirectionState {
+	public static class DirectionUtility {
 		public enum FacingState {
 			RIGHT,
 			LEFT

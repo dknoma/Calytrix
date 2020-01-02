@@ -14,7 +14,7 @@ namespace Utility {
         private static string GetString(object obj) {
             string result;
             if(obj == null) {
-                result = "null";
+                result = "N/A";
             } else {
                 var fieldValues = obj.GetType()
                                      .GetFields()
@@ -33,7 +33,7 @@ namespace Utility {
 
                     string valueString;
                     if(value == null) {
-                        valueString = "null";
+                        valueString = "N/A";
                     } else {
                         if(value.GetType().IsArray) {
                             StringBuilder sb = new StringBuilder();
