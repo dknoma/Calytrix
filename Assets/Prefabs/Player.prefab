@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6453041447995377864}
   - component: {fileID: 6453041447995377863}
   - component: {fileID: 6453041447995377867}
+  - component: {fileID: 5055679643511828453}
   - component: {fileID: 6453041447995377866}
   - component: {fileID: 6453041447995377868}
   - component: {fileID: 6453041447995377865}
@@ -105,6 +106,31 @@ MonoBehaviour:
   facingState: 0
   maxSpeed: 6
   jumpTakeOffSpeed: 19
+--- !u!114 &5055679643511828453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6453041447995377862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0244e7a47b64794a3a1bf0962cdd97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerList: f7e1664c
+  useOtherObject: 0
+  data:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 5aeaa1432b2954144a3d2777b2e7f4c0,
+      type: 2}
+  decodeBank: 0
+  loadAsynchronous: 0
+  saveDecodedBank: 0
+  unloadTriggerList: 958ca0ea
+  bankNameInternal: 
+  valueGuidInternal: 
 --- !u!50 &6453041447995377866
 Rigidbody2D:
   serializedVersion: 4

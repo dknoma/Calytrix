@@ -31,7 +31,7 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 28e4a39dd8608d47a6b874a907eb3111
     GuidInternal: 
-    m_lastTime: -8586235781744775808
+    m_lastTime: -8586235673924775808
     List:
     - name: Cleo
       guid: 69bf85efc054f14eafb1c06721e1b42b
@@ -47,8 +47,20 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: c56af8683b5d6d46814c5a5c398e49d3
     GuidInternal: 
-    m_lastTime: -8586235997064775808
-    List: []
+    m_lastTime: -8586235673924775808
+    List:
+    - name: Coin
+      guid: 8892236ecc99f742b3fe9d3534b8435a
+      id: 3603273110
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Coin
+        ObjectType: 3
+      Path: Default Work Unit/Coin
+      maxAttenuation: 0
+      maxDuration: 0.325805
+      minDuration: 0.325805
   RtpcWwu:
   - PhysicalPath: Game Parameters/Default Work Unit.wwu
     ParentPhysicalPath: 
@@ -79,6 +91,8 @@ MonoBehaviour:
     List: []
   ExpandedItems:
   - /Calytrix_WwiseProject
+  - /Calytrix_WwiseProject/Events
+  - /Calytrix_WwiseProject/Events/Default Work Unit
   - /Calytrix_WwiseProject/SoundBanks
   - /Calytrix_WwiseProject/SoundBanks/Default Work Unit
   autoPopulateEnabled: 1

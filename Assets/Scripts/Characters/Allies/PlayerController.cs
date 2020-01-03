@@ -1,5 +1,7 @@
 ﻿using System;
+using Items.Currencies;
 using UnityEngine;
+using Utility;
 using static Characters.CharacterState;
 using static Characters.InputConstants;
 
@@ -21,6 +23,13 @@ namespace Characters.Allies {
 		private void Awake() {
 			spriteRenderer = GetComponent<SpriteRenderer>();    
 			animator = GetComponent<Animator>();
+		}
+
+		private void OnCollisionEnter2D(Collision2D other) {
+			if(other.gameObject.CompareTag(Tags.CURRENCY)) {
+				Currency currency = other.gameObject.GetComponent<Currency>();
+				currency.OnCollect();
+			}
 		}
 
 		protected override void ComputeVelocity() {
