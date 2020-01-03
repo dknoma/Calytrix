@@ -44,10 +44,10 @@ namespace Tilemaps {
 			public class ObjectGroup : JsonInfo {
 				public string draworder;
 				public string name;
-				public Object[] objects;
+				public TileObject[] tileObjects;
 
 				[Serializable]
-				public class Object : JsonInfo {
+				public class TileObject : JsonInfo {
 					public int id;
 					public int x;
 					public int y;

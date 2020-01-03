@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 
 namespace Utility {
-    [Serializable]
 	public class JsonInfo {
         /// <summary>
         /// Utility method to get the right String  representation of these objects.

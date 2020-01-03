@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcb52f87f53184b41bdfac61af2bcce8, type: 3}
+  m_Name: AkWwiseProjectData
+  m_EditorClassIdentifier: 
+  AcousticTextureWwu:
+  - PhysicalPath: Virtual Acoustics/Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: 0d334c1eddffb34890474dc7cf141e1b
+    GuidInternal: 
+    m_lastTime: -8586235997064775808
+    List: []
+  AuxBusWwu:
+  - PhysicalPath: Master-Mixer Hierarchy/Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: 705289ef978a664ab1eb22f74572cd3d
+    GuidInternal: 
+    m_lastTime: -8586235997064775808
+    List: []
+  BankWwu:
+  - PhysicalPath: SoundBanks/Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: 28e4a39dd8608d47a6b874a907eb3111
+    GuidInternal: 
+    m_lastTime: -8586235781744775808
+    List:
+    - name: Cleo
+      guid: 69bf85efc054f14eafb1c06721e1b42b
+      id: 3804163448
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Cleo
+        ObjectType: 7
+      Path: Default Work Unit/Cleo
+  EventWwu:
+  - PhysicalPath: Events/Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: c56af8683b5d6d46814c5a5c398e49d3
+    GuidInternal: 
+    m_lastTime: -8586235997064775808
+    List: []
+  RtpcWwu:
+  - PhysicalPath: Game Parameters/Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: d2a1e61ac503544b9f17c19ffeaf4403
+    GuidInternal: 
+    m_lastTime: -8586235997064775808
+    List: []
+  StateWwu:
+  - PhysicalPath: States/Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: 4117931eb053fe46930565fb66ccf508
+    GuidInternal: 
+    m_lastTime: -8586235997064775808
+    List: []
+  SwitchWwu:
+  - PhysicalPath: Switches/Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: 429a210ad953894bbb9f512d52d936f2
+    GuidInternal: 
+    m_lastTime: -8586235997064775808
+    List: []
+  TriggerWwu:
+  - PhysicalPath: Triggers/Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: 4a0f452e194acf4fb12b6deda1d6e36e
+    GuidInternal: 
+    m_lastTime: -8586235997064775808
+    List: []
+  ExpandedItems:
+  - /Calytrix_WwiseProject
+  - /Calytrix_WwiseProject/SoundBanks
+  - /Calytrix_WwiseProject/SoundBanks/Default Work Unit
+  autoPopulateEnabled: 1
+  CurrentPluginConfig: 
