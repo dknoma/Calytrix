@@ -31,7 +31,7 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 28e4a39dd8608d47a6b874a907eb3111
     GuidInternal: 
-    m_lastTime: -8586235673924775808
+    m_lastTime: -8586235046624775808
     List:
     - name: Cleo
       guid: 69bf85efc054f14eafb1c06721e1b42b
@@ -42,13 +42,36 @@ MonoBehaviour:
       - ElementName: Cleo
         ObjectType: 7
       Path: Default Work Unit/Cleo
+    - name: Compo
+      guid: d02c99401db8bf4aae7e6ccf7cb19e61
+      id: 2568283571
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Compo
+        ObjectType: 7
+      Path: Default Work Unit/Compo
   EventWwu:
   - PhysicalPath: Events/Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: c56af8683b5d6d46814c5a5c398e49d3
     GuidInternal: 
-    m_lastTime: -8586235673924775808
+    m_lastTime: -8586235046624775808
     List:
+    - name: background_music
+      guid: bc813c9bab723341acdbca2285effb2b
+      id: 1585661381
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Music
+        ObjectType: 4
+      - ElementName: background_music
+        ObjectType: 3
+      Path: Default Work Unit/Music/background_music
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
     - name: Coin
       guid: 8892236ecc99f742b3fe9d3534b8435a
       id: 3603273110
@@ -61,6 +84,20 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: 0.325805
       minDuration: 0.325805
+    - name: compo
+      guid: 5de113cb21c4ba4c954334bad3395d9e
+      id: 2568283571
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Music
+        ObjectType: 4
+      - ElementName: compo
+        ObjectType: 3
+      Path: Default Work Unit/Music/compo
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
   RtpcWwu:
   - PhysicalPath: Game Parameters/Default Work Unit.wwu
     ParentPhysicalPath: 
@@ -73,8 +110,33 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 4117931eb053fe46930565fb66ccf508
     GuidInternal: 
-    m_lastTime: -8586235997064775808
-    List: []
+    m_lastTime: -8586235139564775808
+    List:
+    - name: Music
+      guid: 5552bb46121fe04897b7a2a53b93c7fb
+      id: 3991942870
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Music
+        ObjectType: 9
+      Path: Default Work Unit/Music
+      values:
+      - name: background_music
+        guid: 55003d431dd1904693cc6597bbb06ae6
+        id: 1585661381
+        PathAndIcons:
+        - ElementName: background_music
+          ObjectType: 8
+      - name: None
+        guid: c5ebf117cb80d94d9a95131f90af1434
+        id: 748895195
+        PathAndIcons:
+        - ElementName: None
+          ObjectType: 8
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
   SwitchWwu:
   - PhysicalPath: Switches/Default Work Unit.wwu
     ParentPhysicalPath: 
@@ -93,7 +155,11 @@ MonoBehaviour:
   - /Calytrix_WwiseProject
   - /Calytrix_WwiseProject/Events
   - /Calytrix_WwiseProject/Events/Default Work Unit
+  - /Calytrix_WwiseProject/Events/Default Work Unit/Music
   - /Calytrix_WwiseProject/SoundBanks
   - /Calytrix_WwiseProject/SoundBanks/Default Work Unit
+  - /Calytrix_WwiseProject/States
+  - /Calytrix_WwiseProject/States/Default Work Unit
+  - /Calytrix_WwiseProject/States/Default Work Unit/Music
   autoPopulateEnabled: 1
   CurrentPluginConfig: 
