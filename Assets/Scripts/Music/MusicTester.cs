@@ -3,7 +3,8 @@
 namespace Music {
     public class MusicTester : MonoBehaviour {
         private void Start() {
-            AkSoundEngine.PostEvent("Compo", gameObject);
+            // play music from event name
+            AkSoundEngine.PostEvent("mad_forest", gameObject);
         }
     }
 }

@@ -13,8 +13,10 @@ namespace AK
 {
     namespace EVENTS
     {
+        static const AkUniqueID BACKGROUND_MUSIC = 1585661381U;
         static const AkUniqueID COIN = 3603273110U;
         static const AkUniqueID COMPO = 2568283571U;
+        static const AkUniqueID MAD_FOREST = 4124090799U;
     } // namespace EVENTS
 
     namespace STATES
@@ -35,7 +37,7 @@ namespace AK
     {
         static const AkUniqueID INIT = 1355168291U;
         static const AkUniqueID CLEO = 3804163448U;
-        static const AkUniqueID COMPO = 2568283571U;
+        static const AkUniqueID MUSIC = 3991942870U;
     } // namespace BANKS
 
     namespace BUSSES

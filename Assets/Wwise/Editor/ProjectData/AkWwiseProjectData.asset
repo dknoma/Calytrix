@@ -31,7 +31,7 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 28e4a39dd8608d47a6b874a907eb3111
     GuidInternal: 
-    m_lastTime: -8586235046624775808
+    m_lastTime: -8586235024724775808
     List:
     - name: Cleo
       guid: 69bf85efc054f14eafb1c06721e1b42b
@@ -42,21 +42,21 @@ MonoBehaviour:
       - ElementName: Cleo
         ObjectType: 7
       Path: Default Work Unit/Cleo
-    - name: Compo
-      guid: d02c99401db8bf4aae7e6ccf7cb19e61
-      id: 2568283571
+    - name: Music
+      guid: d99820fbaf55d14592b6704980c920a0
+      id: 3991942870
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Compo
+      - ElementName: Music
         ObjectType: 7
-      Path: Default Work Unit/Compo
+      Path: Default Work Unit/Music
   EventWwu:
   - PhysicalPath: Events/Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: c56af8683b5d6d46814c5a5c398e49d3
     GuidInternal: 
-    m_lastTime: -8586235046624775808
+    m_lastTime: -8586235004594775808
     List:
     - name: background_music
       guid: bc813c9bab723341acdbca2285effb2b
@@ -85,7 +85,7 @@ MonoBehaviour:
       maxDuration: 0.325805
       minDuration: 0.325805
     - name: compo
-      guid: 5de113cb21c4ba4c954334bad3395d9e
+      guid: 35e5efd7519a884aa5821b152b9baef5
       id: 2568283571
       PathAndIcons:
       - ElementName: Default Work Unit
@@ -95,6 +95,20 @@ MonoBehaviour:
       - ElementName: compo
         ObjectType: 3
       Path: Default Work Unit/Music/compo
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: mad_forest
+      guid: 2b04f3e664905246a8d4ba78a3ed8c65
+      id: 4124090799
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Music
+        ObjectType: 4
+      - ElementName: mad_forest
+        ObjectType: 3
+      Path: Default Work Unit/Music/mad_forest
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
