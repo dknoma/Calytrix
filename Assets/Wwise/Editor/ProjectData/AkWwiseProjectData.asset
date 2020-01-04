@@ -167,13 +167,5 @@ MonoBehaviour:
     List: []
   ExpandedItems:
   - /Calytrix_WwiseProject
-  - /Calytrix_WwiseProject/Events
-  - /Calytrix_WwiseProject/Events/Default Work Unit
-  - /Calytrix_WwiseProject/Events/Default Work Unit/Music
-  - /Calytrix_WwiseProject/SoundBanks
-  - /Calytrix_WwiseProject/SoundBanks/Default Work Unit
-  - /Calytrix_WwiseProject/States
-  - /Calytrix_WwiseProject/States/Default Work Unit
-  - /Calytrix_WwiseProject/States/Default Work Unit/Music
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

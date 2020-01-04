@@ -16,6 +16,7 @@ namespace AK
         static const AkUniqueID BACKGROUND_MUSIC = 1585661381U;
         static const AkUniqueID COIN = 3603273110U;
         static const AkUniqueID COMPO = 2568283571U;
+        static const AkUniqueID JUMP = 3833651337U;
         static const AkUniqueID MAD_FOREST = 4124090799U;
     } // namespace EVENTS
 

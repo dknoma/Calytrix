@@ -1,5 +1,6 @@
 ﻿using System;
 using Items.Currencies;
+using Music;
 using UnityEngine;
 using Utility;
 using static Characters.CharacterState;
@@ -7,21 +8,19 @@ using static Characters.InputConstants;
 
 namespace Characters.Allies {
 	public class PlayerController : PhysicsObject {
-
-		[Header("Controller Variables")]
-		[SerializeField]
+		[Header("Controller Variables")] [SerializeField]
 		private float maxSpeed = 7;
-		[SerializeField]
-		private float jumpTakeOffSpeed = 7;
+
+		[SerializeField] private float jumpTakeOffSpeed = 7;
 
 		private SpriteRenderer spriteRenderer;
 		private Animator animator;
-		
+
 		private static readonly int GROUNDED = Animator.StringToHash("grounded");
 		private static readonly int VELOCITY_X = Animator.StringToHash("velocityX");
 
 		private void Awake() {
-			spriteRenderer = GetComponent<SpriteRenderer>();    
+			spriteRenderer = GetComponent<SpriteRenderer>();
 			animator = GetComponent<Animator>();
 		}
 
@@ -38,20 +37,15 @@ namespace Characters.Allies {
 			move.x = ControllerInputManager.GetRawHorizontal();
 
 			float moveX = move.x;
-			
+
 			if(moveX > 0) {
 				this.facingState = DirectionUtility.Right();
 			} else if(moveX < 0) {
 				this.facingState = DirectionUtility.Left();
 			}
-			
+
 			OnCharacterState();
 			OnFacingState();
-
-//			bool flipSprite = spriteRenderer.flipX ? moveX > 0.01f : moveX < 0.01f;
-//			if(flipSprite) {
-//				spriteRenderer.flipX = !spriteRenderer.flipX;
-//			}
 
 			animator.SetBool(GROUNDED, IsGrounded(state));
 			animator.SetFloat(VELOCITY_X, Mathf.Abs(velocity.x) / maxSpeed);
@@ -66,21 +60,25 @@ namespace Characters.Allies {
 					if(Input.GetButtonDown(JUMP_INPUT_NAME)) {
 						velocity.y = jumpTakeOffSpeed;
 						this.state = Jumping();
+						this.PlayerJumpSFX();
 					} else if(Input.GetButtonUp(JUMP_INPUT_NAME)) {
 						if(velocity.y > 0) {
 							velocity.y = velocity.y * 0.5f;
 							this.state = Falling();
 						}
 					}
+
 					break;
 				case State.JUMPING:
 				case State.FALLING:
+					// When letting go of jump, make sure that vertical velocity is updated correctly
 					if(Input.GetButtonUp(JUMP_INPUT_NAME)) {
 						if(velocity.y > 0) {
 							velocity.y = velocity.y * 0.5f;
 							this.state = Falling();
 						}
 					}
+
 					break;
 				case State.CLIMBING_IDLE:
 					break;

@@ -10,7 +10,7 @@ namespace Items.Currencies {
 
 		private const int COIN_VALUE = 1;
 		private const int GEM_VALUE = 10;
-		
+
 		private static readonly IDictionary<Type, int> VALUE_BY_TYPE = new Dictionary<Type, int>();
 
 		static CurrencyType() {
