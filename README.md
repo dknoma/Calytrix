@@ -26,6 +26,18 @@ For example, `layer_name` allows us to tell Unity which `Layer` this tilemap lay
   - `Decoration`: Tiles that the player should not interact with.
   - `Hazards`: Tiles that are player hazards.
   - `Special`: Not implemented yet, but will be used in conjunction with another custom property to see what the special interactions should be.
+  
+# Wwise
+### Importing audio
+- Project -> Import Audio
+  - From here, you can select `actor-mixer hierarchy` (SFX, etc) or `interactive music hierarchy` (music files).
+    - Press `Import`
+  - Create an event which when called, will play the SFX or soundtrack.
+    - Drag the audio file/playlist into the event so that the event will actually play the audio
+    - In order for music to be looped, it must be placed into its own `sequence playlist container`
+      - From the playlist editor you can change the loop count to `infinite` for songs you want looped.
+  - Create a soundbank you would like the place the music into
+    - this will be placed on the object that you want to play the audio from
 
 
 # Version History
