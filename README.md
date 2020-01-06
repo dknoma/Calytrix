@@ -38,9 +38,24 @@ For example, `layer_name` allows us to tell Unity which `Layer` this tilemap lay
       - From the playlist editor you can change the loop count to `infinite` for songs you want looped.
   - Create a soundbank you would like the place the music into
     - this will be placed on the object that you want to play the audio from
+  - Depending on how you want the audio to be played:
+    - In a script attached to the object you want to play audio from, you can do something as simple as `AkSoundEngine.PostEvent("EventNameFromWwise", gameObject);` and it will play the specified `Event` and subsequently any audio attached to the event
 
 
 # Version History
+
+### 1.0.1
+> Wwise audio integration
+#### AudioKinetic: Wwise
+- Wwise allows us to smoothly integrate audio files into our system.
+  - This includes SFX, music tracks, stingers, etc.
+- It is relatively easy to add audio from Wwise into Unity:
+  - To set it up the first time, use the Wwise launcher to inject the Wwise 
+  - Import the audio into Wwise 
+  - Create an event that will play the audio
+  - Put it into a soundbank then generate the soundbank
+  - Depending on how you want the audio to be played:
+    - In a script attached to the object you want to play audio from, you can do something as simple as `AkSoundEngine.PostEvent("EventNameFromWwise", gameObject);` and it will play the specified `Event` and subsequently any audio attached to the event
 
 ### 1.0.0
 > Initial Version
