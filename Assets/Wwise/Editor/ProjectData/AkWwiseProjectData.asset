@@ -13,25 +13,25 @@ MonoBehaviour:
   m_Name: AkWwiseProjectData
   m_EditorClassIdentifier: 
   AcousticTextureWwu:
-  - PhysicalPath: Virtual Acoustics/Default Work Unit.wwu
+  - PhysicalPath: Virtual Acoustics\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: 0d334c1eddffb34890474dc7cf141e1b
     GuidInternal: 
     m_lastTime: -8586235997064775808
     List: []
   AuxBusWwu:
-  - PhysicalPath: Master-Mixer Hierarchy/Default Work Unit.wwu
+  - PhysicalPath: Master-Mixer Hierarchy\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: 705289ef978a664ab1eb22f74572cd3d
     GuidInternal: 
     m_lastTime: -8586235997064775808
     List: []
   BankWwu:
-  - PhysicalPath: SoundBanks/Default Work Unit.wwu
+  - PhysicalPath: SoundBanks\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: 28e4a39dd8608d47a6b874a907eb3111
     GuidInternal: 
-    m_lastTime: -8586235024724775808
+    m_lastTime: -8586233184111487378
     List:
     - name: Cleo
       guid: 69bf85efc054f14eafb1c06721e1b42b
@@ -41,7 +41,7 @@ MonoBehaviour:
         ObjectType: 12
       - ElementName: Cleo
         ObjectType: 7
-      Path: Default Work Unit/Cleo
+      Path: Default Work Unit\Cleo
     - name: Music
       guid: d99820fbaf55d14592b6704980c920a0
       id: 3991942870
@@ -50,13 +50,13 @@ MonoBehaviour:
         ObjectType: 12
       - ElementName: Music
         ObjectType: 7
-      Path: Default Work Unit/Music
+      Path: Default Work Unit\Music
   EventWwu:
-  - PhysicalPath: Events/Default Work Unit.wwu
+  - PhysicalPath: Events\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: c56af8683b5d6d46814c5a5c398e49d3
     GuidInternal: 
-    m_lastTime: -8586235004594775808
+    m_lastTime: -8586233186412166934
     List:
     - name: background_music
       guid: bc813c9bab723341acdbca2285effb2b
@@ -68,7 +68,7 @@ MonoBehaviour:
         ObjectType: 4
       - ElementName: background_music
         ObjectType: 3
-      Path: Default Work Unit/Music/background_music
+      Path: Default Work Unit\Music\background_music
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -80,7 +80,7 @@ MonoBehaviour:
         ObjectType: 12
       - ElementName: Coin
         ObjectType: 3
-      Path: Default Work Unit/Coin
+      Path: Default Work Unit\Coin
       maxAttenuation: 0
       maxDuration: 0.325805
       minDuration: 0.325805
@@ -94,7 +94,19 @@ MonoBehaviour:
         ObjectType: 4
       - ElementName: compo
         ObjectType: 3
-      Path: Default Work Unit/Music/compo
+      Path: Default Work Unit\Music\compo
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Jump
+      guid: 2c82f403411880489130162b5c21a534
+      id: 3833651337
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Jump
+        ObjectType: 3
+      Path: Default Work Unit\Jump
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -108,19 +120,19 @@ MonoBehaviour:
         ObjectType: 4
       - ElementName: mad_forest
         ObjectType: 3
-      Path: Default Work Unit/Music/mad_forest
+      Path: Default Work Unit\Music\mad_forest
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
   RtpcWwu:
-  - PhysicalPath: Game Parameters/Default Work Unit.wwu
+  - PhysicalPath: Game Parameters\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: d2a1e61ac503544b9f17c19ffeaf4403
     GuidInternal: 
     m_lastTime: -8586235997064775808
     List: []
   StateWwu:
-  - PhysicalPath: States/Default Work Unit.wwu
+  - PhysicalPath: States\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: 4117931eb053fe46930565fb66ccf508
     GuidInternal: 
@@ -134,7 +146,7 @@ MonoBehaviour:
         ObjectType: 12
       - ElementName: Music
         ObjectType: 9
-      Path: Default Work Unit/Music
+      Path: Default Work Unit\Music
       values:
       - name: background_music
         guid: 55003d431dd1904693cc6597bbb06ae6
@@ -152,14 +164,14 @@ MonoBehaviour:
       ValueIcons: []
       valuesInternal: []
   SwitchWwu:
-  - PhysicalPath: Switches/Default Work Unit.wwu
+  - PhysicalPath: Switches\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: 429a210ad953894bbb9f512d52d936f2
     GuidInternal: 
     m_lastTime: -8586235997064775808
     List: []
   TriggerWwu:
-  - PhysicalPath: Triggers/Default Work Unit.wwu
+  - PhysicalPath: Triggers\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: 4a0f452e194acf4fb12b6deda1d6e36e
     GuidInternal: 
@@ -167,5 +179,7 @@ MonoBehaviour:
     List: []
   ExpandedItems:
   - /Calytrix_WwiseProject
+  - /Calytrix_WwiseProject/SoundBanks
+  - /Calytrix_WwiseProject/SoundBanks/Default Work Unit
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

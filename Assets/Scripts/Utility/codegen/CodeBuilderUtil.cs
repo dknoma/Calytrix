@@ -1,4 +1,6 @@
-﻿public static class CodeBuilderUtil {
+﻿using System;
+
+public static class CodeBuilderUtil {
 	public enum Modifier {
 		PUBLIC,
 		PROTECTED,
@@ -20,5 +22,9 @@
 	
 	public static string ToLowerCase(this ClassType type) {
 		return type.ToString().ToLower();
+	}
+
+	public static string FormattedString(this Type type) {
+		return type.ToString().Replace('+', '.');
 	}
 }

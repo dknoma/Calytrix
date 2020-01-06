@@ -1,18 +1,25 @@
 ﻿using UnityEngine;
+using Utility.Codegen;
 
 namespace Music {
 	public class MusicTester : MonoBehaviour {
 		private void Start() {
 			// play music from event name
-			AkSoundEngine.PostEvent("mad_forest", gameObject);
+//			AkSoundEngine.PostEvent("mad_forest", gameObject);
+			AkSoundEngine.PostEvent("compo", gameObject);
+
+			CodeBlock block = CodeBlock.NewBuilder()
+			                             .AddStatement("int sum = 0")
+											.BeginControlFlow("for(int i = 0; i <= 10; i++)")
+											.AddStatement("sum += i")
+											.EndControlFlow()
+			                             .Build();
 			
-			Debug.Log(typeof(int[]).FullName);
-			Debug.Log(typeof(int[]).Name);
-			Debug.Log(typeof(int[]).AssemblyQualifiedName);
-//			Debug.Log(typeof(int[]).);
-			Debug.Log(typeof(CodeBuilderUtil.Modifier).FullName);
-			Debug.Log(typeof(CodeBuilderUtil.Modifier).Name);
-			Debug.Log(typeof(CodeBuilderUtil.Modifier).AssemblyQualifiedName);
+			Debug.Log(block);
+
+			CodeBlock.Builder a = CodeBlock.NewBuilder();
+			
+			Debug.Log($"[={a.Indent(1)}=]");
 		}
 	}
 }
