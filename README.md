@@ -27,6 +27,10 @@ For example, `layer_name` allows us to tell Unity which `Layer` this tilemap lay
   - `Hazards`: Tiles that are player hazards.
   - `Special`: Not implemented yet, but will be used in conjunction with another custom property to see what the special interactions should be.
   
+### Order in Layer
+- `order_in_layer`
+  - allows Unity to determine the order of each tilemap in the layer. This is so the tilemaps are rendered in the correct order (in front of the player, behind the player, behind another layer, etc)
+  
 # Wwise
 ### Importing audio
 - Project -> Import Audio
