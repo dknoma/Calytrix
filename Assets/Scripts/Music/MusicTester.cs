@@ -10,16 +10,12 @@ namespace Music {
 
 			CodeBlock block = CodeBlock.NewBuilder()
 			                             .AddStatement("int sum = 0")
-											.BeginControlFlow("for(int i = 0; i <= 10; i++)")
+										 .BeginControlFlow("for(int i = 0; i <= 10; i++)")
 											.AddStatement("sum += i")
-											.EndControlFlow()
+										 .EndControlFlow()
 			                             .Build();
 			
 			Debug.Log(block);
-
-			CodeBlock.Builder a = CodeBlock.NewBuilder();
-			
-			Debug.Log($"[={a.Indent(1)}=]");
 		}
 	}
 }
