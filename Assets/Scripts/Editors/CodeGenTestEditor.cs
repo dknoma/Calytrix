@@ -10,6 +10,7 @@ namespace Editors {
 		
 			MiniButton("CodeBlock", tester.CodeBlockTest);
 			MiniButton("FieldBlock", tester.FieldBlockTest);
+			MiniButton("MethodBlock", tester.MethodBlockTest);
 		}
 	}
 }

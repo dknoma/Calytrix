@@ -38,4 +38,27 @@ public class CodeGenTester : MonoBehaviour {
 	                                 .Build();
 	    Debug.Log(field);
     }
+
+    public void MethodBlockTest() {
+	    int max = 11;
+	    
+	    CodeBlock block = CodeBlock.NewBuilder()
+	                               .AddStatement("int sum = 0")
+	                               .BeginControlFlow("for(int i = 0; i <= $A; i++)", max)
+	                               .AddStatement("sum += i")
+	                               .BeginControlFlow("if(sum > $A && i % 2 == $A", max, 0)
+	                               .AddStatement("sum++")
+	                               .NextControlFlow("else")
+	                               .AddStatement("sum--")
+	                               .EndControlFlow()
+	                               .EndControlFlow()
+	                               .Build();
+
+	    MethodBlock method = MethodBlock.NewBuilder("Testing")
+	                                    .AddModifiers(CodeBuilderUtil.Modifier.PUBLIC, CodeBuilderUtil.Modifier.STATIC)
+	                                    .AddCodeBlock(block)
+	                                    .Build();
+	    
+	    Debug.Log(method);
+    }
 }

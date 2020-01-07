@@ -10,7 +10,7 @@ namespace Utility.Codegen {
 		internal readonly IList<string> formatParts;
 		internal readonly IList<object> args;
 
-		private int indentLevel;
+		internal int indentLevel;
 		
 		private CodeBlock(Builder builder) {
 			this.formatParts = new ReadOnlyCollection<string>(builder.formatParts);
@@ -26,11 +26,18 @@ namespace Utility.Codegen {
 
 			int j = 0;
 			foreach(string part in formatParts) {
+//				Debug.Log(part);
 				if(part[0] == '$' && part.Length > 1) {
 					char type = part[1];
 					switch(type) {
 						case 'A':
 							builder.Append(args[j++]);
+							break;
+						case 'I':
+//							builder.Append(part.Substring(2, part.Length - 2));
+							if(indentLevel == 0) {
+								builder.Append(Indentation());
+							}
 							break;
 						case '>':
 							indentLevel++;
@@ -42,12 +49,16 @@ namespace Utility.Codegen {
 							break;
 					}
 				} else {
+//					Debug.Log($"indentLevel={indentLevel}, part={part}");
+//					builder.Append($"{Indentation()}{part}");
 					builder.Append(part);
 				}
 			}
 			
 			return builder.ToString();
 		}
+		
+		
 
 		private string Indentation() {
 			return "".PadRight(indentLevel * 4);
@@ -76,12 +87,20 @@ namespace Utility.Codegen {
 //					indentLevel = 0;
 //				}
 			}
+
+			private void TryAddIndent() {
+//				if(indentLevel > 0) {
+				this.formatParts.Add("$I");
+//				}
+			}
 		
 			public Builder AddStatement(string format, params object[] args) {
+				TryAddIndent();
 				return this.Add($"{format};\n", args);
 			}
 
 			public Builder BeginControlFlow(string format, params object[] args) {
+				TryAddIndent();
 				this.Add($"{format} {{\n", args);
 				Indent();
 				return this;
@@ -142,6 +161,8 @@ namespace Utility.Codegen {
 				int progress = 0;
 				int indexStart;
 				int argsCount = 0;
+
+//				bool first = true;
 				while(progress < len) {
 					char c = format[progress];
 					if(c != '$') {
@@ -151,6 +172,12 @@ namespace Utility.Codegen {
 						if (indexStart < 0) {
 							indexStart = len - progress;
 						}
+
+						// take substring up until the first $ formatter 
+//						if(first) {
+//							first = false;
+//							this.formatParts.Add("$I");
+//						}
 						
 //						Debug.Log($"len={len}, progress={progress}, indexStart={indexStart}");
 
