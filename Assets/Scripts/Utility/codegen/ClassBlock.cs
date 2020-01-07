@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
-using UnityEngine;
-
 
 public struct ClassBlock {
 	private readonly IList<CodeBuilderUtil.Modifier> modifiers;
-	private readonly IList<Field> fields;
+	private readonly IList<FieldBlock> fields;
 	private readonly CodeBuilderUtil.ClassType type;
 	private readonly string name;
 
 	private ClassBlock(CodeBuilderUtil.ClassType type, string name, IList<CodeBuilderUtil.Modifier> modifiers) {
 		this.modifiers = modifiers;
-		this.fields = new List<Field>();
+		this.fields = new List<FieldBlock>();
 		this.type = type;
 		this.name = name;
 	}
@@ -34,15 +30,15 @@ public struct ClassBlock {
 	}
 
 	public class Builder {
-		private readonly IList<CodeBuilderUtil.Modifier> modifiers;
-		private readonly IList<Field> fields;
-		private readonly string className;
+		internal readonly IList<CodeBuilderUtil.Modifier> modifiers;
+		internal readonly IList<FieldBlock> fields;
+		internal readonly string className;
 
-		private CodeBuilderUtil.ClassType type;
+		internal CodeBuilderUtil.ClassType type;
 
 		internal Builder(string className) {
-			this.modifiers = new List<CodeBuilderUtil.Modifier>();
-			;
+			modifiers = new List<CodeBuilderUtil.Modifier>();
+			fields = new List<FieldBlock>();
 			this.className = className;
 		}
 
@@ -78,68 +74,68 @@ public struct ClassBlock {
 		}
 	}
 
-	private struct Field {
-		private readonly CodeBuilderUtil.Modifier[] modifiers;
-		private readonly Type returnType;
-		private readonly string name;
+//	private struct Field {
+//		private readonly CodeBuilderUtil.Modifier[] modifiers;
+//		private readonly Type returnType;
+//		private readonly string name;
+//
+//		public Field(Type returnType, string name, params CodeBuilderUtil.Modifier[] modifiers) {
+//			this.returnType = returnType;
+//			this.name = name;
+//			this.modifiers = modifiers;
+//		}
+//
+//		public override string ToString() {
+//			StringBuilder builder = new StringBuilder();
+//			builder.Append("\t");
+//			foreach(CodeBuilderUtil.Modifier modifier in modifiers) {
+//				builder.Append($"{modifier.ToLowerCase()} ");
+//			}
+//
+//			builder.Append($"{returnType.FormattedString()} {name};\n");
+//
+//			return builder.ToString();
+//		}
+//	}
 
-		public Field(Type returnType, string name, params CodeBuilderUtil.Modifier[] modifiers) {
-			this.returnType = returnType;
-			this.name = name;
-			this.modifiers = modifiers;
-		}
-
-		public override string ToString() {
-			StringBuilder builder = new StringBuilder();
-			builder.Append("\t");
-			foreach(CodeBuilderUtil.Modifier modifier in modifiers) {
-				builder.Append($"{modifier.ToLowerCase()} ");
-			}
-
-			builder.Append($"{returnType.FormattedString()} {name};\n");
-
-			return builder.ToString();
-		}
-	}
-
-	private class Constructor {
-		private readonly CodeBuilderUtil.Modifier[] modifiers;
-		private readonly string name;
-		private readonly IList<Parameter> parameters = new List<Parameter>();
-		private readonly IList<string> statements = new List<string>();
-
-		public override string ToString() {
-			StringBuilder builder = new StringBuilder();
-			builder.Append("\t");
-			foreach(CodeBuilderUtil.Modifier modifier in modifiers) {
-				builder.Append($"{modifier.ToLowerCase()} ");
-			}
-
-			builder.Append($"{name}(");
-
-			foreach(Parameter parameter in parameters) {
-				builder.Append($"{parameter}, ");
-			}
-
-			builder.Remove(builder.ToString().Length - 1, 1);
-			builder.Append(") {\n");
-
-			foreach(string statement in statements) {
-				builder.Append(statement);
-			}
-
-			builder.Append("}\n");
-
-			return builder.ToString();
-		}
-
-		private struct Parameter {
-			private Type type;
-			private string name;
-
-			public override string ToString() {
-				return $"{type.FormattedString()} {name}";
-			}
-		}
-	}
+//	private class Constructor {
+//		private readonly CodeBuilderUtil.Modifier[] modifiers;
+//		private readonly string name;
+//		private readonly IList<Parameter> parameters = new List<Parameter>();
+//		private readonly IList<string> statements = new List<string>();
+//
+//		public override string ToString() {
+//			StringBuilder builder = new StringBuilder();
+//			builder.Append("\t");
+//			foreach(CodeBuilderUtil.Modifier modifier in modifiers) {
+//				builder.Append($"{modifier.ToLowerCase()} ");
+//			}
+//
+//			builder.Append($"{name}(");
+//
+//			foreach(Parameter parameter in parameters) {
+//				builder.Append($"{parameter}, ");
+//			}
+//
+//			builder.Remove(builder.ToString().Length - 1, 1);
+//			builder.Append(") {\n");
+//
+//			foreach(string statement in statements) {
+//				builder.Append(statement);
+//			}
+//
+//			builder.Append("}\n");
+//
+//			return builder.ToString();
+//		}
+//
+//		private struct Parameter {
+//			private Type type;
+//			private string name;
+//
+//			public override string ToString() {
+//				return $"{type.FormattedString()} {name}";
+//			}
+//		}
+//	}
 }

@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
+using UnityEngine;
 using static CodeBuilderUtil;
 
 namespace Utility.Codegen {
 	public class CodeBlock {
-		private readonly IList<string> formatParts;
-		private readonly IList<object> args;
+		internal readonly IList<string> formatParts;
+		internal readonly IList<object> args;
 
-		private CodeBlock() {
-			this.formatParts = new List<string>();
-			this.args = new List<object>();
-		}
+		private int indentLevel;
 		
-		private CodeBlock(IList<string> formatParts, IList<object> args) {
-			this.formatParts = formatParts;
-			this.args = args;
+		private CodeBlock(Builder builder) {
+			this.formatParts = new ReadOnlyCollection<string>(builder.formatParts);
+			this.args = new ReadOnlyCollection<object>(builder.args);
 		}
 
 		public static Builder NewBuilder() {
@@ -27,125 +26,156 @@ namespace Utility.Codegen {
 
 			int j = 0;
 			foreach(string part in formatParts) {
-				builder.Append(part);
-
 				if(part[0] == '$' && part.Length > 1) {
 					char type = part[1];
 					switch(type) {
 						case 'A':
 							builder.Append(args[j++]);
 							break;
-						default:
+						case '>':
+							indentLevel++;
+							builder.Append(Indentation());
+							break;
+						case '<':
+							indentLevel--;
+							builder.Append(Indentation());
 							break;
 					}
+				} else {
+					builder.Append(part);
 				}
 			}
-
-//			builder.Append("}");
 			
 			return builder.ToString();
 		}
 
+		private string Indentation() {
+			return "".PadRight(indentLevel * 4);
+		}
+		
 		public class Builder {
-			private readonly IList<string> formatParts;
-			private readonly IList<object> args;
+			internal readonly IList<string> formatParts;
+			internal readonly IList<object> args;
 
-			private int indentLevel = 0;
+			private int indentLevel;
 			
 			internal Builder() {
 				this.formatParts = new List<string>();
 				this.args = new List<object>();
 			}
 
-			public Builder AddClassHeader(ClassType type, string name, params Modifier[] modifiers) {
-				StringBuilder builder = new StringBuilder();
-				foreach(Modifier modifier in modifiers) {
-					builder.Append($"{modifier.ToLowerCase()} ");
-				}
-	
-				builder.Append($"{type.ToLowerCase()} {name} {{\n");
-
-				Add(builder.ToString());
-				
-				return this;
-			}
-			
-			public string Indent(int indentLevel) {
-				return "".PadRight(indentLevel * 4);
+			private void Indent() {
+				this.formatParts.Add("$>");
+//				indentLevel++;
 			}
 
-			private string Indent() {
-				return "".PadRight(indentLevel * 4);
+			private void Unindent() {
+				this.formatParts.Add("$<");
+//				indentLevel--;
+//				if(indentLevel < 0) {
+//					indentLevel = 0;
+//				}
 			}
 		
 			public Builder AddStatement(string format, params object[] args) {
-				this.Add($"{Indent()}{format}\n", args);
-				return this;
+				return this.Add($"{format};\n", args);
 			}
 
 			public Builder BeginControlFlow(string format, params object[] args) {
-				this.Add($"{Indent()}{format} {{\n", args);
-				indentLevel++;
+				this.Add($"{format} {{\n", args);
+				Indent();
+				return this;
+			}
+
+			public Builder NextControlFlow(string format, params object[] args) {
+				Unindent();
+				this.Add($"}} {format} {{\n", args);
+				Indent();
 				return this;
 			}
 
 			public Builder EndControlFlow() { 
-				indentLevel--;
-				if(indentLevel < 0) {
-					indentLevel = 0;
-				}
-				this.Add($"{Indent()}}}\n");
+				Unindent();
+				this.Add("}\n");
 				return this;
 			}
 
 			public Builder EndControlFlow(string format, params object[] args) {
-				indentLevel--;
-				if(indentLevel < 0) {
-					indentLevel = 0;
-				}
-				this.Add($"{Indent()}}}{format};\n", args);
-				return this;
+				Unindent();
+				return this.Add($"}} {format};\n", args);
 			}
+		
+//			public Builder AddStatement(string format, params object[] args) {
+//				return this.Add($"{Indentation()}{format};\n", args);
+//			}
+//
+//			public Builder BeginControlFlow(string format, params object[] args) {
+//				this.Add($"{Indentation()}{format} {{\n", args);
+//				Indent();
+//				return this;
+//			}
+//
+//			public Builder NextControlFlow(string format, params object[] args) {
+//				Unindent();
+//				this.Add($"{Indentation()}}} {format} {{\n", args);
+//				Indent();
+//				return this;
+//			}
+//
+//			public Builder EndControlFlow() { 
+//				Unindent();
+//				this.Add($"{Indentation()}}}\n");
+//				return this;
+//			}
+//
+//			public Builder EndControlFlow(string format, params object[] args) {
+//				Unindent();
+//				return this.Add($"{Indentation()}}} {format};\n", args);
+//			}
 
 			public CodeBlock Build() {
-				return new CodeBlock(this.formatParts, this.args);
+				return new CodeBlock(this);
 			}
 
 			private Builder Add(string format, params object[] args) {
 				int len = format.Length;
 				int progress = 0;
-				int indexStart = 0;
+				int indexStart;
 				int argsCount = 0;
 				while(progress < len) {
-					if(format[progress] != '$') {
+					char c = format[progress];
+					if(c != '$') {
 						// Get the index 
-						indexStart = format.IndexOf('$', progress + 1);
+						indexStart = format.IndexOf('$', progress + 1) - progress;
 						// if index not found, default to end of string.
-						if (indexStart == -1) {
-							indexStart = len;
+						if (indexStart < 0) {
+							indexStart = len - progress;
 						}
+						
+//						Debug.Log($"len={len}, progress={progress}, indexStart={indexStart}");
 
 						// take substring up until the first $ formatter 
 						this.formatParts.Add(format.Substring(progress, indexStart));
-						progress = indexStart;
+						progress += indexStart;
 					} else {
-						int index = progress + 1;
-						if (index < len) {
-							if(ValidArgFormatter(format[index])){
-								this.args.Add(args[argsCount++]);
-							}
-						}
+						progress++;
+						indexStart = progress;
+						char formatType = format[indexStart];
 						
-						index = format.IndexOf('$', progress + 1);
-						// if index not found, default to end of string.
-						if (index == -1) {
-							index = len;
+						if (indexStart < len) {
+							if(ValidArgFormatter(formatType)){
+//								Debug.Log($"argsCount={argsCount}");
+								this.args.Add(args[argsCount]);
+								argsCount++;
+							}
+							
+							this.formatParts.Add($"{c}{formatType}");
 						}
 
-						// take substring up until the first $ formatter 
-						this.formatParts.Add(format.Substring(progress, index));
-						progress = index;
+						progress++;
 					}
+					
+//					Debug.Log($"formatParts={string.Join(", ", this.formatParts)}");
 				}
 
 				if(argsCount != args.Length) {
