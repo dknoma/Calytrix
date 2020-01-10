@@ -14,22 +14,19 @@ Some sort of new fangled platformer thing.
 > Custom properties are used in Tiled to allow us to specify variables we otherwise would not be able to use in Tiled AND Unity.
 For example, `layer_name` allows us to tell Unity which `Layer` this tilemap layer should belong to (which is used for physics, etc).
 
-### Layer Names
-> NOTE: All names, keys, and values are case sensitive. So capitalization or lack thereof matters! DO NOT FORGET OR THE GOBLINS WILL GET YOU.
-
 > Labels are the keys (names) that tell Unity which custom property is being used
-- Labels
-  - `layer_name`: the key that tells Unity which Unity `Layer` this Tiled layer is a part of.
+#### Labels
 > The actual Unity `Layer` name
-- Names
-  - `Ground`: The default layer for ground tiles which the player can interact with.
-  - `Decoration`: Tiles that the player should not interact with.
-  - `Hazards`: Tiles that are player hazards.
-  - `Special`: Not implemented yet, but will be used in conjunction with another custom property to see what the special interactions should be.
-  
-### Order in Layer
-- `order_in_layer`
-  - allows Unity to determine the order of each tilemap in the layer. This is so the tilemaps are rendered in the correct order (in front of the player, behind the player, behind another layer, etc)
+  - `layer_name`: the key that tells Unity which Unity `Layer` this Tiled layer is a part of.
+  - `order_in_layer`
+    - allows Unity to determine the order of each tilemap in the layer. This is so the tilemaps are rendered in the correct order (in front of the player, behind the player, behind another layer, etc)
+#### Values
+> NOTE: All names, keys, and values are case sensitive. So capitalization or lack thereof matters! DO NOT FORGET OR THE GOBLINS WILL GET YOU.
+  - Valid values for `layer_name`
+    - `Ground`: The default layer for ground tiles which the player can interact with.
+    - `Decoration`: Tiles that the player should not interact with.
+    - `Hazards`: Tiles that are player hazards.
+    - `Special`: Not implemented yet, but will be used in conjunction with another custom property to see what the special interactions should be.
   
 # Wwise
 ### Importing audio
