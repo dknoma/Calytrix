@@ -2,11 +2,12 @@
 using Items.Currencies;
 using Music;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
 using Utility;
 using static Characters.CharacterState;
+using static Characters.DirectionUtility;
+using static Characters.DirectionUtility.InputAngleState;
 using static Characters.InputConstants;
+using static UnityEngine.InputSystem.InputAction;
 
 namespace Characters.Allies {
 	public class PlayerController : PhysicsObject {
@@ -15,8 +16,7 @@ namespace Characters.Allies {
 
 		[SerializeField] private float jumpTakeOffSpeed = 7;
 
-		private GamepadActions gamepadActions;
-		
+		private PCInputActions pcInputActions;
 		private SpriteRenderer spriteRenderer;
 		private Animator animator;
 
@@ -24,24 +24,28 @@ namespace Characters.Allies {
 		private static readonly int VELOCITY_X = Animator.StringToHash("velocityX");
 
 		private Vector2 move;
+		private InputAngleState inputDirection;
 		
 		private void Awake() {
-			this.gamepadActions = new GamepadActions();
+			this.pcInputActions = new PCInputActions();
 			this.spriteRenderer = GetComponent<SpriteRenderer>();
 			this.animator = GetComponent<Animator>();
 			
 			ControllerInputManager.InitControllers();
 
-			gamepadActions.Player.MovementPress.performed += StartMovement;
-			gamepadActions.Player.MovementRelease.performed += StopMovement;
-			gamepadActions.Player.JumpPress.performed += OnJumpPress;
-			gamepadActions.Player.JumpRelease.performed += OnJumpRelease;
+			pcInputActions.Player.MovementPress.performed += StartMovement;
+			pcInputActions.Player.MovementRelease.performed += StopMovement;
+			pcInputActions.Player.JumpPress.performed += OnJumpPress;
+			pcInputActions.Player.JumpRelease.performed += OnJumpRelease;
+			pcInputActions.Player.Action.performed += OnAction;
+			pcInputActions.Player.SpecialAction.performed += OnSpecialAction;
+			pcInputActions.Player.Menu.performed += OnMenu;
 			
-			gamepadActions.Enable();
+			pcInputActions.Enable();
 		}
 
 		private void OnDisable() {
-			gamepadActions.Disable();
+			pcInputActions.Disable();
 		}
 		
 		private void OnCollisionEnter2D(Collision2D other) {
@@ -51,30 +55,54 @@ namespace Characters.Allies {
 			}
 		}
 
-		private void StartMovement(InputAction.CallbackContext ctx) {
-			Vector2 m = ctx.ReadValue<Vector2>();
-			if(m.x > 0) {
+		private void RawVector(Vector2 input) {
+			if(input.x > 0) {
 				this.move.x = 1;
-			} else if(m.x < 0) {
+			} else if(input.x < 0) {
 				this.move.x = -1;
 			}
 			
-			
-			if(m.y > 0) {
+			if(input.y > 0) {
 				this.move.y = 1;
-			} else if(m.y < 0) {
+			} else if(input.y < 0) {
 				this.move.y = -1;
 			}
+		}
+
+		private bool MagnitudeWithinRange(float mag) {
+			return 0.1 <= mag && mag <= 0.1;
+		}
+
+		private void StartMovement(CallbackContext ctx) {
+			Vector2 input = ctx.ReadValue<Vector2>();
+			if(input.x > 0 && input.y > 0) {
+				this.inputDirection = RIGHT_UP;
+			} else if(input.x > 0 && MagnitudeWithinRange(input.y)) {
+				this.inputDirection = RIGHT;
+			} else if(input.x > 0 && input.y < 0) {
+				this.inputDirection = RIGHT_DOWN;
+			} else if(MagnitudeWithinRange(input.x) && input.y < 0) {
+				this.inputDirection = DOWN;
+			} else if(input.x < 0 && input.y < 0) {
+				this.inputDirection = LEFT_DOWN;
+			} else if(input.x < 0 && MagnitudeWithinRange(input.x)) {
+				this.inputDirection = LEFT;
+			} else if(input.x < 0 && input.y > 0) {
+				this.inputDirection = LEFT_UP;
+			} else if(MagnitudeWithinRange(input.x) && input.y > 0) {
+				this.inputDirection = UP;
+			}
 			
+			RawVector(input);
 			Debug.Log($"moving: {move}");
 		}
 
-		private void StopMovement(InputAction.CallbackContext ctx) {
+		private void StopMovement(CallbackContext ctx) {
 			Debug.Log($"stop moving: {move}");
 			this.move = Vector2.zero;
 		}
 		
-		public void OnJumpPress(InputAction.CallbackContext ctx) {
+		private void OnJumpPress(CallbackContext ctx) {
 			Debug.Log("jumping");
 			switch(state) {
 				case State.DEFAULT:
@@ -86,7 +114,7 @@ namespace Characters.Allies {
 			}
 		}
 		
-		public void OnJumpRelease(InputAction.CallbackContext ctx) {
+		private void OnJumpRelease(CallbackContext ctx) {
 			Debug.Log("falling");
 			if(velocity.y > 0) {
 				velocity.y = velocity.y * 0.5f;
@@ -94,27 +122,21 @@ namespace Characters.Allies {
 			}
 		}
 		
-//		public void OnAction(InputValue value) {
-//			Debug.Log("action");
-////			m_Move = value.Get<Vector2>();
-//		}
-//		
-//		public void OnMenu(InputValue value) {
-//			Debug.Log("menu");
-////			m_Move = value.Get<Vector2>();
-//		}
+		private void OnAction(CallbackContext ctx) {
+			Debug.Log("action");
+		}
+		
+		private void OnSpecialAction(CallbackContext ctx) {
+			Debug.Log("action");
+		}
+		
+		private void OnMenu(CallbackContext ctx) {
+			Debug.Log("menu");
+		}
 
 		protected override void ComputeVelocity() {
 #if USING_INPUT_OLD
-//			Debug.Log($"input=\"{Input.inputString}\"");
-//			Debug.Log($"GetJoystickNames=\"{string.Join(", ", Input.GetJoystickNames())}\"");
-//			
-//			Debug.Log($"inputt=\"{Input.GetButtonDown(JOYSTICK_BUTTON_3.ToString())}\"");
-//			Debug.Log($"inputt=\"{InputSystem.GetDevice<InputDevice>()}\"");
-//			Debug.Log($"controller=\"{}\"");
-			
 			Vector2 move = Vector2.zero;
-
 			move.x = ControllerInputManager.GetRawHorizontal();
 #endif
 			float moveX = move.x;
@@ -122,9 +144,9 @@ namespace Characters.Allies {
 			OnCharacterState();
 			
 			if(moveX > 0) {
-				this.facingState = DirectionUtility.Right();
+				this.facingState = Right();
 			} else if(moveX < 0) {
-				this.facingState = DirectionUtility.Left();
+				this.facingState = Left();
 			}
 
 			OnFacingState();
@@ -179,10 +201,10 @@ namespace Characters.Allies {
 
 		private void OnFacingState() {
 			switch(facingState) {
-				case DirectionUtility.FacingState.RIGHT:
+				case FacingState.RIGHT:
 					spriteRenderer.flipX = false;
 					break;
-				case DirectionUtility.FacingState.LEFT:
+				case FacingState.LEFT:
 					spriteRenderer.flipX = true;
 					break;
 				default:

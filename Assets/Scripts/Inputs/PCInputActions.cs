@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Inputs/InputActions/GamepadActions.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Inputs/InputActions/PCInputActions.inputactions'
 
 using System;
 using System.Collections;
@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public class @GamepadActions : IInputActionCollection, IDisposable
+public class @PCInputActions : IInputActionCollection, IDisposable
 {
     private InputActionAsset asset;
-    public @GamepadActions()
+    public @PCInputActions()
     {
         asset = InputActionAsset.FromJson(@"{
-    ""name"": ""GamepadActions"",
+    ""name"": ""PCInputActions"",
     ""maps"": [
         {
             ""name"": ""Player"",
@@ -648,8 +648,8 @@ public class @GamepadActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_SpecialAction;
     public struct PlayerActions
     {
-        private @GamepadActions m_Wrapper;
-        public PlayerActions(@GamepadActions wrapper) { m_Wrapper = wrapper; }
+        private @PCInputActions m_Wrapper;
+        public PlayerActions(@PCInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @MovementPress => m_Wrapper.m_Player_MovementPress;
         public InputAction @MovementRelease => m_Wrapper.m_Player_MovementRelease;
         public InputAction @Action => m_Wrapper.m_Player_Action;
@@ -738,8 +738,8 @@ public class @GamepadActions : IInputActionCollection, IDisposable
     private readonly InputAction m_UI_Action;
     public struct UIActions
     {
-        private @GamepadActions m_Wrapper;
-        public UIActions(@GamepadActions wrapper) { m_Wrapper = wrapper; }
+        private @PCInputActions m_Wrapper;
+        public UIActions(@PCInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_UI_Movement;
         public InputAction @Action => m_Wrapper.m_UI_Action;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
