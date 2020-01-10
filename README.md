@@ -27,6 +27,9 @@ For example, `layer_name` allows us to tell Unity which `Layer` this tilemap lay
     - `Decoration`: Tiles that the player should not interact with.
     - `Hazards`: Tiles that are player hazards.
     - `Special`: Not implemented yet, but will be used in conjunction with another custom property to see what the special interactions should be.
+  - Valid values for `order_in_layer`
+    - `-2147483648` to `2147483648`
+      - Smaller values are further behind in layer order
   
 # Wwise
 ### Importing audio
