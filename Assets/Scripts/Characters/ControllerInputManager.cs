@@ -1,16 +1,51 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using static Characters.InputConstants;
 
 namespace Characters {
 	public static class ControllerInputManager {
-		private static string vertical = "Vertical";
-		private static string horizontal = "Horizontal";
-		private static string jump = "Jump";
+		private static string vertical = VERTICAL_INPUT_NAME;
+		private static string horizontal = HORIZONTAL_INPUT_NAME;
+		private static string jump = JUMP_INPUT_NAME;
 		private static string grab;
 		private static string fire;
 		private static string pause;
 		private static string weapons;
 		private static string submit;
 		private static string cancel;
+		private static bool useController;
+
+		private static readonly IList<string> CONTROLLERS = new List<string>();
+		private static readonly IDictionary<string, InputDevice> CONTROLLERS_BY_NAME = new Dictionary<string, InputDevice>();
+
+		private const string KEYBOARD = "keyboard";
+		
+		private static string currentController = KEYBOARD;
+
+		public static void InitControllers() {
+			foreach(string controller in Input.GetJoystickNames()) {
+				CONTROLLERS.Add(controller);
+			}
+
+			if(CONTROLLERS.Count > 0) {
+				currentController = CONTROLLERS[0];
+				useController = true;
+			}
+
+			var devices = InputSystem.devices;
+			foreach(InputDevice inputDevice in devices) {
+				CONTROLLERS_BY_NAME.Add(inputDevice.name, inputDevice);
+				
+//				Debug.Log($"device=[{inputDevice.name}], [{inputDevice.displayName}], [{inputDevice.shortDisplayName}]");
+//				
+//				if(inputDevice.name.Equals(PS4)) {
+//					foreach(InputControl inputDeviceAllControl in inputDevice.allControls) {
+//						Debug.Log($"inputDeviceAllControl={inputDeviceAllControl}");
+//					}
+//				}
+			}
+		}
 
 		public static float GetRawHorizontal() {
 			return Input.GetAxisRaw(Horizontal());
@@ -20,27 +55,27 @@ namespace Characters {
 			return Input.GetAxis(Horizontal());
 		}
 
-		public static void VerticalControl(bool useController) {
-			vertical = useController ? "PS4_DPadVertical" : "Vertical";
+		public static void VerticalControl() {
+			vertical = useController ? "PS4_DPadVertical" : VERTICAL_INPUT_NAME;
 		}
 
 		public static string Vertical() {
 			return vertical;
 		}
 
-		public static void HorizontalControl(bool useController) {
-			horizontal = useController ? "PS4_DPadHorizontal" : "Horizontal";
+		public static void HorizontalControl() {
+			horizontal = useController ? "PS4_DPadHorizontal" : HORIZONTAL_INPUT_NAME;
 		}
 
 		public static string Horizontal() {
 			return horizontal;
 		}
 
-		public static void JumpControl(bool useController) {
+		public static void JumpControl() {
 			if(useController) {
-				jump = "Jump";
+				jump = JUMP_INPUT_NAME;
 			} else {
-				jump = "Jump";
+				jump = JUMP_INPUT_NAME;
 			}
 		}
 

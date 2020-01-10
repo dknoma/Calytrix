@@ -28,7 +28,6 @@ namespace Characters {
 		protected Vector2 velocity;
 		protected Vector2 targetVelocity;
 		protected Vector2 groundNormal;
-		protected Vector2 move;
 
 		protected readonly RaycastHit2D[] hitBuffer = new RaycastHit2D[16];
 		protected readonly List<RaycastHit2D> hitBufferList = new List<RaycastHit2D>();

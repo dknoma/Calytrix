@@ -29,13 +29,17 @@ public class MethodBlock {
 
 		builder.Append($"{(returnType == null ? "void" : returnType.FormattedString())} {name}({string.Join(", ", parameters)}) {{\n");
 
-		builder.Append(codeBlock);
+		builder.Append(IndentCodeBlock(codeBlock));
 //		builder.Append($"{codeBlock.ToString().Replace("\n", "\n")}");
 //		builder.Append($"    {codeBlock.ToString().Replace("\n", "\n    ")}");
-//		builder.Remove(builder.ToString().Length - 4, 4);
 		builder.Append("}");
 
 		return builder.ToString();
+	}
+
+	private string IndentCodeBlock(CodeBlock block) {
+		string res = $"    {block.ToString().Replace("\n", "\n    ")}";
+		return res.Substring(0, res.Length - 4);
 	}
 
 	public class Builder {
@@ -74,7 +78,6 @@ public class MethodBlock {
 		}
 
 		public Builder AddCodeBlock(CodeBlock codeBlock) {
-			codeBlock.indentLevel++;
 			this.codeBlock = codeBlock;
 			return this;
 		}

@@ -10,12 +10,12 @@ public class CodeGenTester : MonoBehaviour {
         CodeBlock block = CodeBlock.NewBuilder()
                                    .AddStatement("int sum = 0")
                                    .BeginControlFlow("for(int i = 0; i <= $A; i++)", max)
-                                   .AddStatement("sum += i")
-                                   .BeginControlFlow("if(sum > $A && i % 2 == $A", max, 0)
-                                   .AddStatement("sum++")
-                                   .NextControlFlow("else")
-                                   .AddStatement("sum--")
-                                   .EndControlFlow()
+								       .AddStatement("sum += i")
+									   .BeginControlFlow("if(sum > $A && i % 2 == $A", max, 0)
+										   .AddStatement("sum++")
+									   .NextControlFlow("else")
+										   .AddStatement("sum--")
+									   .EndControlFlow()
                                    .EndControlFlow()
                                    .Build();
 			
@@ -24,7 +24,7 @@ public class CodeGenTester : MonoBehaviour {
         CodeBlock block2 = CodeBlock.NewBuilder()
                                     .AddStatement("int sum = 0")
                                     .BeginControlFlow("do")
-                                    .AddStatement("sum++")
+                                        .AddStatement("sum++")
                                     .EndControlFlow("while(sum < $A)", max)
                                     .Build();
 			
@@ -45,12 +45,12 @@ public class CodeGenTester : MonoBehaviour {
 	    CodeBlock block = CodeBlock.NewBuilder()
 	                               .AddStatement("int sum = 0")
 	                               .BeginControlFlow("for(int i = 0; i <= $A; i++)", max)
-	                               .AddStatement("sum += i")
-	                               .BeginControlFlow("if(sum > $A && i % 2 == $A", max, 0)
-	                               .AddStatement("sum++")
-	                               .NextControlFlow("else")
-	                               .AddStatement("sum--")
-	                               .EndControlFlow()
+	                                   .AddStatement("sum += i")
+	                                   .BeginControlFlow("if(sum > $A && i % 2 == $A", max, 0)
+	                                       .AddStatement("sum++")
+	                                   .NextControlFlow("else")
+	                                      .AddStatement("sum--")
+	                                   .EndControlFlow()
 	                               .EndControlFlow()
 	                               .Build();
 

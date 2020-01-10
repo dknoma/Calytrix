@@ -25,19 +25,14 @@ namespace Utility.Codegen {
 			StringBuilder builder = new StringBuilder();
 
 			int j = 0;
-			foreach(string part in formatParts) {
+			for(int i = 0; i < formatParts.Count; i++) {
+				string part = formatParts[i];
 //				Debug.Log(part);
 				if(part[0] == '$' && part.Length > 1) {
 					char type = part[1];
 					switch(type) {
 						case 'A':
 							builder.Append(args[j++]);
-							break;
-						case 'I':
-//							builder.Append(part.Substring(2, part.Length - 2));
-							if(indentLevel == 0) {
-								builder.Append(Indentation());
-							}
 							break;
 						case '>':
 							indentLevel++;
@@ -49,12 +44,10 @@ namespace Utility.Codegen {
 							break;
 					}
 				} else {
-//					Debug.Log($"indentLevel={indentLevel}, part={part}");
-//					builder.Append($"{Indentation()}{part}");
 					builder.Append(part);
 				}
 			}
-			
+
 			return builder.ToString();
 		}
 		
@@ -77,30 +70,18 @@ namespace Utility.Codegen {
 
 			private void Indent() {
 				this.formatParts.Add("$>");
-//				indentLevel++;
 			}
 
 			private void Unindent() {
 				this.formatParts.Add("$<");
-//				indentLevel--;
-//				if(indentLevel < 0) {
-//					indentLevel = 0;
-//				}
 			}
-
-			private void TryAddIndent() {
-//				if(indentLevel > 0) {
-				this.formatParts.Add("$I");
-//				}
-			}
-		
+			
 			public Builder AddStatement(string format, params object[] args) {
-				TryAddIndent();
-				return this.Add($"{format};\n", args);
+				this.Add($"{format};\n", args);
+				return this;
 			}
 
 			public Builder BeginControlFlow(string format, params object[] args) {
-				TryAddIndent();
 				this.Add($"{format} {{\n", args);
 				Indent();
 				return this;
