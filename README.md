@@ -48,6 +48,11 @@ For example, `layer_name` allows us to tell Unity which `Layer` this tilemap lay
 
 # Version History
 
+### 1.0.2
+> Physics Test
+
+Testing player physics and new input system
+
 ### 1.0.1
 > Wwise audio integration
 #### AudioKinetic: Wwise
