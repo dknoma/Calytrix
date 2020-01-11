@@ -25,8 +25,6 @@ namespace Characters.Allies {
 
 		private Vector2 move;
 		private InputAngleState inputDirection;
-
-//		private int inputAngleState = 0b0000;
 		
 		private void Awake() {
 			this.pcInputActions = new PCInputActions();
@@ -144,7 +142,6 @@ namespace Characters.Allies {
 		private void OnJumpRelease(CallbackContext ctx) {
 			Debug.Log("falling");
 			if(velocity.y > 0) {
-//				velocity.y = velocity.y * 0.5f;
 				this.state = Falling();
 			}
 		}
