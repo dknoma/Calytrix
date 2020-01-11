@@ -21,7 +21,18 @@
 			DOWN,
 			LEFT_DOWN,
 			LEFT,
-			LEFT_UP
+			LEFT_UP,
+			DEFAULT
 		}
+
+//		public const int UP = 0b0001;
+//		public const int DOWN = 0b0010;
+//		public const int LEFT = 0b0100;
+//		public const int RIGHT = 0b1000;
+//
+//		public const int UP_MASK = 0b1101;
+//		public const int DOWN_MASK = 0b1110;
+//		public const int LEFT_MASK = 0b0111;
+//		public const int RIGHT_MASK = 0b1011;
 	}
 }

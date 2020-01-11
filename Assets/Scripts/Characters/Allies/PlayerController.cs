@@ -25,6 +25,8 @@ namespace Characters.Allies {
 
 		private Vector2 move;
 		private InputAngleState inputDirection;
+
+//		private int inputAngleState = 0b0000;
 		
 		private void Awake() {
 			this.pcInputActions = new PCInputActions();
@@ -33,7 +35,7 @@ namespace Characters.Allies {
 			
 			ControllerInputManager.InitControllers();
 
-			pcInputActions.Player.MovementPress.performed += StartMovement;
+			pcInputActions.Player.MovementPress.performed += OnMovement;
 			pcInputActions.Player.MovementRelease.performed += StopMovement;
 			pcInputActions.Player.JumpPress.performed += OnJumpPress;
 			pcInputActions.Player.JumpRelease.performed += OnJumpRelease;
@@ -55,51 +57,76 @@ namespace Characters.Allies {
 			}
 		}
 
-		private void RawVector(Vector2 input) {
-			if(input.x > 0) {
-				this.move.x = 1;
-			} else if(input.x < 0) {
-				this.move.x = -1;
+		/*
+		 * 
+			if(x > 0) {
+				this.inputAngleState &= RIGHT_MASK;
+			} else if(x < 0) {
+				this.inputAngleState &= LEFT_MASK;
 			}
 			
-			if(input.y > 0) {
-				this.move.y = 1;
-			} else if(input.y < 0) {
-				this.move.y = -1;
+			if(y > 0) {
+				this.inputAngleState &= UP_MASK;
+			} else if(x < 0) {
+				this.inputAngleState &= DOWN_MASK;
 			}
+		 */
+		private void OnMovement(CallbackContext ctx) {
+			Vector2 input = ctx.ReadValue<Vector2>();
+			
+			this.inputDirection = CalculateInputAngle(input.x, input.y);
+			
+			(this.move.x, this.move.y) = RawVector(input);
+			Debug.Log($"moving: {move}");
 		}
 
-		private bool MagnitudeWithinRange(float mag) {
+		private static InputAngleState CalculateInputAngle(float x, float y) {
+			InputAngleState angleState = DEFAULT;
+			if(x > 0 && y > 0) {
+				angleState = RIGHT_UP;
+			} else if(x > 0 && MagnitudeWithinRange(y)) {
+				angleState = RIGHT;
+			} else if(x > 0 && y < 0) {
+				angleState = RIGHT_DOWN;
+			} else if(MagnitudeWithinRange(x) && y < 0) {
+				angleState = DOWN;
+			} else if(x < 0 && y < 0) {
+				angleState = LEFT_DOWN;
+			} else if(x < 0 && MagnitudeWithinRange(x)) {
+				angleState = LEFT;
+			} else if(x < 0 && y > 0) {
+				angleState = LEFT_UP;
+			} else if(MagnitudeWithinRange(x) && y > 0) {
+				angleState = UP;
+			}
+			return angleState;
+		}
+
+		private static bool MagnitudeWithinRange(float mag) {
 			return 0.1 <= mag && mag <= 0.1;
 		}
 
-		private void StartMovement(CallbackContext ctx) {
-			Vector2 input = ctx.ReadValue<Vector2>();
-			if(input.x > 0 && input.y > 0) {
-				this.inputDirection = RIGHT_UP;
-			} else if(input.x > 0 && MagnitudeWithinRange(input.y)) {
-				this.inputDirection = RIGHT;
-			} else if(input.x > 0 && input.y < 0) {
-				this.inputDirection = RIGHT_DOWN;
-			} else if(MagnitudeWithinRange(input.x) && input.y < 0) {
-				this.inputDirection = DOWN;
-			} else if(input.x < 0 && input.y < 0) {
-				this.inputDirection = LEFT_DOWN;
-			} else if(input.x < 0 && MagnitudeWithinRange(input.x)) {
-				this.inputDirection = LEFT;
-			} else if(input.x < 0 && input.y > 0) {
-				this.inputDirection = LEFT_UP;
-			} else if(MagnitudeWithinRange(input.x) && input.y > 0) {
-				this.inputDirection = UP;
+		private static (int, int) RawVector(Vector2 input) {
+			int x = 0, y = 0;
+			
+			if(input.x > 0) {
+				x = 1;
+			} else if(input.x < 0) {
+				x = -1;
 			}
 			
-			RawVector(input);
-			Debug.Log($"moving: {move}");
+			if(input.y > 0) {
+				y = 1;
+			} else if(input.y < 0) {
+				y = -1;
+			}
+			return (x, y);
 		}
 
 		private void StopMovement(CallbackContext ctx) {
 			Debug.Log($"stop moving: {move}");
 			this.move = Vector2.zero;
+			this.inputDirection = DEFAULT;
 		}
 		
 		private void OnJumpPress(CallbackContext ctx) {
@@ -117,7 +144,7 @@ namespace Characters.Allies {
 		private void OnJumpRelease(CallbackContext ctx) {
 			Debug.Log("falling");
 			if(velocity.y > 0) {
-				velocity.y = velocity.y * 0.5f;
+//				velocity.y = velocity.y * 0.5f;
 				this.state = Falling();
 			}
 		}
@@ -166,13 +193,16 @@ namespace Characters.Allies {
 					break;
 				case State.FALLING:
 					// When letting go of jump, make sure that vertical velocity is updated correctly
+#if USING_INPUT_OLD
 					if(Input.GetButtonUp(JUMP_INPUT_NAME)) {
-						if(velocity.y > 0) {
-							velocity.y = velocity.y * 0.5f;
-							this.state = Falling();
-						}
+#endif
+					if(velocity.y > 0) {
+						velocity.y = velocity.y * 0.5f;
+						this.state = Falling();
 					}
-
+#if USING_INPUT_OLD
+					}
+#endif
 					break;
 				case State.CLIMBING_IDLE:
 					break;
