@@ -11,6 +11,9 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Characters.Allies {
 	public class PlayerController : PhysicsCharacter {
+		private static readonly int GROUNDED = Animator.StringToHash("grounded");
+		private static readonly int VELOCITY_X = Animator.StringToHash("velocityX");
+		
 		[Header("Controller Variables")] [SerializeField]
 		private float maxSpeed = 7;
 
@@ -20,11 +23,10 @@ namespace Characters.Allies {
 		private SpriteRenderer spriteRenderer;
 		private Animator animator;
 
-		private static readonly int GROUNDED = Animator.StringToHash("grounded");
-		private static readonly int VELOCITY_X = Animator.StringToHash("velocityX");
-
 		private Vector2 move;
 		private InputAngleState inputDirection;
+
+		private bool dpadMovement;
 		
 		private void Awake() {
 			this.pcInputActions = new PCInputActions();
@@ -32,16 +34,7 @@ namespace Characters.Allies {
 			this.animator = GetComponent<Animator>();
 			
 			ControllerInputManager.InitControllers();
-
-			pcInputActions.Player.MovementPress.performed += OnMovement;
-			pcInputActions.Player.MovementRelease.performed += StopMovement;
-			pcInputActions.Player.JumpPress.performed += OnJumpPress;
-			pcInputActions.Player.JumpRelease.performed += OnJumpRelease;
-			pcInputActions.Player.Action.performed += OnAction;
-			pcInputActions.Player.SpecialAction.performed += OnSpecialAction;
-			pcInputActions.Player.Menu.performed += OnMenu;
-			
-			pcInputActions.Enable();
+			InitInput();
 		}
 
 		private void OnDisable() {
@@ -53,6 +46,34 @@ namespace Characters.Allies {
 				Currency currency = other.gameObject.GetComponent<Currency>();
 				currency.OnCollect();
 			}
+		}
+
+		private void InitInput() {
+			pcInputActions.Player.Move.performed += OnMove;
+			pcInputActions.Player.DPadMove.performed += OnDPadMove;
+			pcInputActions.Player.DPadMove.canceled += StopDPadMove;
+			
+//			pcInputActions.Player.MovementPress.performed += OnMovement;
+//			pcInputActions.Player.MovementRelease.performed += StopMovement;
+			pcInputActions.Player.JumpPress.performed += OnJumpPress;
+			pcInputActions.Player.JumpRelease.performed += OnJumpRelease;
+			pcInputActions.Player.Action.performed += OnAction;
+			pcInputActions.Player.SpecialAction.performed += OnSpecialAction;
+			pcInputActions.Player.Menu.performed += OnMenu;
+			
+			pcInputActions.Enable();
+		}
+		
+		private void OnDPadMove(CallbackContext ctx) {
+			dpadMovement = true;
+			Vector2 input = ctx.ReadValue<Vector2>().normalized;
+//			Debug.Log($"input: {input.x},{input.y}");
+			
+			this.inputDirection = CalculateInputAngle(input.x, input.y);
+			
+			Debug.Log($"inputDirection={inputDirection.ToString()}");
+			
+			(this.move.x, this.move.y) = RawVector(input);
 		}
 
 		/*
@@ -69,60 +90,69 @@ namespace Characters.Allies {
 				this.inputAngleState &= DOWN_MASK;
 			}
 		 */
-		private void OnMovement(CallbackContext ctx) {
-			Vector2 input = ctx.ReadValue<Vector2>();
+		private void OnMove(CallbackContext ctx) {
+			if(dpadMovement) return;
 			
+			Vector2 input = ctx.ReadValue<Vector2>().normalized;
+//				Debug.Log($"input: {input.x},{input.y}");
+
 			this.inputDirection = CalculateInputAngle(input.x, input.y);
-			
+
+			Debug.Log($"inputDirection={inputDirection.ToString()}");
+
 			(this.move.x, this.move.y) = RawVector(input);
-			Debug.Log($"moving: {move}");
 		}
 
 		private static InputAngleState CalculateInputAngle(float x, float y) {
 			InputAngleState angleState = DEFAULT;
-			if(x > 0 && y > 0) {
+			if(x >= 0.5 && y >= 0.5) {
 				angleState = RIGHT_UP;
-			} else if(x > 0 && MagnitudeWithinRange(y)) {
+			} else if(x >= 0.5 && MagnitudeWithinRange(y)) {
 				angleState = RIGHT;
-			} else if(x > 0 && y < 0) {
+			} else if(x >= 0.5 && y <= -0.5) {
 				angleState = RIGHT_DOWN;
-			} else if(MagnitudeWithinRange(x) && y < 0) {
+			} else if(MagnitudeWithinRange(x) && y <= -0.5) {
 				angleState = DOWN;
-			} else if(x < 0 && y < 0) {
+			} else if(x <= -0.5 && y <= -0.5) {
 				angleState = LEFT_DOWN;
-			} else if(x < 0 && MagnitudeWithinRange(x)) {
+			} else if(x <= -0.5 && MagnitudeWithinRange(y)) {
 				angleState = LEFT;
-			} else if(x < 0 && y > 0) {
+			} else if(x <= -0.5 && y >= 0.5) {
 				angleState = LEFT_UP;
-			} else if(MagnitudeWithinRange(x) && y > 0) {
+			} else if(MagnitudeWithinRange(x) && y >= 0.5) {
 				angleState = UP;
+			} else {
+				angleState = DEFAULT;
 			}
 			return angleState;
 		}
 
 		private static bool MagnitudeWithinRange(float mag) {
-			return 0.1 <= mag && mag <= 0.1;
+			return -0.5 <= mag && mag <= 0.5;
 		}
 
 		private static (int, int) RawVector(Vector2 input) {
 			int x = 0, y = 0;
 			
-			if(input.x > 0) {
+			if(input.x > 0.5) {
 				x = 1;
-			} else if(input.x < 0) {
+			} else if(input.x < -0.5) {
 				x = -1;
 			}
 			
-			if(input.y > 0) {
+			if(input.y > 0.5) {
 				y = 1;
-			} else if(input.y < 0) {
+			} else if(input.y < -0.5) {
 				y = -1;
 			}
+			
 			return (x, y);
 		}
 
-		private void StopMovement(CallbackContext ctx) {
-			Debug.Log($"stop moving: {move}");
+		private void StopDPadMove(CallbackContext ctx) {
+			dpadMovement = false;
+			Debug.Log($"stop moving: {move}, {dpadMovement}");
+			
 			this.move = Vector2.zero;
 			this.inputDirection = DEFAULT;
 		}
@@ -167,9 +197,9 @@ namespace Characters.Allies {
 
 			OnCharacterState();
 			
-			if(moveX > 0) {
+			if(moveX > 0 && InputRight(inputDirection)) {
 				this.facingState = Right();
-			} else if(moveX < 0) {
+			} else if(moveX < 0 && InputLeft(inputDirection)) {
 				this.facingState = Left();
 			}
 

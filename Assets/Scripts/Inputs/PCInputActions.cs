@@ -19,6 +19,22 @@ public class @PCInputActions : IInputActionCollection, IDisposable
             ""id"": ""30ce39fa-e027-4174-a744-0402bce7f9d5"",
             ""actions"": [
                 {
+                    ""name"": ""DPadMove"",
+                    ""type"": ""Button"",
+                    ""id"": ""da7d7930-59c1-41e8-8278-1688b6024b2c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""6348c776-dc5b-4d73-af22-8989800cb48d"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""MovementPress"",
                     ""type"": ""PassThrough"",
                     ""id"": ""b2e5f322-5540-41d9-a909-5eb0b19162ca"",
@@ -63,22 +79,6 @@ public class @PCInputActions : IInputActionCollection, IDisposable
                     ""type"": ""Button"",
                     ""id"": ""f5577764-22a0-44c2-81f4-21c3798c6216"",
                     ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""DPadMovePress"",
-                    ""type"": ""Button"",
-                    ""id"": ""5b2081cd-8ea2-40a0-8697-4bcd3aa98ae6"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""DPadMoveRelease"",
-                    ""type"": ""Button"",
-                    ""id"": ""0b721258-6d22-4164-9bdf-4ff764b1520e"",
-                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
@@ -443,6 +443,72 @@ public class @PCInputActions : IInputActionCollection, IDisposable
                     ""action"": ""MovementRelease"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2168c997-bc65-4c4e-9f0f-db15a6028473"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": ""NormalizeVector2"",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""DPad"",
+                    ""id"": ""b7313dc1-b20f-4d28-ae42-2539546c291e"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DPadMove"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""876b7285-2d02-40ea-a636-c562c565576c"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DPadMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""0bf22575-0029-4421-87d3-4939aabf5cd1"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DPadMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""559697be-9d94-46ea-911d-0187773e88af"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DPadMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""df9b9e01-ce7b-41b7-a0ca-aaa2763d02cc"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DPadMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -575,14 +641,14 @@ public class @PCInputActions : IInputActionCollection, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
+        m_Player_DPadMove = m_Player.FindAction("DPadMove", throwIfNotFound: true);
+        m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_MovementPress = m_Player.FindAction("MovementPress", throwIfNotFound: true);
         m_Player_MovementRelease = m_Player.FindAction("MovementRelease", throwIfNotFound: true);
         m_Player_Action = m_Player.FindAction("Action", throwIfNotFound: true);
         m_Player_JumpPress = m_Player.FindAction("JumpPress", throwIfNotFound: true);
         m_Player_JumpRelease = m_Player.FindAction("JumpRelease", throwIfNotFound: true);
         m_Player_Menu = m_Player.FindAction("Menu", throwIfNotFound: true);
-        m_Player_DPadMovePress = m_Player.FindAction("DPadMovePress", throwIfNotFound: true);
-        m_Player_DPadMoveRelease = m_Player.FindAction("DPadMoveRelease", throwIfNotFound: true);
         m_Player_SpecialAction = m_Player.FindAction("SpecialAction", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -637,27 +703,27 @@ public class @PCInputActions : IInputActionCollection, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
+    private readonly InputAction m_Player_DPadMove;
+    private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_MovementPress;
     private readonly InputAction m_Player_MovementRelease;
     private readonly InputAction m_Player_Action;
     private readonly InputAction m_Player_JumpPress;
     private readonly InputAction m_Player_JumpRelease;
     private readonly InputAction m_Player_Menu;
-    private readonly InputAction m_Player_DPadMovePress;
-    private readonly InputAction m_Player_DPadMoveRelease;
     private readonly InputAction m_Player_SpecialAction;
     public struct PlayerActions
     {
         private @PCInputActions m_Wrapper;
         public PlayerActions(@PCInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @DPadMove => m_Wrapper.m_Player_DPadMove;
+        public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @MovementPress => m_Wrapper.m_Player_MovementPress;
         public InputAction @MovementRelease => m_Wrapper.m_Player_MovementRelease;
         public InputAction @Action => m_Wrapper.m_Player_Action;
         public InputAction @JumpPress => m_Wrapper.m_Player_JumpPress;
         public InputAction @JumpRelease => m_Wrapper.m_Player_JumpRelease;
         public InputAction @Menu => m_Wrapper.m_Player_Menu;
-        public InputAction @DPadMovePress => m_Wrapper.m_Player_DPadMovePress;
-        public InputAction @DPadMoveRelease => m_Wrapper.m_Player_DPadMoveRelease;
         public InputAction @SpecialAction => m_Wrapper.m_Player_SpecialAction;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -668,6 +734,12 @@ public class @PCInputActions : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
             {
+                @DPadMove.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDPadMove;
+                @DPadMove.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDPadMove;
+                @DPadMove.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDPadMove;
+                @Move.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
+                @Move.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
+                @Move.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @MovementPress.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovementPress;
                 @MovementPress.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovementPress;
                 @MovementPress.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovementPress;
@@ -686,12 +758,6 @@ public class @PCInputActions : IInputActionCollection, IDisposable
                 @Menu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
                 @Menu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
                 @Menu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
-                @DPadMovePress.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDPadMovePress;
-                @DPadMovePress.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDPadMovePress;
-                @DPadMovePress.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDPadMovePress;
-                @DPadMoveRelease.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDPadMoveRelease;
-                @DPadMoveRelease.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDPadMoveRelease;
-                @DPadMoveRelease.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDPadMoveRelease;
                 @SpecialAction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecialAction;
                 @SpecialAction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecialAction;
                 @SpecialAction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecialAction;
@@ -699,6 +765,12 @@ public class @PCInputActions : IInputActionCollection, IDisposable
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
             {
+                @DPadMove.started += instance.OnDPadMove;
+                @DPadMove.performed += instance.OnDPadMove;
+                @DPadMove.canceled += instance.OnDPadMove;
+                @Move.started += instance.OnMove;
+                @Move.performed += instance.OnMove;
+                @Move.canceled += instance.OnMove;
                 @MovementPress.started += instance.OnMovementPress;
                 @MovementPress.performed += instance.OnMovementPress;
                 @MovementPress.canceled += instance.OnMovementPress;
@@ -717,12 +789,6 @@ public class @PCInputActions : IInputActionCollection, IDisposable
                 @Menu.started += instance.OnMenu;
                 @Menu.performed += instance.OnMenu;
                 @Menu.canceled += instance.OnMenu;
-                @DPadMovePress.started += instance.OnDPadMovePress;
-                @DPadMovePress.performed += instance.OnDPadMovePress;
-                @DPadMovePress.canceled += instance.OnDPadMovePress;
-                @DPadMoveRelease.started += instance.OnDPadMoveRelease;
-                @DPadMoveRelease.performed += instance.OnDPadMoveRelease;
-                @DPadMoveRelease.canceled += instance.OnDPadMoveRelease;
                 @SpecialAction.started += instance.OnSpecialAction;
                 @SpecialAction.performed += instance.OnSpecialAction;
                 @SpecialAction.canceled += instance.OnSpecialAction;
@@ -791,14 +857,14 @@ public class @PCInputActions : IInputActionCollection, IDisposable
     }
     public interface IPlayerActions
     {
+        void OnDPadMove(InputAction.CallbackContext context);
+        void OnMove(InputAction.CallbackContext context);
         void OnMovementPress(InputAction.CallbackContext context);
         void OnMovementRelease(InputAction.CallbackContext context);
         void OnAction(InputAction.CallbackContext context);
         void OnJumpPress(InputAction.CallbackContext context);
         void OnJumpRelease(InputAction.CallbackContext context);
         void OnMenu(InputAction.CallbackContext context);
-        void OnDPadMovePress(InputAction.CallbackContext context);
-        void OnDPadMoveRelease(InputAction.CallbackContext context);
         void OnSpecialAction(InputAction.CallbackContext context);
     }
     public interface IUIActions

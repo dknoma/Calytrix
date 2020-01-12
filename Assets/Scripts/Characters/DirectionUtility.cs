@@ -25,6 +25,19 @@
 			DEFAULT
 		}
 
+		public static bool InputRight(InputAngleState input) {
+			return input == InputAngleState.RIGHT || 
+			       input == InputAngleState.RIGHT_UP ||
+			       input == InputAngleState.RIGHT_DOWN;
+		}
+		
+
+		public static bool InputLeft(InputAngleState input) {
+			return input == InputAngleState.LEFT || 
+			       input == InputAngleState.LEFT_UP ||
+			       input == InputAngleState.LEFT_DOWN;
+		}
+
 //		public const int UP = 0b0001;
 //		public const int DOWN = 0b0010;
 //		public const int LEFT = 0b0100;
