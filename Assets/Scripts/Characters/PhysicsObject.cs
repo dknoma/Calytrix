@@ -6,9 +6,9 @@ namespace Characters {
 	public class PhysicsObject : MonoBehaviour {
 		[Header("Physics Variables")]
 		[SerializeField]
-		private float minGroundNormalY = .65f;
+		protected float minGroundNormalY = .65f;
 		[SerializeField]
-		private float gravityModifier = 1f;
+		protected float gravityModifier = 1f;
 		
 		[Header("Layer Physics Interactions")]
 		// Set which layers to hit with rb2d.Raycast
@@ -51,10 +51,7 @@ namespace Characters {
 			targetVelocity = Vector2.zero;
 			ComputeVelocity();
 		}
-
-		protected virtual void ComputeVelocity() {
-		}
-	
+		
 		private void FixedUpdate() {
 			Vector2 verticalVelocity = ComputeVerticalVelocity();
 			
@@ -76,6 +73,10 @@ namespace Characters {
 			DoMovement(move, true);
 		}
 
+		protected virtual void ComputeVelocity() {
+			// Do nothing...
+		}
+		
 		private void DoMovement(Vector2 move, bool yMovement){
 			float distance = move.magnitude;
 
@@ -113,40 +114,8 @@ namespace Characters {
 			rb2d.position = rb2d.position + move.normalized * distance;
 		}
 
-		private Vector2 ComputeVerticalVelocity() {
-			Vector2 verticalVelocity = Vector2.zero;
-			
-			switch(state) {
-				case CharacterState.State.DEFAULT:
-				case CharacterState.State.WALKING:
-				case CharacterState.State.KNOCKED_BACK:
-				case CharacterState.State.JUMPING:
-				case CharacterState.State.FALLING:
-					verticalVelocity = Physics2D.gravity * (gravityModifier * Time.deltaTime);
-					break;
-				case CharacterState.State.CLIMBING_IDLE:
-					break;
-				case CharacterState.State.CLIMBING_UP:
-					break;
-				case CharacterState.State.CLIMBING_DOWN:
-					break;
-				case CharacterState.State.P_RIGHT_UP:
-					break;
-				case CharacterState.State.P_RIGHT:
-					break;
-				case CharacterState.State.P_RIGHT_DOWN:
-					break;
-				case CharacterState.State.P_LEFT_UP:
-					break;
-				case CharacterState.State.P_LEFT:
-					break;
-				case CharacterState.State.P_LEFT_DOWN:
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-
-			return verticalVelocity;
+		protected virtual Vector2 ComputeVerticalVelocity() {
+			return Physics2D.gravity * (gravityModifier * Time.deltaTime);
 		}
 	}
 }

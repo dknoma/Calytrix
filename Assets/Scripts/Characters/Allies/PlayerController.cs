@@ -10,7 +10,7 @@ using static Characters.InputConstants;
 using static UnityEngine.InputSystem.InputAction;
 
 namespace Characters.Allies {
-	public class PlayerController : PhysicsObject {
+	public class PlayerController : PhysicsCharacter {
 		[Header("Controller Variables")] [SerializeField]
 		private float maxSpeed = 7;
 
