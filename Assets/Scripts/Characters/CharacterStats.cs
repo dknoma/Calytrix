@@ -1,89 +1,71 @@
-﻿// using System;
-// using System.Collections.Generic;
-// using System.Linq;
-// using Managers;
-// using UnityEngine;
-// using UnityEngine.Events;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
-// public enum CharacterSlot {
-// 	One,
-// 	Two,
-// 	Three,
-// 	Four,
-// 	Five,
-// }
-
-// public enum Affiliation {
-// 	Ally,
-// 	Enemy
-// }
-
-// namespace Characters {
-// 	public class CharacterStats : StatusEffects {
+namespace Characters {
+	[Serializable]
+	public class CharacterStats {
+		private const int MAX_HP_ALLOWED = 8;
+		private const int MAX_MP_ALLOWED = 8;
 		
-// 		[SerializeField] protected Affiliation affiliation;
-		
-// 		/* Public/inspector elements */
-// 		public int expToGrant = 10;
-// 		public bool bogResist;
-// 		public bool burnResist;
-// 		public bool poisonResist;
-// 		public bool runeLockResist;
-// 		public bool stunResist;
-// 		public bool silenceResist;
-// 		public Element element;
+ 		[SerializeField]
+ 		private int baseHp = 4;
+        private int maxHp;
+        
+ 		[SerializeField]
+        private int currentHp;
 
-// 		protected int maxLevel = 100;
-// 		public int currentLevel = 1;
+        private int tempHp;
+        
+ 		[SerializeField]
+        private int baseMp = 15;
+        private int maxMp;
+        
+        [SerializeField]
+        private int currentMp;
 
-// 		public int expUntilLevelUp;
-// 		public int currentExp;
-// 		protected int potentialExp;
+        public CharacterStats() {
+	        this.maxHp = baseHp;
+	        this.maxMp = baseMp;
+	        this.currentHp = baseHp;
+	        this.currentMp = baseMp;
+	        this.tempHp = 0;
+        }
 
-// 		[SerializeField]
-// 		protected int baseHp = 20;
-// 		protected int maxHp = 20;
-// 		[SerializeField]
-// 		protected int currentHp;
-// 		protected int totalRuneHp;
-// 		[SerializeField]
-// 		protected int baseMp = 15;
-// 		protected int maxMp = 15;
-// 		[SerializeField]
-// 		protected int currentMp;
-// 		protected int totalRuneMp;
-// 		[SerializeField]
-// 		protected int baseAtk = 5;
-// 		protected int currentAtk;
-// 		protected int totalRuneAtk;
-// 		[SerializeField]
-// 		protected int baseDef = 5;
-// 		protected int currentDef;
-// 		protected int totalRuneDef;
-// 		[SerializeField]
-// 		protected int baseSpd = 5;
-// 		protected int currentSpd;
-// 		protected int totalRuneSpd;
-// 		protected int readiness;
-// 		protected bool ready;
-// 		protected const int READINESS_THRESHOLD = 100;
+        public void IncreaseBaseHp() {
+	        this.baseHp = Mathf.Clamp(baseHp++, 4, MAX_HP_ALLOWED);
+        }
 
-// 		public int Readiness {
-// 			get { return readiness; }
-// 			set { readiness = value; }
-// 		}
-	
-// 		public bool Ready {
-// 			get { return ready; }
-// 			set { ready = value; }
-// 		}
+        public void IncreaseCurrentHp(int hp) {
+	        this.currentHp = Mathf.Clamp(currentHp - hp, 0, maxHp);
+        }
 
-// 		//	private StatusEffects characterStatus = new StatusEffects();
-// 		protected Dictionary<Status, int> statusTurnCounter = new Dictionary<Status, int>();
-// 		protected Dictionary<StatChange, int> statChangeTurnCounter = new Dictionary<StatChange, int>();
-// 		protected bool disableRunes;
-// 		protected bool canAct;
-// 		protected bool canCastSpells;
-// 		protected bool hasStatusAffliction;
-// 	}
-// }
+        public void DecreaseCurrentHp(int hp) {
+	        this.currentHp = Mathf.Clamp(currentHp + hp, 0, maxHp);
+        }
+
+        public void IncreaseBaseMp() {
+	        this.baseMp = Mathf.Clamp(baseMp++, 4, MAX_MP_ALLOWED);
+        }
+
+        public void IncreaseCurrentMp(int mp) {
+	        this.currentMp = Mathf.Clamp(currentMp + mp, 0, maxMp);
+        }
+
+        public void DecreaseCurrentMp(int mp) {
+	        this.currentMp = Mathf.Clamp(currentMp - mp, 0, maxMp);
+        }
+
+        public void IncreaseTempHp(int temp) {
+	        this.tempHp += temp;
+        }
+
+        public void DecreaseTempHp(int temp) {
+	        this.tempHp = Mathf.Clamp(tempHp - temp, 0, MAX_HP_ALLOWED);
+        }
+
+        public void ResetTempHp(int temp) {
+	        this.tempHp = 0;
+        }
+ 	}
+ }
