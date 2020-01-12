@@ -27,6 +27,7 @@ namespace Characters.Allies {
 		private InputAngleState inputDirection;
 
 		private bool dpadMovement;
+		private bool leftStickMovement;
 		
 		private void Awake() {
 			this.pcInputActions = new PCInputActions();
@@ -50,55 +51,46 @@ namespace Characters.Allies {
 
 		private void InitInput() {
 			pcInputActions.Player.Move.performed += OnMove;
-			pcInputActions.Player.DPadMove.performed += OnDPadMove;
-			pcInputActions.Player.DPadMove.canceled += StopDPadMove;
+			pcInputActions.Player.Move.canceled += StopMove;
+			pcInputActions.Player.ButtonMove.performed += OnDPadMove;
+			pcInputActions.Player.ButtonMove.canceled += StopMove;
 			
-//			pcInputActions.Player.MovementPress.performed += OnMovement;
-//			pcInputActions.Player.MovementRelease.performed += StopMovement;
-			pcInputActions.Player.JumpPress.performed += OnJumpPress;
-			pcInputActions.Player.JumpRelease.performed += OnJumpRelease;
-			pcInputActions.Player.Action.performed += OnAction;
-			pcInputActions.Player.SpecialAction.performed += OnSpecialAction;
+			pcInputActions.Player.Jump.performed += OnJumpPress;
+			pcInputActions.Player.Jump.canceled += OnJumpRelease;
+			
+			pcInputActions.Player.Action1.performed += OnAction1;
+			pcInputActions.Player.Action2.performed += OnAction2;
+			
 			pcInputActions.Player.Menu.performed += OnMenu;
 			
 			pcInputActions.Enable();
 		}
 		
 		private void OnDPadMove(CallbackContext ctx) {
+			if(leftStickMovement) return;
+			
 			dpadMovement = true;
 			Vector2 input = ctx.ReadValue<Vector2>().normalized;
-//			Debug.Log($"input: {input.x},{input.y}");
-			
 			this.inputDirection = CalculateInputAngle(input.x, input.y);
 			
 			Debug.Log($"inputDirection={inputDirection.ToString()}");
 			
 			(this.move.x, this.move.y) = RawVector(input);
 		}
-
-		/*
-		 * 
-			if(x > 0) {
-				this.inputAngleState &= RIGHT_MASK;
-			} else if(x < 0) {
-				this.inputAngleState &= LEFT_MASK;
-			}
-			
-			if(y > 0) {
-				this.inputAngleState &= UP_MASK;
-			} else if(x < 0) {
-				this.inputAngleState &= DOWN_MASK;
-			}
-		 */
+		
 		private void OnMove(CallbackContext ctx) {
 			if(dpadMovement) return;
-			
+
 			Vector2 input = ctx.ReadValue<Vector2>().normalized;
-//				Debug.Log($"input: {input.x},{input.y}");
+			if(input != Vector2.zero) {
+				leftStickMovement = true;
+			} else {
+				leftStickMovement = false;
+			}
 
 			this.inputDirection = CalculateInputAngle(input.x, input.y);
 
-			Debug.Log($"inputDirection={inputDirection.ToString()}");
+//			Debug.Log($"inputDirection={inputDirection.ToString()}");
 
 			(this.move.x, this.move.y) = RawVector(input);
 		}
@@ -124,6 +116,7 @@ namespace Characters.Allies {
 			} else {
 				angleState = DEFAULT;
 			}
+			
 			return angleState;
 		}
 
@@ -149,8 +142,9 @@ namespace Characters.Allies {
 			return (x, y);
 		}
 
-		private void StopDPadMove(CallbackContext ctx) {
+		private void StopMove(CallbackContext ctx) {
 			dpadMovement = false;
+			leftStickMovement = false;
 			Debug.Log($"stop moving: {move}, {dpadMovement}");
 			
 			this.move = Vector2.zero;
@@ -176,12 +170,12 @@ namespace Characters.Allies {
 			}
 		}
 		
-		private void OnAction(CallbackContext ctx) {
+		private void OnAction1(CallbackContext ctx) {
 			Debug.Log("action");
 		}
 		
-		private void OnSpecialAction(CallbackContext ctx) {
-			Debug.Log("action");
+		private void OnAction2(CallbackContext ctx) {
+			Debug.Log("special action");
 		}
 		
 		private void OnMenu(CallbackContext ctx) {
@@ -212,6 +206,7 @@ namespace Characters.Allies {
 		}
 
 		private void OnCharacterState() {
+			Debug.Log($"state={state}");
 			switch(state) {
 				case State.DEFAULT:
 				case State.WALKING:
