@@ -20,20 +20,27 @@ public class Player : MonoBehaviour {
     }
 
     private void InitInput() {
+        pcInputActions.Player.Action1.performed += OnAction1;
         pcInputActions.Player.Action2.performed += OnAction2;
 			
         pcInputActions.Enable();
     }
 		
+    private void OnAction1(CallbackContext ctx) {
+        stats.DecreaseCurrentHp(1);
+        OnChangeHP();
+    }
+		
     private void OnAction2(CallbackContext ctx) {
-        OnChangeHP(1);
+        stats.IncreaseCurrentHp(1);
+        OnChangeHP();
     }
     
-    public void OnChangeHP(int value) {
+    public void OnChangeHP() {
         hpSignal.DoSignal();
     }
     
-    public void OnChangeMP(int value) {
+    public void OnChangeMP() {
         mpSignal.DoSignal();
     }
 }

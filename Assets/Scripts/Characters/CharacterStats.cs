@@ -6,21 +6,21 @@ namespace Characters {
 	[CreateAssetMenu(fileName = "CharacterStats", menuName = "ScriptableObjects/CharacterStats", order = 1)]
 	[Serializable]
 	public class CharacterStats : ScriptableObject {
+		private const int STARTING_HP = 4;
 		private const int MAX_HP_ALLOWED = 8;
 		private const int MAX_MP_ALLOWED = 8;
 		
  		[SerializeField]
- 		private int baseHp = 4;
+ 		private int baseHp = STARTING_HP;
         private int maxHp;
         
  		[SerializeField]
         private int currentHp;
 
-
         private int tempHp;
         
  		[SerializeField]
-        private int baseMp = 15;
+        private int baseMp = 6;
         private int maxMp;
         
         [SerializeField]
@@ -28,6 +28,8 @@ namespace Characters {
         
         public int CurrentHp => currentHp;
         public int CurrentMp => currentMp;
+        public int BaseHp => baseHp;
+        public int BaseMp => baseMp;
 
         public CharacterStats() {
 	        this.maxHp = baseHp;
@@ -38,7 +40,7 @@ namespace Characters {
         }
 
         public void IncreaseBaseHp() {
-	        this.baseHp = Mathf.Clamp(baseHp + 1, 4, MAX_HP_ALLOWED);
+	        this.baseHp = Mathf.Clamp(baseHp + 1, STARTING_HP, MAX_HP_ALLOWED);
 	        this.currentHp = baseHp;
 	        Debug.Log($"baseHp={baseHp}");
         }

@@ -5252,52 +5252,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 519420032}
     m_Modifications:
-    - target: {fileID: 1723402712, guid: edb65f38e437b4f4c9f6b545efd2ac7d, type: 3}
-      propertyPath: signalEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 649592948829291396, guid: edb65f38e437b4f4c9f6b545efd2ac7d,
-        type: 3}
-      propertyPath: fullHpContainer
-      value: 
-      objectReference: {fileID: 4462427339871783188, guid: 61dd439e1922a0e40987e7c0cda799c4,
-        type: 3}
-    - target: {fileID: 649592948829291396, guid: edb65f38e437b4f4c9f6b545efd2ac7d,
-        type: 3}
-      propertyPath: halfHpContainer
-      value: 
-      objectReference: {fileID: -7951347736353055350, guid: 61dd439e1922a0e40987e7c0cda799c4,
-        type: 3}
-    - target: {fileID: 649592948829291396, guid: edb65f38e437b4f4c9f6b545efd2ac7d,
-        type: 3}
-      propertyPath: emptyHpContainer
-      value: 
-      objectReference: {fileID: -2829386377052085415, guid: 61dd439e1922a0e40987e7c0cda799c4,
-        type: 3}
-    - target: {fileID: 649592948829291396, guid: edb65f38e437b4f4c9f6b545efd2ac7d,
-        type: 3}
-      propertyPath: fullMpContainer
-      value: 
-      objectReference: {fileID: -6660433326202903522, guid: 61dd439e1922a0e40987e7c0cda799c4,
-        type: 3}
-    - target: {fileID: 649592948829291396, guid: edb65f38e437b4f4c9f6b545efd2ac7d,
-        type: 3}
-      propertyPath: halfMpContainer
-      value: 
-      objectReference: {fileID: -195118753681557494, guid: 61dd439e1922a0e40987e7c0cda799c4,
-        type: 3}
-    - target: {fileID: 649592948829291396, guid: edb65f38e437b4f4c9f6b545efd2ac7d,
-        type: 3}
-      propertyPath: emptyMpContainer
-      value: 
-      objectReference: {fileID: 5679378785473041884, guid: 61dd439e1922a0e40987e7c0cda799c4,
-        type: 3}
-    - target: {fileID: 649592948829291396, guid: edb65f38e437b4f4c9f6b545efd2ac7d,
-        type: 3}
-      propertyPath: tempHpContainer
-      value: 
-      objectReference: {fileID: 2763348096364376797, guid: 61dd439e1922a0e40987e7c0cda799c4,
-        type: 3}
     - target: {fileID: 649592948829291418, guid: edb65f38e437b4f4c9f6b545efd2ac7d,
         type: 3}
       propertyPath: m_Name
