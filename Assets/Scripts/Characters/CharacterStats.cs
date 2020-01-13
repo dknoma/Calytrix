@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Characters {
+	[CreateAssetMenu(fileName = "CharacterStats", menuName = "ScriptableObjects/CharacterStats", order = 1)]
 	[Serializable]
-	public class CharacterStats {
+	public class CharacterStats : ScriptableObject {
 		private const int MAX_HP_ALLOWED = 8;
 		private const int MAX_MP_ALLOWED = 8;
 		
@@ -15,6 +16,7 @@ namespace Characters {
  		[SerializeField]
         private int currentHp;
 
+
         private int tempHp;
         
  		[SerializeField]
@@ -23,6 +25,9 @@ namespace Characters {
         
         [SerializeField]
         private int currentMp;
+        
+        public int CurrentHp => currentHp;
+        public int CurrentMp => currentMp;
 
         public CharacterStats() {
 	        this.maxHp = baseHp;
@@ -33,7 +38,9 @@ namespace Characters {
         }
 
         public void IncreaseBaseHp() {
-	        this.baseHp = Mathf.Clamp(baseHp++, 4, MAX_HP_ALLOWED);
+	        this.baseHp = Mathf.Clamp(baseHp + 1, 4, MAX_HP_ALLOWED);
+	        this.currentHp = baseHp;
+	        Debug.Log($"baseHp={baseHp}");
         }
 
         public void IncreaseCurrentHp(int hp) {
@@ -45,7 +52,8 @@ namespace Characters {
         }
 
         public void IncreaseBaseMp() {
-	        this.baseMp = Mathf.Clamp(baseMp++, 4, MAX_MP_ALLOWED);
+	        this.baseMp = Mathf.Clamp(baseMp + 1, 4, MAX_MP_ALLOWED);
+	        this.currentMp = baseMp;
         }
 
         public void IncreaseCurrentMp(int mp) {

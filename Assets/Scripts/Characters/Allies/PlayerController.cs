@@ -14,9 +14,8 @@ namespace Characters.Allies {
 		private static readonly int GROUNDED = Animator.StringToHash("grounded");
 		private static readonly int VELOCITY_X = Animator.StringToHash("velocityX");
 		
-		[Header("Controller Variables")] [SerializeField]
-		private float maxSpeed = 7;
-
+		[Header("Controller Variables")] 
+		[SerializeField] private float maxSpeed = 7;
 		[SerializeField] private float jumpTakeOffSpeed = 7;
 
 		private PCInputActions pcInputActions;
