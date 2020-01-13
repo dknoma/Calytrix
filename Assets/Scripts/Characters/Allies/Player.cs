@@ -22,6 +22,8 @@ public class Player : MonoBehaviour {
     private void InitInput() {
         pcInputActions.Player.Action1.performed += OnAction1;
         pcInputActions.Player.Action2.performed += OnAction2;
+        pcInputActions.Player.Action3.performed += OnAction3;
+        pcInputActions.Player.Action4.performed += OnAction4;
 			
         pcInputActions.Enable();
     }
@@ -33,6 +35,16 @@ public class Player : MonoBehaviour {
 		
     private void OnAction2(CallbackContext ctx) {
         stats.IncreaseCurrentHp(1);
+        OnChangeHP();
+    }
+		
+    private void OnAction3(CallbackContext ctx) {
+        stats.IncreaseTempHp(1);
+        OnChangeHP();
+    }
+		
+    private void OnAction4(CallbackContext ctx) {
+        stats.DamageCharacter(1);
         OnChangeHP();
     }
     

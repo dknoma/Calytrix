@@ -59,6 +59,7 @@ namespace Characters.Allies {
 			
 			pcInputActions.Player.Action1.performed += OnAction1;
 			pcInputActions.Player.Action2.performed += OnAction2;
+			pcInputActions.Player.Action3.performed += OnAction3;
 			
 			pcInputActions.Player.Menu.performed += OnMenu;
 			
@@ -170,11 +171,15 @@ namespace Characters.Allies {
 		}
 		
 		private void OnAction1(CallbackContext ctx) {
-			Debug.Log("action");
+			Debug.Log("action1");
 		}
 		
 		private void OnAction2(CallbackContext ctx) {
-			Debug.Log("special action");
+			Debug.Log("action2");
+		}
+		
+		private void OnAction3(CallbackContext ctx) {
+			Debug.Log("action3");
 		}
 		
 		private void OnMenu(CallbackContext ctx) {

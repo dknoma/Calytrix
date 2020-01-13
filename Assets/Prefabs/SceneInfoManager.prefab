@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5094295593441763345}
   - component: {fileID: 5094295593441763344}
+  - component: {fileID: 1653508100}
   m_Layer: 0
   m_Name: SceneInfoManager
   m_TagString: Untagged
@@ -55,3 +56,21 @@ MonoBehaviour:
   overwriteTilesetAssets: 0
   overwriteLevelGrid: 1
   overwriteSpritesheetSlice: 0
+--- !u!114 &1653508100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5094295593441763350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d57037c05257b945bb9276482bf0033, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHpContainerCount: 8
+  maxMpContainerCount: 8
+  hpContainerPrefab: {fileID: 6191760252437751064, guid: c9e1d37161d184e4e80da7da06c2f95a,
+    type: 3}
+  mpContainerPrefab: {fileID: 7667788195492593802, guid: 62da9cc17373a3b42975667e67f872d3,
+    type: 3}

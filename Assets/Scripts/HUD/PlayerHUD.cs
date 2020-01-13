@@ -23,12 +23,7 @@ public class PlayerHUD : MonoBehaviour {
     private readonly IList<SpriteRenderer> hpContainers = new List<SpriteRenderer>();
     private readonly IList<SpriteRenderer> mpContainers = new List<SpriteRenderer>();
 
-    private SignalListener hpListener;
-
-//    private readonly HealthHUD healthHud = new HealthHUD();
-
     private void Awake() {
-        this.hpListener = GetComponent<SignalListener>();
         
         foreach(Transform child in hpContainer.transform) {
             hpContainers.Add(child.GetComponent<SpriteRenderer>());
@@ -45,16 +40,31 @@ public class PlayerHUD : MonoBehaviour {
         UpdateHp();
     }
 
+    public void OnMpSignal() {
+        UpdateMp();
+    }
+
     private void UpdateHp() {
         int currentHp = playerStats.CurrentHp;
         int baseHp = playerStats.BaseHp;
+        int tempHp = playerStats.TempHp;
+        
         for(int i = 0; i < hpContainers.Count; i++) {
             SpriteRenderer container = hpContainers[i];
 
             if(i < baseHp) {
-                container.sprite = i < currentHp ? fullHpContainer : emptyHpContainer;
+                Debug.Log($"currentHp={currentHp}, i={i}, currentHp + tempHp={currentHp + tempHp}");
+                if(currentHp <= i && i < currentHp + tempHp) {
+                    container.sprite = tempHpContainer;
+                } else {
+                    container.sprite = i < currentHp ? fullHpContainer : emptyHpContainer;
+                }
             } else {
-                container.sprite = blankContainer;
+                if(currentHp <= i && i < currentHp + tempHp) {
+                    container.sprite = tempHpContainer;
+                } else {
+                    container.sprite = blankContainer;
+                }
             }
         }
     }
