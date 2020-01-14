@@ -8,6 +8,8 @@ public class CurrencyStash : ScriptableObject {
     
     [SerializeField] private int stash = 0;
 
+    public int Stash => stash;
+
     public void AddToStash(int count) {
         this.stash = Mathf.Clamp(stash + count, 0, MAX_STASH_COUNT);
     }

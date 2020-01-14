@@ -8,9 +8,12 @@ public class PlayerHUD : MonoBehaviour {
     [Header("Objects")] 
     [SerializeField] private GameObject hpContainer;
     [SerializeField] private GameObject mpContainer;
+    [SerializeField] private GameObject currencyContainer;
+    
     [Header("Scriptable Objects")]
     [SerializeField] private CharacterStats playerStats;
     [SerializeField] private CurrencyStash currencyStash;
+    [SerializeField] private NumberSprites numberSprites;
 
     [Header("Sprites")] 
     [SerializeField] private Sprite fullHpContainer;
@@ -24,18 +27,25 @@ public class PlayerHUD : MonoBehaviour {
 
     private readonly IList<SpriteRenderer> hpContainers = new List<SpriteRenderer>();
     private readonly IList<SpriteRenderer> mpContainers = new List<SpriteRenderer>();
+    private readonly IList<SpriteRenderer> currencyContainers = new List<SpriteRenderer>();
 
     private void Awake() {
-        
+        InitContainers();
+        UpdateHp();
+        UpdateMp();
+        UpdateCurrency();
+    }
+
+    private void InitContainers() {
         foreach(Transform child in hpContainer.transform) {
             hpContainers.Add(child.GetComponent<SpriteRenderer>());
         }
         foreach(Transform child in mpContainer.transform) {
             mpContainers.Add(child.GetComponent<SpriteRenderer>());
         }
-        
-        UpdateHp();
-        UpdateMp();
+        foreach(Transform child in currencyContainer.transform) {
+            currencyContainers.Add(child.GetComponent<SpriteRenderer>());
+        }
     }
 
     /** -------- OnSignal -------- **/
@@ -92,6 +102,19 @@ public class PlayerHUD : MonoBehaviour {
     }
 
     private void UpdateCurrency() {
-        Debug.Log($"{currencyStash}");
+        int stashValue = currencyStash.Stash;
+        Debug.Log($"stashValue={stashValue}");
+
+        int i = currencyContainers.Count - 1;
+        int temp = stashValue;
+        while(temp > 0 && i >= 0) {
+            int num = temp % 10;
+            Sprite sprite = numberSprites.GetSprite(num);
+            Debug.Log($"num={num}, sprite={sprite}");
+            currencyContainers[i].sprite = sprite;
+
+            i--;
+            temp /= 10;
+        }
     }
 }
