@@ -8,7 +8,9 @@ public class PlayerHUD : MonoBehaviour {
     [Header("Objects")] 
     [SerializeField] private GameObject hpContainer;
     [SerializeField] private GameObject mpContainer;
+    [Header("Scriptable Objects")]
     [SerializeField] private CharacterStats playerStats;
+    [SerializeField] private CurrencyStash currencyStash;
 
     [Header("Sprites")] 
     [SerializeField] private Sprite fullHpContainer;
@@ -36,6 +38,7 @@ public class PlayerHUD : MonoBehaviour {
         UpdateMp();
     }
 
+    /** -------- OnSignal -------- **/
     public void OnHpSignal() {
         UpdateHp();
     }
@@ -44,6 +47,11 @@ public class PlayerHUD : MonoBehaviour {
         UpdateMp();
     }
 
+    public void OnCurrencySignal() {
+        UpdateCurrency();
+    }
+    
+    /** -------- Helper methods -------- **/
     private void UpdateHp() {
         int currentHp = playerStats.CurrentHp;
         int baseHp = playerStats.BaseHp;
@@ -53,7 +61,7 @@ public class PlayerHUD : MonoBehaviour {
             SpriteRenderer container = hpContainers[i];
 
             if(i < baseHp) {
-                Debug.Log($"currentHp={currentHp}, i={i}, currentHp + tempHp={currentHp + tempHp}");
+//                Debug.Log($"currentHp={currentHp}, i={i}, currentHp + tempHp={currentHp + tempHp}");
                 if(currentHp <= i && i < currentHp + tempHp) {
                     container.sprite = tempHpContainer;
                 } else {
@@ -83,18 +91,7 @@ public class PlayerHUD : MonoBehaviour {
         }
     }
 
-//    private class HealthHUD {
-//        private int maxHp;
-//
-//        public int CurrentHp { get; private set; }
-//
-//        public HealthHUD() {
-//        }
-//
-//        public void UpdateHp(CharacterStats playerStats) {
-//            // init current and max hp values
-//            Debug.Log("Initializing HealthHUD");
-//            this.CurrentHp = playerStats.CurrentHp;
-//        }
-//    }
+    private void UpdateCurrency() {
+        Debug.Log($"{currencyStash}");
+    }
 }

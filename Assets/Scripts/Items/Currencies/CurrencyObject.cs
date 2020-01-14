@@ -3,8 +3,10 @@ using UnityEngine;
 using Utility;
 
 namespace Items.Currencies {
-	public class Currency : MonoBehaviour {
+	public class CurrencyObject : MonoBehaviour {
+		[SerializeField] private CurrencyStash currencyStash;
 		[SerializeField] private CurrencyType.Type type;
+		[SerializeField] private Signal currencySignal;
 
 		private int value;
 
@@ -20,6 +22,13 @@ namespace Items.Currencies {
 		}
 
 		public void OnCollect() {
+			PlaySFX();
+			currencyStash.AddToStash(value);
+			currencySignal.DoSignal();
+			Destroy(this.gameObject);
+		}
+
+		private void PlaySFX() {
 			switch(type) {
 				case CurrencyType.Type.COIN:
 					AkSoundEngine.PostEvent(Tags.COIN, gameObject);
@@ -30,8 +39,6 @@ namespace Items.Currencies {
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-
-			Destroy(this.gameObject);
 		}
 	}
 }

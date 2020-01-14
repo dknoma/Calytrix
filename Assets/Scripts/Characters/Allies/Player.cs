@@ -4,6 +4,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class Player : MonoBehaviour {
     [SerializeField] private CharacterStats stats;
+    [SerializeField] private CurrencyStash currencyStash;
     [SerializeField] private Signal hpSignal;
     [SerializeField] private Signal mpSignal;
 

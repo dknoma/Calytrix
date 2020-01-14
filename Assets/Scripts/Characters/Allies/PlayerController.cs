@@ -43,8 +43,8 @@ namespace Characters.Allies {
 		
 		private void OnCollisionEnter2D(Collision2D other) {
 			if(other.gameObject.CompareTag(Tags.CURRENCY)) { 
-				Currency currency = other.gameObject.GetComponent<Currency>();
-				currency.OnCollect();
+				CurrencyObject currencyObject = other.gameObject.GetComponent<CurrencyObject>();
+				currencyObject.OnCollect();
 			}
 		}
 
