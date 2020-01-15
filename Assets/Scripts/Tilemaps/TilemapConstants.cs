@@ -32,6 +32,7 @@ namespace Tilemaps {
 			
 			public const string LAYER_KEY_NAME = "layer_name";
 			public const string SORT_ORDER_KEY_NAME = "order_in_layer";
+			public const string SCROLL_RATE = "scroll_rate";
 
 			static CustomPropertyLabels() {
 				PROPERTY_TYPES_BY_STRING.Add(BOOL, ValueType.BOOL);

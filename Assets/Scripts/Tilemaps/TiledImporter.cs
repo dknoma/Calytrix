@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -201,22 +202,37 @@ namespace Tilemaps {
 			}
 		}
 
+		private static string GetPropertyValueAsString(Property property) {
+			string res = property == null ? null : (string) property.Value;
+
+			return res;
+		}
+
+		private static int GetPropertyValueAsInt(Property property) {
+			int res = property == null ? 0 : (int) property.Value;
+
+			return res;
+		}
+
+		private static bool GetPropertyValueAsBool(Property property) {
+			bool res = property == null ? false : (bool) property.Value;
+
+			return res;
+		}
+
 		/// <summary>
 		/// Sets the Tilemap
 		/// </summary>
 		/// <param name="tilemap"></param>
-		/// <param name="property"></param>
-		private static void SetTilemapLayer(Component tilemap, Property property) {
-			if(property == null) return;
+		/// <param name="layerName"></param>
+		private static void SetTilemapLayer(Component tilemap, string layerName) {
+			if(layerName == null) return;
 
-			string layerNameValue = property.Value;
-			tilemap.gameObject.layer = LayerMask.NameToLayer(layerNameValue);
+			tilemap.gameObject.layer = LayerMask.NameToLayer(layerName);
 		}
 
-		private static void SetTilemapSortOrder(TilemapRenderer tilemapRenderer, Property property) {
-			if(property == null) return;
-
-			tilemapRenderer.sortingOrder = property.Value;
+		private static void SetTilemapSortOrder(TilemapRenderer tilemapRenderer, int order) {
+			tilemapRenderer.sortingOrder = order;
 		}
 
 		/// <summary>
@@ -224,8 +240,8 @@ namespace Tilemaps {
 		/// </summary>
 		/// <param name="properties"></param>
 		/// <param name="propertiesByKey"></param>
-		private static IDictionary<string, Property>
-			PropertiesArrayToDictionary(IEnumerable<Layer.Property> properties) {
+		private static ReadOnlyDictionary<string, Property> PropertiesArrayToDictionary(
+			IEnumerable<Layer.Property> properties) {
 			IDictionary<string, Property> propertiesByKey = new Dictionary<string, Property>();
 
 			foreach(Layer.Property property in properties) {
@@ -233,7 +249,7 @@ namespace Tilemaps {
 				propertiesByKey.Add(prop.Key, prop);
 			}
 
-			return propertiesByKey;
+			return new ReadOnlyDictionary<string, Property>(propertiesByKey);
 		}
 
 		/// <summary>
@@ -276,10 +292,20 @@ namespace Tilemaps {
 			TilemapCollider2D coll = layer.AddComponent<TilemapCollider2D>();
 			tilemapRenderer.sortOrder = TilemapRenderer.SortOrder.TopRight;
 
-			SetTilemapLayer(tilemap, propertiesByKey.GetOrDefault(CustomPropertyLabels.LAYER_KEY_NAME));
-			SetTilemapSortOrder(tilemapRenderer,
-			                    propertiesByKey.GetOrDefault(CustomPropertyLabels.SORT_ORDER_KEY_NAME));
+			string propertyLayerName = GetPropertyValueAsString(
+			                                propertiesByKey.GetOrDefault(CustomPropertyLabels.LAYER_KEY_NAME));
+			int orderInLayer = GetPropertyValueAsInt(
+			                                propertiesByKey.GetOrDefault(CustomPropertyLabels.SORT_ORDER_KEY_NAME));
+			
+			SetTilemapLayer(tilemap, propertyLayerName);
+			SetTilemapSortOrder(tilemapRenderer, orderInLayer);
 
+			if(propertyLayerName.Equals("Background")) {
+				int scrollRate = GetPropertyValueAsInt(propertiesByKey.GetOrDefault(CustomPropertyLabels.SCROLL_RATE));
+				// TODO - get scroll rate for background and add parallax
+			}
+			
+			
 			return tilemap;
 		}
 
