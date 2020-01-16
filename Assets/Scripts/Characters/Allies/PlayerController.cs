@@ -6,7 +6,6 @@ using Utility;
 using static Characters.CharacterState;
 using static Characters.DirectionUtility;
 using static Characters.DirectionUtility.InputAngleState;
-using static Characters.InputConstants;
 using static UnityEngine.InputSystem.InputAction;
 
 namespace Characters.Allies {
@@ -48,6 +47,9 @@ namespace Characters.Allies {
 			}
 		}
 
+		// TODO - add input to its own script? maybe move and some other shared variables can be stored in
+		//		  scriptable objects. Benefit of this is other scripts can easily check these values if needed
+		//		- not all scripts may be attached to a collider ie. system that monitors player speed
 		private void InitInput() {
 			pcInputActions.Player.Move.performed += OnMove;
 			pcInputActions.Player.Move.canceled += StopMove;

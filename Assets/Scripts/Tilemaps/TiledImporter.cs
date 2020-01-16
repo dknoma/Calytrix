@@ -303,6 +303,7 @@ namespace Tilemaps {
 			if(propertyLayerName.Equals("Background")) {
 				int scrollRate = GetPropertyValueAsInt(propertiesByKey.GetOrDefault(CustomPropertyLabels.SCROLL_RATE));
 				// TODO - get scroll rate for background and add parallax
+				
 			}
 			
 			
