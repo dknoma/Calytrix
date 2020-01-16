@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Backgrounds;
 using UnityEngine;
 
@@ -24,6 +25,8 @@ public class BackgroundScroll : MonoBehaviour {
     private Vector3 previousCamPos;
 
     private Action scroller;
+    
+    private readonly ICollection<BackgroundScroll> backgroundCopies = new LinkedList<BackgroundScroll>();
 
     private void Awake() {
         // If no scrolling, then background does not move; disable script
