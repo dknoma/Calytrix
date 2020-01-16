@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class Helper {
@@ -33,5 +34,9 @@ public static class Helper {
 
     public static bool IsReallyNull<T>(this T obj) {
         return ReferenceEquals(obj, null);
+    }
+    
+    public static string ToLowerCase(this Enum e) {
+        return e.ToString().ToLower();
     }
 }
