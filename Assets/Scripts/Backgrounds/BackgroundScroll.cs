@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using Backgrounds;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class BackgroundScroll : MonoBehaviour {
     [SerializeField] private int horizontalScrollRate;
     [SerializeField] private int verticalScrollRate;
     [SerializeField] private ScrollType.Type scrollType;
     [SerializeField] private ScrollType.ScrollDirection scrollDirection;
+    
+    [SerializeField] private float threshold = 0.25f;
 
     public ScrollType.Type BGScrollType {
         get => scrollType;
@@ -21,28 +24,36 @@ public class BackgroundScroll : MonoBehaviour {
 
     private GameObject originalObject;
     private Camera main;
-
-    private Vector3 previousCamPos;
+    private Renderer renderer;
+    
+    private SpriteRenderer spriteRender;
+//    private Sprite sprite;
+    private TilemapRenderer tilemapRenderer;
+//    private Tilemap tilemap;
 
     private Action scroller;
+    private Action instantiator;
+    private Vector3 previousCamPos;
+    private Vector2 screenBounds;
+    private bool usingTilemap;
     
-    private readonly ICollection<BackgroundScroll> backgroundCopies = new LinkedList<BackgroundScroll>();
+    private readonly LinkedList<GameObject> backgrounds = new LinkedList<GameObject>();
 
     private void Awake() {
         // If no scrolling, then background does not move; disable script
         switch(scrollType) {
             case ScrollType.Type.NORMAL:
-                scroller = NormalScrolling;
+                this.scroller = NormalScrolling;
                 
                 if(horizontalScrollRate == 0 && verticalScrollRate == 0) {
                     this.enabled = false;
                 }
                 break;
             case ScrollType.Type.AUTO:
-                scroller = AutoScrolling;
+                this.scroller = AutoScrolling;
                 break;
             case ScrollType.Type.NONE:
-                scroller = NoScrolling;
+                this.scroller = NoScrolling;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -50,7 +61,53 @@ public class BackgroundScroll : MonoBehaviour {
         
         this.main = Camera.main;
         Debug.Assert(main != null, nameof(main) + " != null");
+
         this.previousCamPos = main.transform.position;
+        
+        this.screenBounds =
+            main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, main.transform.position.z));
+        
+        this.originalObject = transform.GetChild(0).gameObject;
+        this.renderer = originalObject.GetComponent<Renderer>();
+        
+        switch(renderer) {
+            case SpriteRenderer sRender:
+                this.spriteRender = sRender;
+                InstantiateSprite();
+//                this.sprite = spriteRender.sprite;
+//                this.usingTilemap = false;
+//                instantiator = InstantiateSprite;
+                break;
+            case TilemapRenderer tRender:
+                this.tilemapRenderer = tRender;
+                InstantiateTilemap();
+//                this.tilemap = GetComponent<Tilemap>();
+//                Debug.Assert(tilemap != null, nameof(tilemap) + " != null");
+//                this.usingTilemap = true;
+//                instantiator = InstantiateTilemap;
+                break;
+        }
+    }
+
+    private void InstantiateSprite() {
+        float spriteWidth = spriteRender.bounds.size.x;
+        Vector3 position = spriteRender.transform.position;
+        int copiesNeeded = Mathf.CeilToInt(screenBounds.x * 2 / spriteWidth);
+        
+        backgrounds.AddFirst(originalObject);
+        for(int i = 1; i <= copiesNeeded; i++) {
+            GameObject clone = Instantiate(originalObject, transform, true);
+            clone.transform.position = new Vector3(position.x + spriteWidth * i, position.y, position.z);
+            backgrounds.AddLast(clone);
+        }
+    }
+    
+    private void InstantiateTilemap() {
+        float tilemapWidth = tilemapRenderer.bounds.size.x;
+        int copiesNeeded = Mathf.CeilToInt(screenBounds.x * 2 / tilemapWidth);
+        for(int i = 0; i < copiesNeeded; i++) {
+            
+        }
     }
     
     private void Update() {
@@ -61,9 +118,8 @@ public class BackgroundScroll : MonoBehaviour {
         Vector3 position = main.transform.position;
         float hPara = (previousCamPos.x - position.x) * horizontalScrollRate;
         float vPara = (previousCamPos.y - position.y) * verticalScrollRate;
-
         
-        this.transform.position = new Vector3(position.x - hPara, position.y - vPara, 0);
+//        this.transform.position = new Vector3(position.x - hPara, position.y - vPara, 0);
         
         this.previousCamPos = position;
     }

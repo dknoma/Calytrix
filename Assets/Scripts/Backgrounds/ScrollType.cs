@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Tilemaps;
+using Utility;
 
 namespace Backgrounds {
 	public static class ScrollType {
