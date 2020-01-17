@@ -51,5 +51,19 @@ namespace Utility {
         public static bool IsLast<T>(this LinkedList<T> list, T obj) {
             return obj.Equals(list.Last);
         }
+
+        public static T SetFirstAsLast<T>(this LinkedList<T> list) {
+            LinkedListNode<T> first = list.First;
+            list.RemoveFirst();
+            list.AddLast(first);
+            return first.Value;
+        }
+
+        public static T SetLastAsFirst<T>(this LinkedList<T> list) {
+            LinkedListNode<T> last = list.Last;
+            list.RemoveLast();
+            list.AddFirst(last);
+            return last.Value;
+        }
     }
 }

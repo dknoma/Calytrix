@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Backgrounds;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Utility;
 
 public class BackgroundScroll : MonoBehaviour {
     [SerializeField] private int horizontalScrollRate;
@@ -32,7 +33,7 @@ public class BackgroundScroll : MonoBehaviour {
 //    private Tilemap tilemap;
 
     private Action scroller;
-    private Action instantiator;
+    private Action reposition;
     private Vector3 previousCamPos;
     private Vector2 screenBounds;
     private bool usingTilemap;
@@ -62,10 +63,12 @@ public class BackgroundScroll : MonoBehaviour {
         this.main = Camera.main;
         Debug.Assert(main != null, nameof(main) + " != null");
 
-        this.previousCamPos = main.transform.position;
+        Transform mainCameraTransform = main.transform;
+        Vector3 position = mainCameraTransform.position;
+        this.previousCamPos = position;
         
         this.screenBounds =
-            main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, main.transform.position.z));
+            main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, position.z));
         
         this.originalObject = transform.GetChild(0).gameObject;
         this.renderer = originalObject.GetComponent<Renderer>();
@@ -104,14 +107,41 @@ public class BackgroundScroll : MonoBehaviour {
     
     private void InstantiateTilemap() {
         float tilemapWidth = tilemapRenderer.bounds.size.x;
+        Vector3 position = tilemapRenderer.transform.position;
         int copiesNeeded = Mathf.CeilToInt(screenBounds.x * 2 / tilemapWidth);
-        for(int i = 0; i < copiesNeeded; i++) {
-            
+        
+        backgrounds.AddFirst(originalObject);
+        for(int i = 1; i <= copiesNeeded; i++) {
+            GameObject clone = Instantiate(originalObject, transform, true);
+            clone.transform.position = new Vector3(position.x + tilemapWidth * i, position.y, position.z);
+            backgrounds.AddLast(clone);
         }
     }
     
     private void Update() {
         scroller.Invoke();
+    }
+
+    private void LateUpdate() {
+        reposition.Invoke();
+    }
+
+    private void RepositionSprite() {
+        Vector3 position = transform.position;
+        float rightScreenBound = position.x + screenBounds.x;
+        float leftScreenBound = position.x - screenBounds.x;
+        
+        GameObject first = backgrounds.First.Value;
+        GameObject last = backgrounds.Last.Value;
+        float halfObjWidth = last.GetComponent<SpriteRenderer>().bounds.extents.x;
+        
+        if(rightScreenBound > last.transform.position.x + halfObjWidth) {
+            first.transform.position = new Vector3();
+            backgrounds.SetFirstAsLast();
+        } else if(leftScreenBound < first.transform.position.x - halfObjWidth) {
+            last.transform.position = new Vector3();
+            backgrounds.SetLastAsFirst();
+        }
     }
 
     private void NormalScrolling() {  
