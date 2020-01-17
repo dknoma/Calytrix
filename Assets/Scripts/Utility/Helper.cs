@@ -6,32 +6,36 @@ namespace Utility {
     public static class Helper {
 
         // GameObject
-        public static T FindComponentInChildWithTag<T>(this GameObject parent, string tag)where T:Component{
+        public static T FindComponentInChildWithTag<T>(this GameObject parent, string tag) where T:Component{
             Transform t = parent.transform;
+            T res = null;
             foreach(Transform tr in t) {
                 if(tr.CompareTag(tag)) {
-                    return tr.GetComponent<T>();
+                    res = tr.GetComponent<T>();
+                    break;
                 }
             }
-            return null;
+            return res;
         }
     
-        public static T FindComponentInSiblingsWithTag<T>(this GameObject me, string tag)where T:Component{
+        public static T FindComponentInSiblingsWithTag<T>(this GameObject me, string tag) where T:Component{
             Transform parent = me.transform.parent;
+            T res = null;
             foreach(Transform sib in parent) {
                 if(sib.CompareTag(tag) && !sib.Equals(me.transform)) {
-                    return sib.GetComponent<T>();
+                    res = sib.GetComponent<T>();
+                    break;
                 }
             }
-            return null;
+            return res;
         }
 
         public static bool IsNull<T>(this T obj )where T:Component {
-            return EqualityComparer<T>.Default.Equals(obj,default(T));
+            return EqualityComparer<T>.Default.Equals(obj,default);
         }
     
         public static bool IsObjectNull<T>(T obj )  {
-            return EqualityComparer<T>.Default.Equals(obj,default(T));
+            return EqualityComparer<T>.Default.Equals(obj,default);
         }
 
         public static bool IsReallyNull<T>(this T obj) {

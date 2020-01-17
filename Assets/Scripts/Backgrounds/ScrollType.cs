@@ -14,6 +14,8 @@ namespace Backgrounds {
 		public enum ScrollDirection {
 			LEFT,
 			RIGHT,
+			UP,
+			DOWN,
 			NONE
 		}
 		

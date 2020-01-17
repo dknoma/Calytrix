@@ -30,7 +30,12 @@
                 {
                  "name":"order_in_layer",
                  "type":"int",
-                 "value":-2
+                 "value":-7
+                }, 
+                {
+                 "name":"scroll_type",
+                 "type":"string",
+                 "value":"none"
                 }],
          "startx":-16,
          "starty":0,

@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using Tilemaps;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "NumberSprites", menuName = "ScriptableObjects/NumberSprites", order = 1)]
 public class NumberSprites : ScriptableObject {
@@ -26,9 +24,9 @@ public class NumberSprites : ScriptableObject {
 
     [SerializeField] private string filename;
     [SerializeField] private bool overrideFilename;
-    [SerializeField] private bool reAddSprites = false;
+    [SerializeField] private bool reAddSprites;
     
-    private readonly IDictionary<int, Sprite> SPRITE_BY_INT = new Dictionary<int, Sprite>();
+    private static readonly IDictionary<int, Sprite> SPRITE_BY_INT = new Dictionary<int, Sprite>();
 
     private void Awake() {
         Init();

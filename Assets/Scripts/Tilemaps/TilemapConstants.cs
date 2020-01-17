@@ -48,7 +48,7 @@ namespace Tilemaps {
 			public const string LAYER_KEY_NAME = "layer_name";
 			public const string SORT_ORDER_KEY_NAME = "order_in_layer";
 			public const string HORIZONTAL_SCROLL_RATE = "horizontal_scroll_rate";
-			public const string VERTICALL_SCROLL_RATE = "vertical_scroll_rate";
+			public const string VERTICAL_SCROLL_RATE = "vertical_scroll_rate";
 			public const string SCROLL_TYPE = "scroll_type";
 			public const string SCROLL_DIRECTION = "scroll_direction";
 

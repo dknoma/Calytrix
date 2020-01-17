@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Backgrounds;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using Utility;
 
 public class BackgroundScroll : MonoBehaviour {
@@ -11,25 +12,58 @@ public class BackgroundScroll : MonoBehaviour {
     [SerializeField] private ScrollType.ScrollDirection scrollDirection;
     
     private const float PADDING_THRESHOLD = 2f;
+    private static readonly Action NO_OP = () => {};
 
     private GameObject originalObject;
     private Camera main;
     private Renderer renderer;
 
+    private Tilemap tilemap;
+
     private Action scroller;
+    private Action repositionBg;
+    
     private Vector3 previousCamPos;
+    private Vector3 originalBgPos;
     private Vector2 screenBounds;
     
     private bool usingTilemap;
     private float halfBackgroundWidth;
+    private float verticalPadding;
     
     private readonly LinkedList<GameObject> backgrounds = new LinkedList<GameObject>();
 
     private void Awake() {
+        this.main = Camera.main;
+        Debug.Assert(main != null, nameof(main) + " != null");
+
+        Transform mainCameraTransform = main.transform;
+        Vector3 camPos = mainCameraTransform.position;
+        this.previousCamPos = camPos;
+        
+        this.screenBounds =
+            main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, camPos.z));
+        
+        this.originalObject = transform.GetChild(0).gameObject;
+        this.renderer = originalObject.GetComponent<Renderer>();
+        Bounds bounds = renderer.bounds;
+        this.halfBackgroundWidth = bounds.extents.x;
+
+//        switch(renderer) {
+//            case TilemapRenderer tilemapRenderer:
+//                this.tilemap = originalObject.GetComponent<Tilemap>();
+//                break;
+//        }
+//        
+//        tilemap.bou
+//        this.originalBgPos = transform.position;
+        this.verticalPadding = camPos.y - bounds.extents.y;
         // If no scrolling, then background does not move; disable script
         switch(scrollType) {
             case ScrollType.Type.NORMAL:
                 this.scroller = NormalScrolling;
+                InstantiateCopies();
+                repositionBg = RepositionBackground;
                 
 //                if(horizontalScrollRate == 0 && verticalScrollRate == 0) {
 //                    this.enabled = false;
@@ -37,28 +71,16 @@ public class BackgroundScroll : MonoBehaviour {
                 break;
             case ScrollType.Type.AUTO:
                 this.scroller = AutoScrolling;
+                InstantiateCopies();
+                repositionBg = RepositionBackground;
                 break;
             case ScrollType.Type.NONE:
                 this.scroller = NoScrolling;
+                repositionBg = NO_OP;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        
-        this.main = Camera.main;
-        Debug.Assert(main != null, nameof(main) + " != null");
-
-        Transform mainCameraTransform = main.transform;
-        Vector3 position = mainCameraTransform.position;
-        this.previousCamPos = position;
-        
-        this.screenBounds =
-            main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, position.z));
-        
-        this.originalObject = transform.GetChild(0).gameObject;
-        this.renderer = originalObject.GetComponent<Renderer>();
-        this.halfBackgroundWidth = renderer.bounds.extents.x;
-        InstantiateCopies();
     }
 
     private void InstantiateCopies() {
@@ -83,7 +105,7 @@ public class BackgroundScroll : MonoBehaviour {
     }
 
     private void LateUpdate() {
-        RepositionBackground();
+        repositionBg.Invoke();
     }
 
     private void RepositionBackground() {
@@ -124,7 +146,8 @@ public class BackgroundScroll : MonoBehaviour {
     }
 
     private void NoScrolling() {
-        this.transform.position = main.transform.position;
+        Vector3 position = main.transform.position;
+        this.transform.position = new Vector3(position.x, position.y - verticalPadding, transform.position.z);
     }
     
     public void Initialize(int horizontalScrollRate, int verticalScrollRate, 

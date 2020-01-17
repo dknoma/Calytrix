@@ -15,11 +15,9 @@ using static Tilemaps.TiledTilemapJsonInfo;
 using static Tilemaps.TiledTilemapJsonInfo.Layer;
 using static Tilemaps.TilemapConstants;
 using static Tilemaps.TiledRenderOrder;
-using static Tilemaps.TilemapConstants.CustomPropertyLabels.ValueType;
 using static Tilemaps.TilesetFileType;
 using static Tilemaps.TilesetFileType.Type;
 using Object = UnityEngine.Object;
-using Type = System.Type;
 
 namespace Tilemaps {
 	public class TiledImporter : MonoBehaviour {
@@ -224,10 +222,10 @@ namespace Tilemaps {
 		/// <param name="properties"></param>
 		/// <param name="propertiesByKey"></param>
 		private static ReadOnlyDictionary<string, Property> PropertiesArrayToDictionary(
-			IEnumerable<Layer.LayerProperty> properties) {
+			IEnumerable<LayerProperty> properties) {
 			IDictionary<string, Property> propertiesByKey = new Dictionary<string, Property>();
 
-			foreach(Layer.LayerProperty property in properties) {
+			foreach(LayerProperty property in properties) {
 				Property prop = Property.GetPropertyByType(property);
 				propertiesByKey.Add(prop.Key, prop);
 			}
@@ -282,7 +280,7 @@ namespace Tilemaps {
 					int horizontalScrollRate = Property.GetPropertyValueAsInt(
 					                    propertiesByKey.GetOrDefault(CustomPropertyLabels.HORIZONTAL_SCROLL_RATE));
 					int verticalScrollRate = Property.GetPropertyValueAsInt(
-										propertiesByKey.GetOrDefault(CustomPropertyLabels.VERTICALL_SCROLL_RATE));
+										propertiesByKey.GetOrDefault(CustomPropertyLabels.VERTICAL_SCROLL_RATE));
 					ScrollType.Type scrollType = ScrollType.GetTypeByName(Property.GetPropertyValueAsString(
                                        propertiesByKey.GetOrDefault(CustomPropertyLabels.SCROLL_TYPE)));
 					ScrollType.ScrollDirection direction = ScrollType.GetScrollDirectionByName(Property.GetPropertyValueAsString(
@@ -602,70 +600,6 @@ namespace Tilemaps {
 			tile.sprite = sprite;
 
 			return tile;
-		}
-
-		private abstract class Property {
-			public abstract string Key { get; }
-			public abstract Type Type { get; }
-
-			public abstract dynamic Value { get; }
-			
-
-			public static string GetPropertyValueAsString(Property property) {
-				string res = property == null ? "" : (string) property.Value;
-
-				return res;
-			}
-
-			public static int GetPropertyValueAsInt(Property property) {
-				int res = property == null ? 0 : (int) property.Value;
-
-				return res;
-			}
-
-			public static bool GetPropertyValueAsBool(Property property) {
-				bool res = property == null ? false : (bool) property.Value;
-
-				return res;
-			}
-
-			public static Property GetPropertyByType(LayerProperty prop) {
-				string typeString = prop.type;
-				string key = prop.name;
-				string valueString = prop.value;
-				CustomPropertyLabels.ValueType type = CustomPropertyLabels.GetTypeByString(typeString);
-
-				switch(type) {
-					case BOOL:
-						return new Property<bool>(key, bool.Parse(valueString));
-					case COLOR:
-						Color color = Color.white;
-						ColorUtility.TryParseHtmlString(valueString, out color);
-						return new Property<Color>(key, color);
-					case FLOAT:
-						return new Property<float>(key, float.Parse(valueString));
-					case FILE:
-						return new Property<FileInfo>(key, new FileInfo(valueString));
-					case INT:
-						return new Property<int>(key, int.Parse(valueString));
-					case STRING:
-						return new Property<string>(key, valueString);
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
-		}
-
-		private class Property<T> : Property {
-			public override string Key { get; }
-			public override Type Type => typeof(T);
-
-			public override dynamic Value { get; }
-
-			public Property(string key, T value) {
-				this.Key = key;
-				this.Value = value;
-			}
 		}
 	}
 }
