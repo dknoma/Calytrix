@@ -103,14 +103,14 @@ public class PlayerHUD : MonoBehaviour {
 
     private void UpdateCurrency() {
         int stashValue = currencyStash.Stash;
-        Debug.Log($"stashValue={stashValue}");
+//        Debug.Log($"stashValue={stashValue}");
 
         int i = currencyContainers.Count - 1;
         int temp = stashValue;
         while(temp > 0 && i >= 0) {
             int num = temp % 10;
             Sprite sprite = numberSprites.GetSprite(num);
-            Debug.Log($"num={num}, sprite={sprite}");
+//            Debug.Log($"num={num}, sprite={sprite}");
             currencyContainers[i].sprite = sprite;
 
             i--;

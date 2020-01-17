@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Linq;
-using System.Text;
 using Utility;
 
 namespace Tilemaps {
@@ -46,7 +43,7 @@ namespace Tilemaps {
             public int id;
             public string name;
             public Chunk[] chunks;
-            public Property[] properties;
+            public LayerProperty[] properties;
             public int height;
             public int width;
             public int startx;
@@ -67,7 +64,7 @@ namespace Tilemaps {
             }
 
             [Serializable]
-            public class Property : JsonInfo {
+            public class LayerProperty : JsonInfo {
                 public string name;
                 public string type;
                 public string value;

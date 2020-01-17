@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEditorInternal;
 
 namespace Tilemaps {
 	public static class TilemapConstants {
@@ -7,9 +8,23 @@ namespace Tilemaps {
 
 		public const int PIXELS_PER_UNIT = 16;
 
+		public const string LAYER_BACKGROUND = "Background";
 		public const string LAYER_DECORATION = "Decoration";
+		public const string LAYER_GROUND = "Ground";
 		public const string LAYER_HAZARD = "Hazard";
-		public const string LAYER_LADDER = "Ladder";
+		public const string LAYER_SPECIAL = "Special";
+		
+		private static readonly IDictionary<string, string> LAYERS_BY_NAME = new Dictionary<string, string>();
+
+		static TilemapConstants() {
+			foreach(string layer in InternalEditorUtility.layers) {
+				LAYERS_BY_NAME.Add(layer.ToLower(), layer);
+			}
+		}
+
+		public static string GetLayerByName(string name) {
+			return LAYERS_BY_NAME.GetOrDefault(name.ToLower(), LAYER_GROUND);
+		}
 
 		public static class CustomPropertyLabels {
 			public enum ValueType {
@@ -32,7 +47,10 @@ namespace Tilemaps {
 			
 			public const string LAYER_KEY_NAME = "layer_name";
 			public const string SORT_ORDER_KEY_NAME = "order_in_layer";
-			public const string SCROLL_RATE = "scroll_rate";
+			public const string HORIZONTAL_SCROLL_RATE = "horizontal_scroll_rate";
+			public const string VERTICALL_SCROLL_RATE = "vertical_scroll_rate";
+			public const string SCROLL_TYPE = "scroll_type";
+			public const string SCROLL_DIRECTION = "scroll_direction";
 
 			static CustomPropertyLabels() {
 				PROPERTY_TYPES_BY_STRING.Add(BOOL, ValueType.BOOL);

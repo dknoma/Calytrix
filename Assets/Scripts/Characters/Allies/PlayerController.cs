@@ -212,7 +212,7 @@ namespace Characters.Allies {
 		}
 
 		private void OnCharacterState() {
-			Debug.Log($"state={state}");
+//			Debug.Log($"state={state}");
 			switch(state) {
 				case State.DEFAULT:
 				case State.WALKING:

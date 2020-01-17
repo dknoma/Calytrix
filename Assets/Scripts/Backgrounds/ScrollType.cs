@@ -31,11 +31,13 @@ namespace Backgrounds {
 		}
 
 		public static Type GetTypeByName(string name) {
-			return SCROLL_TYPE_BY_NAME.GetOrDefault(name.ToLower());
+			string value = name != null ? name.ToLower() : Type.NORMAL.ToLowerCase();
+			return SCROLL_TYPE_BY_NAME.GetOrDefault(value);
 		}
 
 		public static ScrollDirection GetScrollDirectionByName(string name) {
-			return SCROLL_DIRECTION_BY_NAME.GetOrDefault(name.ToLower());
+			string value = name != null ? name.ToLower() : ScrollDirection.LEFT.ToLowerCase();
+			return SCROLL_DIRECTION_BY_NAME.GetOrDefault(value);
 		}
 	}
 }

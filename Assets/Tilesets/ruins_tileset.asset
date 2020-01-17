@@ -79,4 +79,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 176060ff50a474aeca5492fc9d54248b, type: 2}
   tilemapName: 
   firstGid: 1
-  lastGid: 2147483647
+  lastGid: 64
