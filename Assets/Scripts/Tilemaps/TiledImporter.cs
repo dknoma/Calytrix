@@ -148,7 +148,7 @@ namespace Tilemaps {
 			int layerX = layer.x;
 			int layerY = layer.y;
 
-			IDictionary<string, Property> propertiesByKey = PropertiesArrayToDictionary(layer.properties);
+			IDictionary<string, TiledImporterProperty> propertiesByKey = PropertiesArrayToDictionary(layer.properties);
 			Tilemap tilemap = NewTilemap(layerName, layerX, layerY, propertiesByKey);
 
 			// Get 
@@ -221,16 +221,16 @@ namespace Tilemaps {
 		/// </summary>
 		/// <param name="properties"></param>
 		/// <param name="propertiesByKey"></param>
-		private static ReadOnlyDictionary<string, Property> PropertiesArrayToDictionary(
+		private static ReadOnlyDictionary<string, TiledImporterProperty> PropertiesArrayToDictionary(
 			IEnumerable<LayerProperty> properties) {
-			IDictionary<string, Property> propertiesByKey = new Dictionary<string, Property>();
+			IDictionary<string, TiledImporterProperty> propertiesByKey = new Dictionary<string, TiledImporterProperty>();
 
 			foreach(LayerProperty property in properties) {
-				Property prop = Property.GetPropertyByType(property);
+				TiledImporterProperty prop = new TiledImporterProperty(property);
 				propertiesByKey.Add(prop.Key, prop);
 			}
 
-			return new ReadOnlyDictionary<string, Property>(propertiesByKey);
+			return new ReadOnlyDictionary<string, TiledImporterProperty>(propertiesByKey);
 		}
 
 		/// <summary>
@@ -264,11 +264,9 @@ namespace Tilemaps {
 		/// <param name="y"></param>
 		/// <param name="propertiesByKey"></param>
 		/// <returns></returns>
-		private Tilemap NewTilemap(string layerName, int x, int y, IDictionary<string, Property> propertiesByKey) {
-			string propertyStringValue = Property.GetPropertyValueAsString(
-                                            propertiesByKey.GetOrDefault(CustomPropertyLabels.LAYER_KEY_NAME));
-			int orderInLayer = Property.GetPropertyValueAsInt(
-                                     propertiesByKey.GetOrDefault(CustomPropertyLabels.SORT_ORDER_KEY_NAME));
+		private Tilemap NewTilemap(string layerName, int x, int y, IDictionary<string, TiledImporterProperty> propertiesByKey) {
+			string propertyStringValue = propertiesByKey.TryGetValueAsString(TiledCustomProperty.LAYER_KEY_NAME);
+			int orderInLayer = propertiesByKey.TryGetValueAsInt(TiledCustomProperty.SORT_ORDER_KEY_NAME);
 
 			string propertyLayerName = GetLayerByName(propertyStringValue);
 			
@@ -277,14 +275,14 @@ namespace Tilemaps {
 			
 			switch(propertyLayerName) {
 				case LAYER_BACKGROUND:
-					int horizontalScrollRate = Property.GetPropertyValueAsInt(
-					                    propertiesByKey.GetOrDefault(CustomPropertyLabels.HORIZONTAL_SCROLL_RATE));
-					int verticalScrollRate = Property.GetPropertyValueAsInt(
-										propertiesByKey.GetOrDefault(CustomPropertyLabels.VERTICAL_SCROLL_RATE));
-					ScrollType.Type scrollType = ScrollType.GetTypeByName(Property.GetPropertyValueAsString(
-                                       propertiesByKey.GetOrDefault(CustomPropertyLabels.SCROLL_TYPE)));
-					ScrollType.ScrollDirection direction = ScrollType.GetScrollDirectionByName(Property.GetPropertyValueAsString(
-                                       propertiesByKey.GetOrDefault(CustomPropertyLabels.SCROLL_DIRECTION)));
+					int horizontalScrollRate = propertiesByKey.TryGetValueAsInt(TiledCustomProperty.HORIZONTAL_SCROLL_RATE);
+					int verticalScrollRate = propertiesByKey.TryGetValueAsInt(TiledCustomProperty.VERTICAL_SCROLL_RATE);
+					ScrollType.Type scrollType = ScrollType.GetTypeByName(
+					                                                      propertiesByKey.TryGetValueAsString(
+																				TiledCustomProperty.SCROLL_TYPE));
+					ScrollType.ScrollDirection direction = ScrollType.GetScrollDirectionByName(
+																		  propertiesByKey.TryGetValueAsString(
+					                                                            TiledCustomProperty.SCROLL_DIRECTION));
 					
 					GameObject backgroundContainer = new GameObject($"{layerName}_container");
 					BackgroundScroll scroll = backgroundContainer.AddComponent<BackgroundScroll>();
