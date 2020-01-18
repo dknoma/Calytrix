@@ -11,8 +11,8 @@ public class BackgroundScroll : MonoBehaviour {
     [SerializeField] private ScrollType.Type scrollType;
     [SerializeField] private ScrollType.ScrollDirection scrollDirection;
 
-    private const float BASE_HORIZONTAL_MOVE_SPEED = 0.125f;
-    private const float BASE_VERTICAL_MOVE_SPEED = 0.125f;
+    private const float BASE_HORIZONTAL_MOVE_SPEED = 0.0625f;
+    private const float BASE_VERTICAL_MOVE_SPEED = 0.0625f;
     private const float PADDING_THRESHOLD = 2f;
     private static readonly Action NO_OP = () => {};
 
@@ -32,6 +32,9 @@ public class BackgroundScroll : MonoBehaviour {
     private bool usingTilemap;
     private float halfBackgroundWidth;
     private float verticalPadding;
+
+    private float hScroll;
+    private float vScroll;
     
     private readonly LinkedList<GameObject> backgrounds = new LinkedList<GameObject>();
 
@@ -77,6 +80,33 @@ public class BackgroundScroll : MonoBehaviour {
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+        this.hScroll = BASE_HORIZONTAL_MOVE_SPEED * horizontalScrollRate;
+        this.vScroll = BASE_VERTICAL_MOVE_SPEED * verticalPadding;
+    }
+
+    private void Update() {
+        scroller.Invoke();
+    }
+    
+    private void LateUpdate() {
+        repositionBg.Invoke();
+    }
+    
+    // Initialization
+    public void Initialize(int horizontalScrollRate, int verticalScrollRate, 
+                           ScrollType.Type scrollType, ScrollType.ScrollDirection direction) {
+        this.horizontalScrollRate = horizontalScrollRate;
+        this.verticalScrollRate = verticalScrollRate;
+        this.scrollType = scrollType;
+        this.scrollDirection = direction;
+    }
+    
+    public void Initialize(BackgroundSettings settings) {
+        this.horizontalScrollRate = settings.HorizontalScrollRate;
+        this.verticalScrollRate = settings.VerticalScrollRate;
+        this.scrollType = settings.Type;
+        this.scrollDirection = settings.Direction;
     }
 
     private void InstantiateCopies() {
@@ -95,12 +125,8 @@ public class BackgroundScroll : MonoBehaviour {
             backgrounds.AddLast(clone);
         }
     }
-    
-    private void LateUpdate() {
-        scroller.Invoke();
-        repositionBg.Invoke();
-    }
 
+    // Looping
     private void RepositionBackground() {
         // Get bounds of the screen
         Vector3 position = main.transform.position;
@@ -122,40 +148,49 @@ public class BackgroundScroll : MonoBehaviour {
         }
     }
 
+    // Scrolling
     private void NormalScrolling() {
         Vector3 camPos = main.transform.position;
         float hPara = camPos.x - previousPos.x * BASE_HORIZONTAL_MOVE_SPEED * horizontalScrollRate;
         float vPara = camPos.y - previousPos.y * BASE_VERTICAL_MOVE_SPEED * verticalScrollRate;
+        
+        this.previousPos = camPos;
 
         Transform thisTransform = transform;
         thisTransform.position = new Vector3(camPos.x - hPara, camPos.y - vPara, thisTransform.position.z);
-        
-        this.previousPos = camPos;
     }
 
     private void AutoScrolling() {
-        // TODO
-        Vector3 position = main.transform.position;
-        this.previousPos = position;
+        Vector3 camPos = main.transform.position;
+        Transform thisTransform = transform;
+        Vector3 pos = thisTransform.position;
+        
+        float hPara = BASE_HORIZONTAL_MOVE_SPEED * horizontalScrollRate;
+        float vPara = BASE_VERTICAL_MOVE_SPEED * verticalScrollRate;
+        
+
+        switch(scrollDirection){
+            case ScrollType.ScrollDirection.LEFT:
+                thisTransform.position = new Vector3(pos.x - hPara, camPos.y - vPara, thisTransform.position.z);
+                break;
+            case ScrollType.ScrollDirection.RIGHT:
+                thisTransform.position = new Vector3(pos.x + hPara, camPos.y - vPara, thisTransform.position.z);
+                break;
+            case ScrollType.ScrollDirection.UP:
+                thisTransform.position = new Vector3(camPos.x - hPara, pos.y - vPara, thisTransform.position.z);
+                break;
+            case ScrollType.ScrollDirection.DOWN:
+                thisTransform.position = new Vector3(camPos.x - hPara, pos.y + vPara, thisTransform.position.z);
+                break;
+            case ScrollType.ScrollDirection.NONE:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 
     private void NoScrolling() {
         Vector3 position = main.transform.position;
         this.transform.position = new Vector3(position.x, position.y, transform.position.z);
-    }
-    
-    public void Initialize(int horizontalScrollRate, int verticalScrollRate, 
-                           ScrollType.Type scrollType, ScrollType.ScrollDirection direction) {
-        this.horizontalScrollRate = horizontalScrollRate;
-        this.verticalScrollRate = verticalScrollRate;
-        this.scrollType = scrollType;
-        this.scrollDirection = direction;
-    }
-    
-    public void Initialize(BackgroundSettings settings) {
-        this.horizontalScrollRate = settings.HorizontalScrollRate;
-        this.verticalScrollRate = settings.VerticalScrollRate;
-        this.scrollType = settings.Type;
-        this.scrollDirection = settings.Direction;
     }
 }
