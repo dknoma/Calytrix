@@ -7,8 +7,8 @@ namespace Backgrounds {
     public class Background {
         [SerializeField] private Texture2D spriteTexture;
         [SerializeField] private BackgroundSettings settings;
-
-        private Sprite sprite;
+        [SerializeField] private Sprite sprite;
+        [SerializeField] private bool overwriteSprite;
 
         public Sprite Sprite {
             get => sprite;
@@ -31,7 +31,7 @@ namespace Backgrounds {
         }
 
         public void SetSpriteIfNecessary() {
-            if(sprite == null) {
+            if(overwriteSprite || sprite == null || sprite == default) {
                 SetSprite();
             }
         }

@@ -157,4 +157,11 @@ public class BackgroundScroll : MonoBehaviour {
         this.scrollType = scrollType;
         this.scrollDirection = direction;
     }
+    
+    public void Initialize(BackgroundSettings settings) {
+        this.horizontalScrollRate = settings.HorizontalScrollRate;
+        this.verticalScrollRate = settings.VerticalScrollRate;
+        this.scrollType = settings.Type;
+        this.scrollDirection = settings.Direction;
+    }
 }

@@ -11,19 +11,19 @@ namespace Backgrounds {
 	public class BackgroundImporterList : ScriptableObject {
 		public List<Background> backgrounds = new List<Background>();
 
-//		public void AddBackground(Sprite sprite) {
-//			backgrounds.Add(new Background(sprite.texture));
-//		}
-//
-//		public Sprite GetBackground(int index) {
-//			Sprite bg = default;
-//
-//			if(index < backgrounds.Count) {
-//				bg = backgrounds[index].Sprite;
-//			}
-//			
-//			return bg;
-//		}
+		public void AddBackground(Sprite sprite) {
+			backgrounds.Add(new Background(sprite.texture));
+		}
+
+		public Sprite GetBackground(int index) {
+			Sprite bg = default;
+
+			if(index < backgrounds.Count) {
+				bg = backgrounds[index].Sprite;
+			}
+			
+			return bg;
+		}
 
 		public (bool, int) FormatBackgrounds() {
 			bool res = false;
