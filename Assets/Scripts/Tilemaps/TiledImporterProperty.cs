@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using UnityEngine;
 
@@ -72,7 +73,7 @@ namespace Tilemaps {
         }
     }
     
-    public static class TiledImporterPropertyDictionaryExtension {
+    public static class TiledImporterPropertyExtensions {
         public static bool TryGetValueAsBool(this IDictionary<string, TiledImporterProperty> dict, string key) {
             TiledImporterProperty prop = dict.GetOrDefault(key);
             return prop != null ? prop.GetValueAsBool() : false;
@@ -101,6 +102,22 @@ namespace Tilemaps {
         public static string TryGetValueAsString(this IDictionary<string, TiledImporterProperty> dict, string key) {
             TiledImporterProperty prop = dict.GetOrDefault(key);
             return prop != null ? prop.GetValueAsString() : "";
+        }
+        
+        /// <summary>
+        /// Converts Property array to Dictionary for convenience.
+        /// </summary>
+        /// <param name="properties"></param>
+        public static ReadOnlyDictionary<string, TiledImporterProperty> PropertiesEnumerableToDictionary(
+            this IEnumerable<TiledTilemapJsonInfo.Layer.LayerProperty> properties) {
+            IDictionary<string, TiledImporterProperty> propertiesByKey = new Dictionary<string, TiledImporterProperty>();
+
+            foreach(TiledTilemapJsonInfo.Layer.LayerProperty property in properties) {
+                TiledImporterProperty prop = new TiledImporterProperty(property);
+                propertiesByKey.Add(prop.Key, prop);
+            }
+
+            return new ReadOnlyDictionary<string, TiledImporterProperty>(propertiesByKey);
         }
     }
 }

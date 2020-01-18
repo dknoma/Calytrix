@@ -46,6 +46,12 @@ namespace Editors {
 			}
 		}
 
+		protected static void GUIButton(string text, Action action) {
+			if (Button(text)) {
+				action();
+			}
+		}
+
 		protected static void MiniButton(string text, Action action) {
 			if (Button(text, miniButton)) {
 				action();

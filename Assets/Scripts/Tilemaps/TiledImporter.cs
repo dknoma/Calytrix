@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -148,7 +147,8 @@ namespace Tilemaps {
 			int layerX = layer.x;
 			int layerY = layer.y;
 
-			IDictionary<string, TiledImporterProperty> propertiesByKey = PropertiesArrayToDictionary(layer.properties);
+			IDictionary<string, TiledImporterProperty> propertiesByKey = 
+							layer.properties.PropertiesEnumerableToDictionary();
 			Tilemap tilemap = NewTilemap(layerName, layerX, layerY, propertiesByKey);
 
 			// Get 
@@ -214,23 +214,6 @@ namespace Tilemaps {
 
 		private static void SetTilemapSortOrder(TilemapRenderer tilemapRenderer, int order) {
 			tilemapRenderer.sortingOrder = order;
-		}
-
-		/// <summary>
-		/// Converts Property array to Dictionary for convenience.
-		/// </summary>
-		/// <param name="properties"></param>
-		/// <param name="propertiesByKey"></param>
-		private static ReadOnlyDictionary<string, TiledImporterProperty> PropertiesArrayToDictionary(
-			IEnumerable<LayerProperty> properties) {
-			IDictionary<string, TiledImporterProperty> propertiesByKey = new Dictionary<string, TiledImporterProperty>();
-
-			foreach(LayerProperty property in properties) {
-				TiledImporterProperty prop = new TiledImporterProperty(property);
-				propertiesByKey.Add(prop.Key, prop);
-			}
-
-			return new ReadOnlyDictionary<string, TiledImporterProperty>(propertiesByKey);
 		}
 
 		/// <summary>
@@ -546,30 +529,20 @@ namespace Tilemaps {
 
 			// Sort the order of sprites as they may be out of order
 			Array.Sort(sprites, (o1, o2) => {
-				                    var s1 = o1.name.Split('_');
-				                    var s2 = o2.name.Split('_');
-				                    string n1 = s1[s1.Length - 1];
-				                    string n2 = s2[s2.Length - 1];
-
-				                    return int.Parse(n1) - int.Parse(n2);
-			                    });
+															var s1 = o1.name.Split('_');
+															var s2 = o2.name.Split('_');
+															string n1 = s1[s1.Length - 1];
+															string n2 = s2[s2.Length - 1];
+						
+															return int.Parse(n1) - int.Parse(n2);
+														});
 
 			foreach(Sprite sprite in sprites) {
-#if DEBUG
-                Debug.LogFormat("sprite [{0}]", sprite);
-#endif
 				CreateTilesetAssets(asset, sprite);
 			}
 
 			tilesets.Add(asset);
 			SaveAssetToDatabase(asset, TILESETS_PATH, tilesetName);
-		}
-
-		private static void SaveAssetToDatabase(Object asset, string path, string filename) {
-			AssetDatabase.CreateAsset(asset, GetAssetPath(path, filename));
-			AssetDatabase.SaveAssets();
-
-			EditorUtility.FocusProjectWindow();
 		}
 
 		/// <summary>
@@ -586,6 +559,19 @@ namespace Tilemaps {
             Debug.LogFormat("NEW SPRITE [{0}]", newTile);
 #endif
 			asset.tilePrefabs.Add(tile);
+		}
+
+		/// <summary>
+		/// Saves a given asset to the given path with the given filename
+		/// </summary>
+		/// <param name="asset"></param>
+		/// <param name="path"></param>
+		/// <param name="filename"></param>
+		private static void SaveAssetToDatabase(Object asset, string path, string filename) {
+			AssetDatabase.CreateAsset(asset, GetAssetPath(path, filename));
+			AssetDatabase.SaveAssets();
+
+			EditorUtility.FocusProjectWindow();
 		}
 
 		/// <summary>

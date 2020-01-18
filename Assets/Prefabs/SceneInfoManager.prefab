@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5094295593441763345}
   - component: {fileID: 5094295593441763344}
+  - component: {fileID: 8349070605905481891}
   - component: {fileID: 1653508100}
   m_Layer: 0
   m_Name: SceneInfoManager
@@ -56,6 +57,19 @@ MonoBehaviour:
   overwriteTilesetAssets: 0
   overwriteLevelGrid: 1
   overwriteSpritesheetSlice: 0
+--- !u!114 &8349070605905481891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5094295593441763350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e2d224a3ad96436493698fdd307ff9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundList: {fileID: 11400000, guid: f7ac0a23301d4495a8981cf221fcb7f0, type: 2}
 --- !u!114 &1653508100
 MonoBehaviour:
   m_ObjectHideFlags: 0
