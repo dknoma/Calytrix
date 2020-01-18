@@ -5573,7 +5573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81074cc38dd1b4945bd04b6fed190392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalScrollRate: 0
+  horizontalScrollRate: 2
   verticalScrollRate: 0
   scrollType: 0
   scrollDirection: 0

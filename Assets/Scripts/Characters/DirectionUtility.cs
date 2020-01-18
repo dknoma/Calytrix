@@ -1,4 +1,6 @@
-﻿namespace Characters {
+﻿using static Characters.DirectionUtility.InputAngleState;
+
+namespace Characters {
 	public static class DirectionUtility {
 		public enum FacingState {
 			RIGHT,
@@ -26,16 +28,45 @@
 		}
 
 		public static bool InputRight(InputAngleState input) {
-			return input == InputAngleState.RIGHT || 
-			       input == InputAngleState.RIGHT_UP ||
-			       input == InputAngleState.RIGHT_DOWN;
+			return input == RIGHT || 
+			       input == RIGHT_UP ||
+			       input == RIGHT_DOWN;
 		}
 		
 
 		public static bool InputLeft(InputAngleState input) {
-			return input == InputAngleState.LEFT || 
-			       input == InputAngleState.LEFT_UP ||
-			       input == InputAngleState.LEFT_DOWN;
+			return input == LEFT || 
+			       input == LEFT_UP ||
+			       input == LEFT_DOWN;
+		}
+
+		public static InputAngleState CalculateInputAngle(float x, float y) {
+			InputAngleState angleState = DEFAULT;
+			if(x >= 0.5 && y >= 0.5) {
+				angleState = RIGHT_UP;
+			} else if(x >= 0.5 && MagnitudeWithinRange(y)) {
+				angleState = RIGHT;
+			} else if(x >= 0.5 && y <= -0.5) {
+				angleState = RIGHT_DOWN;
+			} else if(MagnitudeWithinRange(x) && y <= -0.5) {
+				angleState = DOWN;
+			} else if(x <= -0.5 && y <= -0.5) {
+				angleState = LEFT_DOWN;
+			} else if(x <= -0.5 && MagnitudeWithinRange(y)) {
+				angleState = LEFT;
+			} else if(x <= -0.5 && y >= 0.5) {
+				angleState = LEFT_UP;
+			} else if(MagnitudeWithinRange(x) && y >= 0.5) {
+				angleState = UP;
+			} else {
+				angleState = DEFAULT;
+			}
+			
+			return angleState;
+		}
+		
+		private static bool MagnitudeWithinRange(float mag) {
+			return -0.5 <= mag && mag <= 0.5;
 		}
 
 //		public const int UP = 0b0001;

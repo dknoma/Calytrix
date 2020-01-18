@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Backgrounds;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -257,23 +256,23 @@ namespace Tilemaps {
 			layer.transform.position = new Vector3(x, y, 0);
 			
 			switch(propertyLayerName) {
-				case LAYER_BACKGROUND:
-					int horizontalScrollRate = propertiesByKey.TryGetValueAsInt(TiledCustomProperty.HORIZONTAL_SCROLL_RATE);
-					int verticalScrollRate = propertiesByKey.TryGetValueAsInt(TiledCustomProperty.VERTICAL_SCROLL_RATE);
-					ScrollType.Type scrollType = ScrollType.GetTypeByName(
-					                                                      propertiesByKey.TryGetValueAsString(
-																				TiledCustomProperty.SCROLL_TYPE));
-					ScrollType.ScrollDirection direction = ScrollType.GetScrollDirectionByName(
-																		  propertiesByKey.TryGetValueAsString(
-					                                                            TiledCustomProperty.SCROLL_DIRECTION));
-					
-					GameObject backgroundContainer = new GameObject($"{layerName}_container");
-					BackgroundScroll scroll = backgroundContainer.AddComponent<BackgroundScroll>();
-					scroll.Initialize(horizontalScrollRate, verticalScrollRate, scrollType, direction);
-					
-					backgroundContainer.transform.SetParent(grid.transform);
-					layer.transform.SetParent(backgroundContainer.transform);
-					break;
+//				case LAYER_BACKGROUND:
+//					int horizontalScrollRate = propertiesByKey.TryGetValueAsInt(TiledCustomProperty.HORIZONTAL_SCROLL_RATE);
+//					int verticalScrollRate = propertiesByKey.TryGetValueAsInt(TiledCustomProperty.VERTICAL_SCROLL_RATE);
+//					ScrollType.Type scrollType = ScrollType.GetTypeByName(
+//					                                                      propertiesByKey.TryGetValueAsString(
+//																				TiledCustomProperty.SCROLL_TYPE));
+//					ScrollType.ScrollDirection direction = ScrollType.GetScrollDirectionByName(
+//																		  propertiesByKey.TryGetValueAsString(
+//					                                                            TiledCustomProperty.SCROLL_DIRECTION));
+//					
+//					GameObject backgroundContainer = new GameObject($"{layerName}_container");
+//					BackgroundScroll scroll = backgroundContainer.AddComponent<BackgroundScroll>();
+//					scroll.Initialize(horizontalScrollRate, verticalScrollRate, scrollType, direction);
+//					
+//					backgroundContainer.transform.SetParent(grid.transform);
+//					layer.transform.SetParent(backgroundContainer.transform);
+//					break;
 				default:
 					layer.transform.SetParent(grid.transform);
 					break;

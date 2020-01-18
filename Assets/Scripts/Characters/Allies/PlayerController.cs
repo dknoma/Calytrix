@@ -110,35 +110,6 @@ namespace Characters.Allies {
 			(this.move.x, this.move.y) = (clampedVector.x, clampedVector.y);
 		}
 
-		private static InputAngleState CalculateInputAngle(float x, float y) {
-			InputAngleState angleState = DEFAULT;
-			if(x >= 0.5 && y >= 0.5) {
-				angleState = RIGHT_UP;
-			} else if(x >= 0.5 && MagnitudeWithinRange(y)) {
-				angleState = RIGHT;
-			} else if(x >= 0.5 && y <= -0.5) {
-				angleState = RIGHT_DOWN;
-			} else if(MagnitudeWithinRange(x) && y <= -0.5) {
-				angleState = DOWN;
-			} else if(x <= -0.5 && y <= -0.5) {
-				angleState = LEFT_DOWN;
-			} else if(x <= -0.5 && MagnitudeWithinRange(y)) {
-				angleState = LEFT;
-			} else if(x <= -0.5 && y >= 0.5) {
-				angleState = LEFT_UP;
-			} else if(MagnitudeWithinRange(x) && y >= 0.5) {
-				angleState = UP;
-			} else {
-				angleState = DEFAULT;
-			}
-			
-			return angleState;
-		}
-
-		private static bool MagnitudeWithinRange(float mag) {
-			return -0.5 <= mag && mag <= 0.5;
-		}
-
 		private static Vector2 RawVector(Vector2 input) {
 			float x = 0, y = 0;
 			

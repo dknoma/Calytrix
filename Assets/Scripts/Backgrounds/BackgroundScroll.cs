@@ -10,21 +10,22 @@ public class BackgroundScroll : MonoBehaviour {
     [SerializeField] private int verticalScrollRate;
     [SerializeField] private ScrollType.Type scrollType;
     [SerializeField] private ScrollType.ScrollDirection scrollDirection;
-    
+
+    private const float BASE_HORIZONTAL_MOVE_SPEED = 0.125f;
+    private const float BASE_VERTICAL_MOVE_SPEED = 0.125f;
     private const float PADDING_THRESHOLD = 2f;
     private static readonly Action NO_OP = () => {};
 
     private GameObject originalObject;
     private Camera main;
     private Renderer renderer;
-//    private PlayerController player;
 
     private Tilemap tilemap;
 
     private Action scroller;
     private Action repositionBg;
     
-    private Vector3 previousCamPos;
+    private Vector3 previousPos;
     private Vector3 originalBgPos;
     private Vector2 screenBounds;
     
@@ -42,7 +43,7 @@ public class BackgroundScroll : MonoBehaviour {
 
         Transform mainCameraTransform = main.transform;
         Vector3 camPos = mainCameraTransform.position;
-        this.previousCamPos = camPos;
+        this.previousPos = camPos;
         
         this.screenBounds =
             main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, camPos.z));
@@ -52,14 +53,6 @@ public class BackgroundScroll : MonoBehaviour {
         Bounds bounds = renderer.bounds;
         this.halfBackgroundWidth = bounds.extents.x;
 
-//        switch(renderer) {
-//            case TilemapRenderer tilemapRenderer:
-//                this.tilemap = originalObject.GetComponent<Tilemap>();
-//                break;
-//        }
-//        
-//        tilemap.bou
-//        this.originalBgPos = transform.position;
         this.verticalPadding = camPos.y - bounds.extents.y;
         // If no scrolling, then background does not move; disable script
         switch(scrollType) {
@@ -129,19 +122,21 @@ public class BackgroundScroll : MonoBehaviour {
         }
     }
 
-    private void NormalScrolling() {  
-        Vector3 position = main.transform.position;
-        float hPara = (previousCamPos.x - position.x) * horizontalScrollRate;
-        float vPara = (previousCamPos.y - position.y) * verticalScrollRate;
-//        this.transform.position = new Vector3(position.x - hPara, position.y - vPara, 0);
+    private void NormalScrolling() {
+        Vector3 camPos = main.transform.position;
+        float hPara = camPos.x - previousPos.x * BASE_HORIZONTAL_MOVE_SPEED * horizontalScrollRate;
+        float vPara = camPos.y - previousPos.y * BASE_VERTICAL_MOVE_SPEED * verticalScrollRate;
+
+        Transform thisTransform = transform;
+        thisTransform.position = new Vector3(camPos.x - hPara, camPos.y - vPara, thisTransform.position.z);
         
-        this.previousCamPos = position;
+        this.previousPos = camPos;
     }
 
     private void AutoScrolling() {
         // TODO
         Vector3 position = main.transform.position;
-        this.previousCamPos = position;
+        this.previousPos = position;
     }
 
     private void NoScrolling() {
