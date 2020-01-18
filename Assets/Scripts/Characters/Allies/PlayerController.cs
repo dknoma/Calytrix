@@ -6,6 +6,7 @@ using Utility;
 using static Characters.CharacterState;
 using static Characters.DirectionUtility;
 using static Characters.DirectionUtility.InputAngleState;
+using static Tilemaps.TilemapConstants;
 using static UnityEngine.InputSystem.InputAction;
 
 namespace Characters.Allies {
@@ -76,8 +77,18 @@ namespace Characters.Allies {
 			this.inputDirection = CalculateInputAngle(input.x, input.y);
 			
 			Debug.Log($"inputDirection={inputDirection.ToString()}");
-			
-			(this.move.x, this.move.y) = RawVector(input);
+
+//			Vector2 clampedVector = PixelClamp(RawVector(input));
+			Vector2 clampedVector = RawVector(input);
+			(this.move.x, this.move.y) = (clampedVector.x, clampedVector.y);
+		}
+
+		private Vector2 PixelClamp(Vector2 input) {
+			Vector2 vector = new Vector2(
+			Mathf.RoundToInt(input.x * PIXELS_PER_UNIT),
+			Mathf.RoundToInt(input.y * PIXELS_PER_UNIT));
+
+			return vector / PIXELS_PER_UNIT;
 		}
 		
 		private void OnMove(CallbackContext ctx) {
@@ -94,7 +105,9 @@ namespace Characters.Allies {
 
 //			Debug.Log($"inputDirection={inputDirection.ToString()}");
 
-			(this.move.x, this.move.y) = RawVector(input);
+//			Vector2 clampedVector = PixelClamp(RawVector(input));
+			Vector2 clampedVector = RawVector(input);
+			(this.move.x, this.move.y) = (clampedVector.x, clampedVector.y);
 		}
 
 		private static InputAngleState CalculateInputAngle(float x, float y) {
@@ -126,22 +139,22 @@ namespace Characters.Allies {
 			return -0.5 <= mag && mag <= 0.5;
 		}
 
-		private static (int, int) RawVector(Vector2 input) {
-			int x = 0, y = 0;
+		private static Vector2 RawVector(Vector2 input) {
+			float x = 0, y = 0;
 			
 			if(input.x > 0.5) {
-				x = 1;
+				x = 0.0625f;
 			} else if(input.x < -0.5) {
-				x = -1;
+				x = -0.0625f;
 			}
 			
 			if(input.y > 0.5) {
-				y = 1;
+				y = 0.0625f;
 			} else if(input.y < -0.5) {
-				y = -1;
+				y = -0.0625f;
 			}
 			
-			return (x, y);
+			return new Vector2(x, y);
 		}
 
 		private void StopMove(CallbackContext ctx) {

@@ -7,13 +7,13 @@ namespace Backgrounds {
     public class Background {
         [SerializeField] private Texture2D spriteTexture;
         [SerializeField] private BackgroundSettings settings;
-        [SerializeField] private Sprite sprite;
+//        [SerializeField] private Sprite sprite;
         [SerializeField] private bool overwriteSprite;
 
-        public Sprite Sprite {
-            get => sprite;
-            set => sprite = value;
-        }
+//        public Sprite Sprite {
+//            get => sprite;
+//            set => sprite = value;
+//        }
 
         public Texture2D SpriteTexture {
             get => spriteTexture;
@@ -27,19 +27,27 @@ namespace Backgrounds {
 
         public Background(Texture2D spriteTexture) {
             this.SpriteTexture = spriteTexture;
-            SetSprite();
+//            SetSprite();
         }
 
-        public void SetSpriteIfNecessary() {
-            if(overwriteSprite || sprite == null || sprite == default) {
-                SetSprite();
-            }
-        }
+//        public void SetSpriteIfNecessary() {
+//            if(overwriteSprite || sprite == null || sprite == default) {
+//                SetSprite();
+//            }
+//        }
 
-        private void SetSprite() {
+        public Sprite GetSprite() {
             Rect rec = new Rect(0, 0, spriteTexture.width, spriteTexture.height);
-            this.sprite = Sprite.Create(spriteTexture, rec, new Vector2(0.5f,0.5f), PIXELS_PER_UNIT);
+            Sprite sprite = Sprite.Create(spriteTexture, rec, new Vector2(0.5f,0.5f), PIXELS_PER_UNIT);
             Debug.Log($"sprite={sprite}");
+            
+            return sprite;
         }
+
+//        private void SetSprite() {
+//            Rect rec = new Rect(0, 0, spriteTexture.width, spriteTexture.height);
+//            this.sprite = Sprite.Create(spriteTexture, rec, new Vector2(0.5f,0.5f), PIXELS_PER_UNIT);
+//            Debug.Log($"sprite={sprite}");
+//        }
     }
 }

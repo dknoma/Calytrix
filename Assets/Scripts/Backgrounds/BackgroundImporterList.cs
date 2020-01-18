@@ -19,7 +19,7 @@ namespace Backgrounds {
 			Sprite bg = default;
 
 			if(index < backgrounds.Count) {
-				bg = backgrounds[index].Sprite;
+				bg = backgrounds[index].GetSprite();
 			}
 			
 			return bg;
@@ -29,7 +29,7 @@ namespace Backgrounds {
 			bool res = false;
 			int index = 0;
 			foreach(Background background in backgrounds) {
-				background.SetSpriteIfNecessary();
+//				background.SetSpriteIfNecessary();
 				res = FormatSprite(background.SpriteTexture);
 				if(!res) {
 					break;

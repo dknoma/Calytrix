@@ -7,7 +7,7 @@ public class Container : MonoBehaviour {
         this.cam = Camera.main;
     }
 
-    private void Update() {
+    private void LateUpdate() {
         this.transform.position = cam.transform.position;
     }
 }

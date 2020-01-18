@@ -17,6 +17,7 @@ public class BackgroundScroll : MonoBehaviour {
     private GameObject originalObject;
     private Camera main;
     private Renderer renderer;
+//    private PlayerController player;
 
     private Tilemap tilemap;
 
@@ -34,6 +35,8 @@ public class BackgroundScroll : MonoBehaviour {
     private readonly LinkedList<GameObject> backgrounds = new LinkedList<GameObject>();
 
     private void Awake() {
+//        player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();    // Get the main player character
+
         this.main = Camera.main;
         Debug.Assert(main != null, nameof(main) + " != null");
 
@@ -100,11 +103,8 @@ public class BackgroundScroll : MonoBehaviour {
         }
     }
     
-    private void Update() {
-        scroller.Invoke();
-    }
-
     private void LateUpdate() {
+        scroller.Invoke();
         repositionBg.Invoke();
     }
 
@@ -133,7 +133,6 @@ public class BackgroundScroll : MonoBehaviour {
         Vector3 position = main.transform.position;
         float hPara = (previousCamPos.x - position.x) * horizontalScrollRate;
         float vPara = (previousCamPos.y - position.y) * verticalScrollRate;
-        
 //        this.transform.position = new Vector3(position.x - hPara, position.y - vPara, 0);
         
         this.previousCamPos = position;
@@ -147,7 +146,7 @@ public class BackgroundScroll : MonoBehaviour {
 
     private void NoScrolling() {
         Vector3 position = main.transform.position;
-        this.transform.position = new Vector3(position.x, position.y - verticalPadding, transform.position.z);
+        this.transform.position = new Vector3(position.x, position.y, transform.position.z);
     }
     
     public void Initialize(int horizontalScrollRate, int verticalScrollRate, 

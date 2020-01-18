@@ -4,11 +4,17 @@ using UnityEngine;
 namespace Backgrounds {
     [Serializable]
     public class BackgroundSettings {
+        [SerializeField] private string sortLayer;
         [SerializeField] private int orderInLayer;
         [SerializeField] private int horizontalScrollRate;
         [SerializeField] private int verticalScrollRate;
         [SerializeField] private ScrollType.Type type;
         [SerializeField] private ScrollType.ScrollDirection direction;
+
+        public string SortLayer {
+            get => sortLayer;
+            set => sortLayer = value;
+        }
 
         public int OrderInLayer {
             get => orderInLayer;

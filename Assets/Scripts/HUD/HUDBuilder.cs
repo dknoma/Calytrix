@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HUDBuilder : MonoBehaviour {
     private const float ICON_DISTANCE = 0.8125f;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Characters {
@@ -62,7 +61,7 @@ namespace Characters {
 				this.state = CharacterState.Falling();
 			}
 			
-			Vector2 deltaPosition = velocity * Time.deltaTime;
+			Vector2 deltaPosition = velocity * Time.smoothDeltaTime;
 			Vector2 moveAlongGround = new Vector2(groundNormal.y, -groundNormal.x);
 			Vector2 move = moveAlongGround * deltaPosition.x;
 			
@@ -115,7 +114,7 @@ namespace Characters {
 		}
 
 		protected virtual Vector2 ComputeVerticalVelocity() {
-			return Physics2D.gravity * (gravityModifier * Time.deltaTime);
+			return Physics2D.gravity * (gravityModifier * Time.smoothDeltaTime);
 		}
 	}
 }
