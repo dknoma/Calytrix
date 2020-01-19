@@ -15,7 +15,7 @@ using static Tilemaps.TilemapConstants;
 using static Tilemaps.TiledRenderOrder;
 using static Tilemaps.TilesetFileType;
 using static Tilemaps.TilesetFileType.Type;
-using Object = UnityEngine.Object;
+using static Utility.AssetHelper;
 
 namespace Tilemaps {
 	public class TiledImporter : MonoBehaviour {
@@ -66,11 +66,11 @@ namespace Tilemaps {
 		/// Individual processing methods
 		/// </summary>
 		public void ProcessJSON() {
-			GetAssetPath();
+			GetJsonAssetPath();
 			LoadFromJson();
 		}
 
-		private void GetAssetPath() {
+		private void GetJsonAssetPath() {
 			string assetPath = AssetDatabase.GetAssetPath(json);
 
 			this.path = Split(assetPath, "/(\\w)+\\.json")[0];
@@ -506,10 +506,6 @@ namespace Tilemaps {
 			tilesets.Add(tilesetAsset);
 		}
 
-		private static string GetAssetPath(string path, string sourcename) {
-			return $"{path}/{sourcename}.asset";
-		}
-
 		private string FromAbsolutePath(string file) {
 			return $"{this.path}/{file}";
 		}
@@ -558,19 +554,6 @@ namespace Tilemaps {
             Debug.LogFormat("NEW SPRITE [{0}]", newTile);
 #endif
 			asset.tilePrefabs.Add(tile);
-		}
-
-		/// <summary>
-		/// Saves a given asset to the given path with the given filename
-		/// </summary>
-		/// <param name="asset"></param>
-		/// <param name="path"></param>
-		/// <param name="filename"></param>
-		private static void SaveAssetToDatabase(Object asset, string path, string filename) {
-			AssetDatabase.CreateAsset(asset, GetAssetPath(path, filename));
-			AssetDatabase.SaveAssets();
-
-			EditorUtility.FocusProjectWindow();
 		}
 
 		/// <summary>

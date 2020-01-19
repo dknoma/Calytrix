@@ -6,8 +6,8 @@ namespace Backgrounds {
     public class BackgroundSettings {
         [SerializeField] private string sortLayer;
         [SerializeField] private int orderInLayer;
-        [SerializeField] private int horizontalScrollRate;
-        [SerializeField] private int verticalScrollRate;
+        [SerializeField] [Range(-16, 16)] private int horizontalScrollRate;
+        [SerializeField] [Range(-16, 16)] private int verticalScrollRate;
         [SerializeField] private ScrollType.Type type;
         [SerializeField] private ScrollType.ScrollDirection direction;
 

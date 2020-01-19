@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: 0b393990858b9eb41829879dfdbef664, type: 2}
+  currencyStash: {fileID: 0}
   hpSignal: {fileID: 11400000, guid: ec78d155e8f2f364dbe80123aaaf4cc0, type: 2}
   mpSignal: {fileID: 11400000, guid: 38f26fc35ef6d3e41bf2f3b0f4e6e381, type: 2}
 --- !u!114 &6453041447995377867

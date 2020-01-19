@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using static Tilemaps.TilemapConstants;
+using static Utility.ProjectConstants;
 
 namespace Tilemaps {
 	public static class SpriteSlicer {

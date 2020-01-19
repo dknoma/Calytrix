@@ -6,18 +6,17 @@ using UnityEngine.Tilemaps;
 using Utility;
 
 public class BackgroundScroll : MonoBehaviour {
-    [SerializeField] private int horizontalScrollRate;
-    [SerializeField] private int verticalScrollRate;
+    [SerializeField] [Range(-16, 16)] private int horizontalScrollRate;
+    [SerializeField] [Range(-16, 16)] private int verticalScrollRate;
     [SerializeField] private ScrollType.Type scrollType;
     [SerializeField] private ScrollType.ScrollDirection scrollDirection;
 
-    private const float BASE_HORIZONTAL_MOVE_SPEED = 0.0625f;
-    private const float BASE_VERTICAL_MOVE_SPEED = 0.0625f;
+    private const float BASE_MOVE_SPEED = 0.0625f;
     private const float PADDING_THRESHOLD = 2f;
     private static readonly Action NO_OP = () => {};
 
     private GameObject originalObject;
-    private Camera main;
+    private Camera bgCam;
     private Renderer renderer;
 
     private Tilemap tilemap;
@@ -41,15 +40,15 @@ public class BackgroundScroll : MonoBehaviour {
     private void Awake() {
 //        player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();    // Get the main player character
 
-        this.main = Camera.main;
-        Debug.Assert(main != null, nameof(main) + " != null");
+        this.bgCam = GameObject.FindWithTag(Tags.BACKGROUND_CAMERA_TAG).GetComponent<Camera>();
+        Debug.Assert(bgCam != null, nameof(bgCam) + " != null");
 
-        Transform mainCameraTransform = main.transform;
+        Transform mainCameraTransform = bgCam.transform;
         Vector3 camPos = mainCameraTransform.position;
-        this.previousPos = camPos;
+        this.previousPos = transform.position;
         
         this.screenBounds =
-            main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, camPos.z));
+            bgCam.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, camPos.z));
         
         this.originalObject = transform.GetChild(0).gameObject;
         this.renderer = originalObject.GetComponent<Renderer>();
@@ -81,8 +80,8 @@ public class BackgroundScroll : MonoBehaviour {
                 throw new ArgumentOutOfRangeException();
         }
 
-        this.hScroll = BASE_HORIZONTAL_MOVE_SPEED * horizontalScrollRate;
-        this.vScroll = BASE_VERTICAL_MOVE_SPEED * verticalPadding;
+        this.hScroll = BASE_MOVE_SPEED * horizontalScrollRate;
+        this.vScroll = BASE_MOVE_SPEED * verticalPadding;
     }
 
     private void Update() {
@@ -129,7 +128,7 @@ public class BackgroundScroll : MonoBehaviour {
     // Looping
     private void RepositionBackground() {
         // Get bounds of the screen
-        Vector3 position = main.transform.position;
+        Vector3 position = bgCam.transform.position;
         float rightScreenBound = position.x + screenBounds.x;
         float leftScreenBound = position.x - screenBounds.x;
         
@@ -150,23 +149,23 @@ public class BackgroundScroll : MonoBehaviour {
 
     // Scrolling
     private void NormalScrolling() {
-        Vector3 camPos = main.transform.position;
-        float hPara = camPos.x - previousPos.x * BASE_HORIZONTAL_MOVE_SPEED * horizontalScrollRate;
-        float vPara = camPos.y - previousPos.y * BASE_VERTICAL_MOVE_SPEED * verticalScrollRate;
-        
-        this.previousPos = camPos;
+        Vector3 camPos = bgCam.transform.position;
+        float hPara = camPos.x - previousPos.x * BASE_MOVE_SPEED * horizontalScrollRate;
+        float vPara = camPos.y - previousPos.y * BASE_MOVE_SPEED * verticalScrollRate;
+        Debug.Log($"{name} - camPos={camPos}, vpara={vPara}, camPos.y - vPara = {camPos.y - vPara}");
 
         Transform thisTransform = transform;
         thisTransform.position = new Vector3(camPos.x - hPara, camPos.y - vPara, thisTransform.position.z);
+        this.previousPos = camPos;
     }
 
     private void AutoScrolling() {
-        Vector3 camPos = main.transform.position;
+        Vector3 camPos = bgCam.transform.position;
         Transform thisTransform = transform;
         Vector3 pos = thisTransform.position;
         
-        float hPara = BASE_HORIZONTAL_MOVE_SPEED * horizontalScrollRate;
-        float vPara = BASE_VERTICAL_MOVE_SPEED * verticalScrollRate;
+        float hPara = BASE_MOVE_SPEED * horizontalScrollRate;
+        float vPara = BASE_MOVE_SPEED * verticalScrollRate;
         
 
         switch(scrollDirection){
@@ -190,7 +189,7 @@ public class BackgroundScroll : MonoBehaviour {
     }
 
     private void NoScrolling() {
-        Vector3 position = main.transform.position;
+        Vector3 position = bgCam.transform.position;
         this.transform.position = new Vector3(position.x, position.y, transform.position.z);
     }
 }

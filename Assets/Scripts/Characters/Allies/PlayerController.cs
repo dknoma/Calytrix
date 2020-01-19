@@ -6,7 +6,7 @@ using Utility;
 using static Characters.CharacterState;
 using static Characters.DirectionUtility;
 using static Characters.DirectionUtility.InputAngleState;
-using static Tilemaps.TilemapConstants;
+using static Utility.ProjectConstants;
 using static UnityEngine.InputSystem.InputAction;
 
 namespace Characters.Allies {

@@ -49,11 +49,10 @@ MonoBehaviour:
   gridX: 1
   gridY: 1
   gridZ: 0
-  path: Assets/Tilesets/BlueRuins
-  tilesetFolder: BlueRuins
+  path: 
+  tilesetFolder: 
   renderOrder: 0
-  tilesets:
-  - {fileID: 11400000, guid: a586558a9b5164a1c8165164365cc206, type: 2}
+  tilesets: []
   overwriteTilesetAssets: 0
   overwriteLevelGrid: 1
   overwriteSpritesheetSlice: 0
@@ -70,6 +69,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundList: {fileID: 11400000, guid: f7ac0a23301d4495a8981cf221fcb7f0, type: 2}
+  settings: {fileID: 0}
 --- !u!114 &1653508100
 MonoBehaviour:
   m_ObjectHideFlags: 0

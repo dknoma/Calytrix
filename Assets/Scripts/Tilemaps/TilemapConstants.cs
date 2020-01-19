@@ -8,8 +8,6 @@ namespace Tilemaps {
 		
 		public const string TILESETS_PATH = "Assets/Tilesets";
 
-		public const int PIXELS_PER_UNIT = 16;
-
 		public const string LAYER_BACKGROUND = "Background";
 		public const string LAYER_DECORATION = "Decoration";
 		public const string LAYER_GROUND = "Ground";

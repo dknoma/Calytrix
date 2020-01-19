@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using static Tilemaps.TilemapConstants;
+using static Utility.ProjectConstants;
 
 namespace Backgrounds {
     [Serializable]
