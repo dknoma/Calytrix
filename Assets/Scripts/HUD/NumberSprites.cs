@@ -105,7 +105,9 @@ public class NumberSprites : ScriptableObject {
         Debug.Log($"fieldValues={string.Join(", ", fieldValues)}");
 
         for(int i = 0; i < 10; i++) {
-            SPRITE_BY_INT.Add(i, (Sprite) fieldValues[i]);
+            if(!SPRITE_BY_INT.ContainsKey(i)) {
+                SPRITE_BY_INT.Add(i, (Sprite) fieldValues[i]);
+            }
         }
     }
 }

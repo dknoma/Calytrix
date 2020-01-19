@@ -85,10 +85,10 @@ public class BackgroundScroll : MonoBehaviour {
     }
 
     private void Update() {
-        scroller.Invoke();
     }
     
     private void LateUpdate() {
+        scroller.Invoke();
         repositionBg.Invoke();
     }
     
@@ -149,7 +149,7 @@ public class BackgroundScroll : MonoBehaviour {
 
     // Scrolling
     private void NormalScrolling() {
-        Vector3 camPos = bgCam.transform.position;
+        Vector3 camPos = transform.parent.position;
         float hPara = camPos.x - previousPos.x * BASE_MOVE_SPEED * horizontalScrollRate;
         float vPara = camPos.y - previousPos.y * BASE_MOVE_SPEED * verticalScrollRate;
         Debug.Log($"{name} - camPos={camPos}, vpara={vPara}, camPos.y - vPara = {camPos.y - vPara}");
