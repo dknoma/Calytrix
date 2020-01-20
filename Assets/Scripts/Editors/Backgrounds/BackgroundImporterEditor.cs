@@ -12,7 +12,7 @@ namespace Editors {
 			ButtonGroup(("Import Settings", importer.LoadPixelPerfectCameraSettings),
 			           ("Save Settings", importer.SavePixelPerfectCameraSettings));
 			
-			GUIButton("Format Backgrounds", importer.FormatBackgrounds);
+			GUIButton("Import Backgrounds", importer.ImportBackgrounds);
 		}
 	}
 }

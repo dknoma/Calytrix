@@ -25,29 +25,33 @@ namespace Backgrounds {
 			return bg;
 		}
 
-		public (bool, int) FormatBackgrounds() {
-			bool res = false;
+		public (bool, int) ProcessBackgrounds(bool overwrite) {
+			bool res = true;
 			int index = 0;
-			foreach(Background background in backgrounds) {
-//				background.SetSpriteIfNecessary();
-				res = FormatSprite(background.SpriteTexture);
-				if(!res) {
-					break;
+			
+			if(overwrite) {
+				foreach(Background background in backgrounds) {
+					res = FormatSprite(background.SpriteTexture);
+					if(!res) {
+						break;
+					}
+
+					index++;
 				}
-				index++;
 			}
 
 			return (res, index);
 		}
 
 		private static bool FormatSprite(Texture2D spriteTexture) {
-			Rect rect = new Rect(0, 0, spriteTexture.width, spriteTexture.height);
-			Sprite sprite = Sprite.Create(spriteTexture, rect, new Vector2(0.5f,0.5f), PIXELS_PER_UNIT);
+			bool formatted = false;
 			
+			Rect rect = new Rect(0, 0, spriteTexture.width, spriteTexture.height);
+			Sprite sprite = Sprite.Create(spriteTexture, rect, new Vector2(0.5f, 0.5f), PIXELS_PER_UNIT);
+
 			string texturePath = AssetDatabase.GetAssetPath(spriteTexture);
 			Debug.Log($"so - texturePath={texturePath}");
-			
-			bool formatted = false;
+
 			if(!string.IsNullOrEmpty(texturePath)) {
 				SpriteSlicer.SliceSprite(texturePath, sprite.bounds.size.x, sprite.bounds.size.y, rect);
 				formatted = true;

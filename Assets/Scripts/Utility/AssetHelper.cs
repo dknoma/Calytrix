@@ -16,6 +16,17 @@ namespace Utility {
             EditorUtility.FocusProjectWindow();
         }
         
+        public static void SaveAssetToDatabase(Object asset, string filename) {
+            AssetDatabase.CreateAsset(asset, filename);
+            AssetDatabase.SaveAssets();
+
+            EditorUtility.FocusProjectWindow();
+        }
+        
+        public static string GetAssetPath(Object asset) {
+            return AssetDatabase.GetAssetPath(asset);
+        }
+        
         public static string GetAssetPath(string path, string sourcename) {
             return $"{path}/{sourcename}.asset";
         }

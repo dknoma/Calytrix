@@ -7,47 +7,35 @@ namespace Backgrounds {
     public class Background {
         [SerializeField] private Texture2D spriteTexture;
         [SerializeField] private BackgroundSettings settings;
-//        [SerializeField] private Sprite sprite;
         [SerializeField] private bool overwriteSprite;
 
-//        public Sprite Sprite {
-//            get => sprite;
-//            set => sprite = value;
-//        }
-
+        /// <summary>
+        /// The 2D texture of the background's sprite. Can be used to obtain the Sprite object representation of the background.
+        /// </summary>
         public Texture2D SpriteTexture {
             get => spriteTexture;
-            set => spriteTexture = value;
+            set => this.spriteTexture = value;
         }
 
+        /// <summary>
+        /// The background settings to determine it's various metadata.
+        /// </summary>
         public BackgroundSettings Settings {
             get => settings;
-            set => settings = value;
+            set => this.settings = value;
         }
 
         public Background(Texture2D spriteTexture) {
             this.SpriteTexture = spriteTexture;
-//            SetSprite();
         }
-
-//        public void SetSpriteIfNecessary() {
-//            if(overwriteSprite || sprite == null || sprite == default) {
-//                SetSprite();
-//            }
-//        }
 
         public Sprite GetSprite() {
             Rect rec = new Rect(0, 0, spriteTexture.width, spriteTexture.height);
             Sprite sprite = Sprite.Create(spriteTexture, rec, new Vector2(0.5f,0.5f), PIXELS_PER_UNIT);
+            sprite.name = spriteTexture.name;
             Debug.Log($"sprite={sprite}");
             
             return sprite;
         }
-
-//        private void SetSprite() {
-//            Rect rec = new Rect(0, 0, spriteTexture.width, spriteTexture.height);
-//            this.sprite = Sprite.Create(spriteTexture, rec, new Vector2(0.5f,0.5f), PIXELS_PER_UNIT);
-//            Debug.Log($"sprite={sprite}");
-//        }
     }
 }

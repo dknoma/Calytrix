@@ -17,6 +17,7 @@ public class BackgroundScroll : MonoBehaviour {
 
     private GameObject originalObject;
     private Camera bgCam;
+    private Transform bgCamTransform;
     private Renderer renderer;
 
     private Tilemap tilemap;
@@ -32,6 +33,8 @@ public class BackgroundScroll : MonoBehaviour {
     private float halfBackgroundWidth;
     private float verticalPadding;
 
+    private float verticalOffset;
+
     private float hScroll;
     private float vScroll;
     
@@ -39,12 +42,16 @@ public class BackgroundScroll : MonoBehaviour {
 
     private void Awake() {
 //        player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();    // Get the main player character
+        Transform parent = transform.parent;
+        Debug.Assert(parent != null, "parent != null");
 
-        this.bgCam = GameObject.FindWithTag(Tags.BACKGROUND_CAMERA_TAG).GetComponent<Camera>();
+        this.bgCam = parent.GetComponent<Camera>();
         Debug.Assert(bgCam != null, nameof(bgCam) + " != null");
+        this.bgCamTransform = bgCam.transform;
+        Vector3 camPos = bgCamTransform.position;
 
-        Transform mainCameraTransform = bgCam.transform;
-        Vector3 camPos = mainCameraTransform.position;
+        this.verticalOffset = transform.position.y;
+
         this.previousPos = transform.position;
         
         this.screenBounds =
@@ -85,11 +92,11 @@ public class BackgroundScroll : MonoBehaviour {
     }
 
     private void Update() {
+        repositionBg.Invoke();
     }
     
     private void LateUpdate() {
         scroller.Invoke();
-        repositionBg.Invoke();
     }
     
     // Initialization
@@ -128,7 +135,7 @@ public class BackgroundScroll : MonoBehaviour {
     // Looping
     private void RepositionBackground() {
         // Get bounds of the screen
-        Vector3 position = bgCam.transform.position;
+        Vector3 position = bgCamTransform.position;
         float rightScreenBound = position.x + screenBounds.x;
         float leftScreenBound = position.x - screenBounds.x;
         
@@ -149,18 +156,18 @@ public class BackgroundScroll : MonoBehaviour {
 
     // Scrolling
     private void NormalScrolling() {
-        Vector3 camPos = transform.parent.position;
+        Vector3 camPos = bgCamTransform.position;
         float hPara = camPos.x - previousPos.x * BASE_MOVE_SPEED * horizontalScrollRate;
         float vPara = camPos.y - previousPos.y * BASE_MOVE_SPEED * verticalScrollRate;
         Debug.Log($"{name} - camPos={camPos}, vpara={vPara}, camPos.y - vPara = {camPos.y - vPara}");
 
         Transform thisTransform = transform;
-        thisTransform.position = new Vector3(camPos.x - hPara, camPos.y - vPara, thisTransform.position.z);
+        thisTransform.position = new Vector3(camPos.x - hPara, camPos.y - vPara + verticalOffset, thisTransform.position.z);
         this.previousPos = camPos;
     }
 
     private void AutoScrolling() {
-        Vector3 camPos = bgCam.transform.position;
+        Vector3 camPos = bgCamTransform.position;
         Transform thisTransform = transform;
         Vector3 pos = thisTransform.position;
         
@@ -189,7 +196,7 @@ public class BackgroundScroll : MonoBehaviour {
     }
 
     private void NoScrolling() {
-        Vector3 position = bgCam.transform.position;
+        Vector3 position = bgCamTransform.position;
         this.transform.position = new Vector3(position.x, position.y, transform.position.z);
     }
 }
