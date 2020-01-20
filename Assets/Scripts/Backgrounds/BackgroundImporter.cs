@@ -67,6 +67,7 @@ namespace Backgrounds {
 			if(backgroundCamera == null) {
 				backgroundCamera = new GameObject(Tags.BACKGROUND_CAMERA_TAG) { tag = Tags.BACKGROUND_CAMERA_TAG };
 				backgroundCamera.transform.position = new Vector3(0, 0, -50);
+				backgroundCamera.AddComponent<CameraMovement>();
 				Camera bgCam = backgroundCamera.AddComponent<Camera>();
 				bgCam.orthographic = true;
 				bgCam.orthographicSize = 7;
@@ -74,6 +75,7 @@ namespace Backgrounds {
 				ppCam.InitializeCamera(settings);
 				CreateBackgroundObjects(list, backgroundCamera);
 			} else {
+				backgroundCamera.TryAddComponent<CameraMovement>();
 				if(overwriteBackgrounds) {
 					backgroundCamera.transform.RemoveAllChildren();
 					CreateBackgroundObjects(list, backgroundCamera);
