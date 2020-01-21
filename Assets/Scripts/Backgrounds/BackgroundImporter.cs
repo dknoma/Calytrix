@@ -121,10 +121,10 @@ namespace Backgrounds {
 					backgroundObject.transform.SetParent(backgroundContainer.transform);
 					backgroundContainer.transform.SetParent(backgroundCamera.transform);
 					backgroundContainer.transform.position = new Vector3(settings.x, settings.y, 0);
-					SavePrefab(backgroundContainer, backgroundAssetsPath,
-					                    $"{backgroundContainer.name}.prefab");
 
-					data.AddBackground(backgroundContainer);
+					data.AddBackground(SavePrefab(backgroundContainer, 
+					                              backgroundAssetsPath,
+					                              $"{backgroundContainer.name}.prefab"));
 				}
 
 				SaveAssetToDatabase(data, backgroundAssetsPath, $"{backgroundListAssetName}.asset");
