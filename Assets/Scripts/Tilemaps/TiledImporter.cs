@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Utility;
 using static Tilemaps.SpriteSlicer;
 using static Tilemaps.TiledTilemapJsonInfo;
 using static Tilemaps.TiledTilemapJsonInfo.Layer;
@@ -73,14 +73,10 @@ namespace Tilemaps {
 		private void GetJsonAssetPath() {
 			string assetPath = AssetDatabase.GetAssetPath(json);
 
-			this.path = Split(assetPath, "/(\\w)+\\.json")[0];
+			this.path = assetPath.SplitBy("/(\\w)+\\.json")[0];
 
-			string[] parts = Split(path, "/");
+			string[] parts = path.SplitBy("/");
 			this.tilesetFolder = parts[2];
-		}
-
-		private static string[] Split(string input, string regex) {
-			return Regex.Split(input, regex);
 		}
 
 		private void LoadFromJson() {

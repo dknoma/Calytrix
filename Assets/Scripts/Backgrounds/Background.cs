@@ -33,7 +33,7 @@ namespace Backgrounds {
             Rect rec = new Rect(0, 0, spriteTexture.width, spriteTexture.height);
             Sprite sprite = Sprite.Create(spriteTexture, rec, new Vector2(0.5f,0.5f), PIXELS_PER_UNIT);
             sprite.name = spriteTexture.name;
-            Debug.Log($"sprite={sprite}");
+//            Debug.Log($"sprite={sprite}");
             
             return sprite;
         }

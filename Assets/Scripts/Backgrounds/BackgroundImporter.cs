@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.U2D;
 using Utility;
 using static PixelPerfectCameraSettings;
+using static Utility.AssetHelper;
 using static Utility.ProjectConstants;
 
 namespace Backgrounds {
@@ -14,8 +15,13 @@ namespace Backgrounds {
 		[SerializeField] private bool reSliceBackgrounds;
 		[SerializeField] private bool overwriteBackgrounds;
 
+//		[SerializeField] [HideInInspector] private BackgroundListData backgroundListData;
+
 		private readonly string PATH = $"{SETTINGS_PATH}/ppcam_settings.json";
 		private readonly string SETTINGS_OBJECT_PATH = $"{IMPORTER_SETTINGS_OBJECT_PATH}/PixelPerfectCameraSettings.asset";
+
+		private string backgroundAssetsPath;
+		private string backgroundListAssetName;
 		
 		public void LoadPixelPerfectCameraSettings() {
 			TextAsset json = AssetDatabase.LoadAssetAtPath<TextAsset>(PATH);
@@ -30,7 +36,7 @@ namespace Backgrounds {
 					settingsObject = ScriptableObject.CreateInstance<PixelPerfectCameraSettings>();
 					SettingsData data = JsonUtility.FromJson<SettingsData>(json.text);
 					settingsObject.Data = data;
-					AssetHelper.SaveAssetToDatabase(settingsObject, SETTINGS_OBJECT_PATH);
+					SaveAssetToDatabase(settingsObject, SETTINGS_OBJECT_PATH);
 					this.settings = settingsObject;
 				}
 			}
@@ -44,6 +50,12 @@ namespace Backgrounds {
 		}
 		
 		public void ImportBackgrounds() {
+			string path = AssetDatabase.GetAssetPath(backgroundList);
+			this.backgroundAssetsPath = path.SplitBy($"/{backgroundList.name}\\.asset")[0];
+			Debug.Log($"backgroundAssetsPath={backgroundAssetsPath}");
+			string[] parts = backgroundAssetsPath.Split('/');
+			this.backgroundListAssetName = parts[parts.Length - 1];
+			
 			(bool formatted, int index) = backgroundList.ProcessBackgrounds(reSliceBackgrounds);
 			Debug.Assert(formatted, $"Background at index {index} failed to format.");
 
@@ -68,10 +80,10 @@ namespace Backgrounds {
 				backgroundCamera = new GameObject(Tags.BACKGROUND_CAMERA_TAG) { tag = Tags.BACKGROUND_CAMERA_TAG };
 				backgroundCamera.transform.position = new Vector3(0, 0, -50);
 				backgroundCamera.AddComponent<CameraMovement>();
-				Camera bgCam = backgroundCamera.AddComponent<Camera>();
+				Camera bgCam = backgroundCamera.TryAddComponent<Camera>();
 				bgCam.orthographic = true;
 				bgCam.orthographicSize = 7;
-				PixelPerfectCamera ppCam = backgroundCamera.AddComponent<PixelPerfectCamera>();
+				PixelPerfectCamera ppCam = backgroundCamera.TryAddComponent<PixelPerfectCamera>();
 				ppCam.InitializeCamera(settings);
 				CreateBackgroundObjects(list, backgroundCamera);
 			} else {
@@ -86,23 +98,39 @@ namespace Backgrounds {
 		}
 
 		private void CreateBackgroundObjects(List<Background> backgroundList, GameObject backgroundCamera) {
-			foreach(Background background in backgroundList) {
-				BackgroundSettings settings = background.Settings;
-			
-				GameObject backgroundContainer = new GameObject($"{background.SpriteTexture.name}_container");
-			
-				BackgroundScroll scroll = backgroundContainer.AddComponent<BackgroundScroll>();
-				scroll.Initialize(settings);
-			
-				GameObject spriteObject = new GameObject($"{background.SpriteTexture.name}_sprite");
-				SpriteRenderer renderer = spriteObject.AddComponent<SpriteRenderer>();
-				renderer.sprite = background.GetSprite();
-//				renderer.sortingLayerName = settings.SortLayer;
-				renderer.sortingOrder = settings.OrderInLayer;
-			
-				spriteObject.transform.SetParent(backgroundContainer.transform);
-				backgroundContainer.transform.SetParent(backgroundCamera.transform);
-				backgroundContainer.transform.position = new Vector3(settings.x, settings.y, 0);
+			BackgroundListData data = AssetDatabase.LoadAssetAtPath<BackgroundListData>(
+			                                            $"{backgroundAssetsPath}/{backgroundListAssetName}.asset");
+			if(data == null) {
+				data = ScriptableObject.CreateInstance<BackgroundListData>();
+
+				foreach(Background background in backgroundList) {
+					BackgroundSettings settings = background.Settings;
+
+					GameObject backgroundContainer = new GameObject($"{background.SpriteTexture.name}_container");
+
+					BackgroundScroll scroll = backgroundContainer.AddComponent<BackgroundScroll>();
+					scroll.Initialize(settings);
+
+					GameObject backgroundObject = new GameObject($"{background.SpriteTexture.name}_sprite");
+					SpriteRenderer renderer = backgroundObject.AddComponent<SpriteRenderer>();
+					renderer.sprite = background.GetSprite();
+//					renderer.sortingLayerName = settings.SortLayer;
+					renderer.sortingOrder = settings.OrderInLayer;
+
+					backgroundObject.transform.SetParent(backgroundContainer.transform);
+					backgroundContainer.transform.SetParent(backgroundCamera.transform);
+					backgroundContainer.transform.position = new Vector3(settings.x, settings.y, 0);
+					SavePrefab(backgroundContainer, backgroundAssetsPath,
+					                    $"{backgroundContainer.name}.prefab");
+
+					data.AddBackground(backgroundContainer);
+				}
+
+				SaveAssetToDatabase(data, backgroundAssetsPath, $"{backgroundListAssetName}.asset");
+			} else {
+				foreach(GameObject backgroundPrefab in data.GetBackgroundPrefabs()) {
+					Instantiate(backgroundPrefab, backgroundCamera.transform);
+				}
 			}
 		}
 	}

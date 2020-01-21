@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace Utility {
@@ -68,6 +69,11 @@ namespace Utility {
             list.RemoveLast();
             list.AddFirst(last);
             return last.Value;
+        }
+        
+        // string
+        public static string[] SplitBy(this string input, string regex) {
+            return Regex.Split(input, regex);
         }
     }
 }

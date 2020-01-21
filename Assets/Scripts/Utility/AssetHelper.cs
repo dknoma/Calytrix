@@ -30,5 +30,13 @@ namespace Utility {
         public static string GetAssetPath(string path, string sourcename) {
             return $"{path}/{sourcename}.asset";
         }
+        
+        public static string GetPrefabPath(string path, string sourcename) {
+            return $"{path}/{sourcename}.prefab";
+        }
+
+        public static void SavePrefab(GameObject prefab, string path, string filename) {
+            PrefabUtility.SaveAsPrefabAsset(prefab, GetPrefabPath(path, filename));
+        }
     }
 }
