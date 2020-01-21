@@ -4,7 +4,12 @@ using UnityEngine;
 namespace Backgrounds {
     public class BackgroundListData : ScriptableObject {
         [SerializeField] private List<GameObject> backgroundPrefabs = new List<GameObject>();
-        [SerializeField] [DisableInspectorEdit] private string name;
+        [SerializeField] [DisableInspectorEdit] private string m_listName;
+
+        public string listName {
+            get => m_listName;
+            set => this.m_listName = value;
+        }
 
         public IEnumerable<GameObject> GetBackgroundPrefabs() {
             return backgroundPrefabs;

@@ -102,6 +102,7 @@ namespace Backgrounds {
 			                                            $"{backgroundAssetsPath}/{backgroundListAssetName}.asset");
 			if(data == null) {
 				data = ScriptableObject.CreateInstance<BackgroundListData>();
+				data.listName =  backgroundListAssetName;
 
 				foreach(Background background in backgroundList) {
 					BackgroundSettings settings = background.Settings;
