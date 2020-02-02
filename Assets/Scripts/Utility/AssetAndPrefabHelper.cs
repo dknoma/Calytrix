@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 
 namespace Utility {
-    public class AssetHelper {
+    public class AssetAndPrefabHelper {
         /// <summary>
         /// Saves a given asset to the given path with the given filename
         /// </summary>

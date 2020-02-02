@@ -15,7 +15,7 @@ using static Tilemaps.TilemapConstants;
 using static Tilemaps.TiledRenderOrder;
 using static Tilemaps.TilesetFileType;
 using static Tilemaps.TilesetFileType.Type;
-using static Utility.AssetHelper;
+using static Utility.AssetAndPrefabHelper;
 
 namespace Tilemaps {
 	public class TiledImporter : MonoBehaviour {

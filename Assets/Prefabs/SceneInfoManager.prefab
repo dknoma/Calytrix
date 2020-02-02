@@ -70,6 +70,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundList: {fileID: 11400000, guid: f7ac0a23301d4495a8981cf221fcb7f0, type: 2}
   settings: {fileID: 0}
+  reSliceBackgrounds: 0
+  overwriteBackgrounds: 1
 --- !u!114 &1653508100
 MonoBehaviour:
   m_ObjectHideFlags: 0

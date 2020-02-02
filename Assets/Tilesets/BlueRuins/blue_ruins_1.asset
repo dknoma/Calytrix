@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: blue_ruins_1
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 2463942339431910671, guid: 39beb3b87c2a3432fa3b8c63bb01007f,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 76432f2d7f9f5b4418a931627f0acf38, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

@@ -11,27 +11,13 @@ namespace Backgrounds {
 	public class BackgroundImporterList : ScriptableObject {
 		public List<Background> backgrounds = new List<Background>();
 
-		public void AddBackground(Sprite sprite) {
-			backgrounds.Add(new Background(sprite.texture));
-		}
-
-		public Sprite GetBackground(int index) {
-			Sprite bg = default;
-
-			if(index < backgrounds.Count) {
-				bg = backgrounds[index].GetSprite();
-			}
-			
-			return bg;
-		}
-
 		public (bool, int) ProcessBackgrounds(bool overwrite) {
 			bool res = true;
 			int index = 0;
 			
 			if(overwrite) {
 				foreach(Background background in backgrounds) {
-					res = FormatSprite(background.SpriteTexture);
+					res = CreateSpriteForTexture2D(background.SpriteTexture);
 					if(!res) {
 						break;
 					}
@@ -43,7 +29,7 @@ namespace Backgrounds {
 			return (res, index);
 		}
 
-		private static bool FormatSprite(Texture2D spriteTexture) {
+		private static bool CreateSpriteForTexture2D(Texture2D spriteTexture) {
 			bool formatted = false;
 			
 			Rect rect = new Rect(0, 0, spriteTexture.width, spriteTexture.height);

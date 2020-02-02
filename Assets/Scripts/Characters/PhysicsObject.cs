@@ -48,10 +48,10 @@ namespace Characters {
 
 		private void Update() {
 			targetVelocity = Vector2.zero;
-			ComputeVelocity();
 		}
 		
 		private void FixedUpdate() {
+			ComputeVelocity();
 			Vector2 verticalVelocity = ComputeVerticalVelocity();
 			
 			velocity += verticalVelocity;

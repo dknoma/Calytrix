@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.U2D;
 using Utility;
 using static PixelPerfectCameraSettings;
-using static Utility.AssetHelper;
+using static Utility.AssetAndPrefabHelper;
 using static Utility.ProjectConstants;
 
 namespace Backgrounds {
@@ -14,8 +14,6 @@ namespace Backgrounds {
 		[SerializeField] private PixelPerfectCameraSettings settings;
 		[SerializeField] private bool reSliceBackgrounds;
 		[SerializeField] private bool overwriteBackgrounds;
-
-//		[SerializeField] [HideInInspector] private BackgroundListData backgroundListData;
 
 		private readonly string PATH = $"{SETTINGS_PATH}/ppcam_settings.json";
 		private readonly string SETTINGS_OBJECT_PATH = $"{IMPORTER_SETTINGS_OBJECT_PATH}/PixelPerfectCameraSettings.asset";
@@ -59,17 +57,7 @@ namespace Backgrounds {
 			(bool formatted, int index) = backgroundList.ProcessBackgrounds(reSliceBackgrounds);
 			Debug.Assert(formatted, $"Background at index {index} failed to format.");
 
-//			GameObject grid = GameObject.FindWithTag(TilemapConstants.ENVIRONMENT_GRID_TAG);
-//			GameObject container = GameObject.FindWithTag(TilemapConstants.BACKGROUND_CONTAINER_TAG);
-//			if(container != null) {
-//				DestroyImmediate(container.gameObject);
-//			}
 			GameObject backgroundCamera = FormatBackgrounds(backgroundList.backgrounds);
-			
-//				GameObject newGridObject = new GameObject();
-//				Grid newGrid = newGridObject.AddComponent<Grid>();
-//				newGrid.cellSize = new Vector3(1, 1, 1);
-//				backgroundContainer.transform.SetParent(newGridObject.transform);
 		}
 
 		private GameObject FormatBackgrounds(List<Background> list) {
@@ -77,6 +65,7 @@ namespace Backgrounds {
 //				new GameObject("Backgrounds") { tag = TilemapConstants.BACKGROUND_CONTAINER_TAG };
 			GameObject backgroundCamera = GameObject.FindWithTag(Tags.BACKGROUND_CAMERA_TAG);
 			if(backgroundCamera == null) {
+				Debug.Log("Creating new camera");
 				backgroundCamera = new GameObject(Tags.BACKGROUND_CAMERA_TAG) { tag = Tags.BACKGROUND_CAMERA_TAG };
 				backgroundCamera.transform.position = new Vector3(0, 0, -50);
 				backgroundCamera.AddComponent<CameraMovement>();
@@ -101,6 +90,7 @@ namespace Backgrounds {
 			BackgroundListData data = AssetDatabase.LoadAssetAtPath<BackgroundListData>(
 			                                            $"{backgroundAssetsPath}/{backgroundListAssetName}.asset");
 			if(data == null) {
+				Debug.Log("Creating new list object.");
 				data = ScriptableObject.CreateInstance<BackgroundListData>();
 				data.listName =  backgroundListAssetName;
 

@@ -10,7 +10,7 @@ namespace Editors {
 			BackgroundImporter importer = (BackgroundImporter) target;
 
 			ButtonGroup(("Import Settings", importer.LoadPixelPerfectCameraSettings),
-			           ("Save Settings", importer.SavePixelPerfectCameraSettings));
+			            ("Save Settings", importer.SavePixelPerfectCameraSettings));
 			
 			GUIButton("Import Backgrounds", importer.ImportBackgrounds);
 		}

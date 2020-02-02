@@ -8,8 +8,8 @@ namespace Backgrounds {
         [SerializeField] private float m_y;
         [SerializeField] private string sortLayer;
         [SerializeField] private int orderInLayer;
-        [SerializeField] [Range(-16, 16)] private int horizontalScrollRate;
-        [SerializeField] [Range(-16, 16)] private int verticalScrollRate;
+        [SerializeField] [Range(-16, 16)] private float horizontalScrollRate;
+        [SerializeField] [Range(-16, 16)] private float verticalScrollRate;
         [SerializeField] private ScrollType.Type type;
         [SerializeField] private ScrollType.ScrollDirection direction;
 
@@ -48,7 +48,7 @@ namespace Backgrounds {
         /// <summary>
         /// Horizontal scroll rate of the background.
         /// </summary>
-        public int HorizontalScrollRate {
+        public float HorizontalScrollRate {
             get => horizontalScrollRate;
             set => this.horizontalScrollRate = value;
         }
@@ -56,7 +56,7 @@ namespace Backgrounds {
         /// <summary>
         /// Vertical scroll rate of the background.
         /// </summary>
-        public int VerticalScrollRate {
+        public float VerticalScrollRate {
             get => verticalScrollRate;
             set => this.verticalScrollRate = value;
         }

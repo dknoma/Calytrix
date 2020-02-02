@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: HDistortionTransition
   m_Shader: {fileID: 4800000, guid: fabca918ca89c6c42b211ec3299e2998, type: 3}
-  m_ShaderKeywords: _DISTORT_ON
+  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA _DISTORT_ON
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
