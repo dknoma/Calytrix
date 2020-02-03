@@ -114,15 +114,15 @@ namespace Characters.Allies {
 			float x = 0, y = 0;
 			
 			if(input.x > 0.5) {
-				x = 0.0625f;
+				x = 1f;
 			} else if(input.x < -0.5) {
-				x = -0.0625f;
+				x = -1f;
 			}
 			
 			if(input.y > 0.5) {
-				y = 0.0625f;
+				y = 1f;
 			} else if(input.y < -0.5) {
-				y = -0.0625f;
+				y = -1f;
 			}
 			
 			return new Vector2(x, y);
@@ -131,7 +131,7 @@ namespace Characters.Allies {
 		private void StopMove(CallbackContext ctx) {
 			dpadMovement = false;
 			leftStickMovement = false;
-			Debug.Log($"stop moving: {move}, {dpadMovement}");
+//			Debug.Log($"stop moving: {move}, {dpadMovement}");
 			
 			this.move = Vector2.zero;
 			this.inputDirection = DEFAULT;

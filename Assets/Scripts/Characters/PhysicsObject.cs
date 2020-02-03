@@ -61,7 +61,9 @@ namespace Characters {
 				this.state = CharacterState.Falling();
 			}
 			
+//			Debug.Log($"velocity={velocity}, Time.smoothDeltaTime={Time.smoothDeltaTime}");
 			Vector2 deltaPosition = velocity * Time.smoothDeltaTime;
+//			Debug.Log($"deltaPosition={deltaPosition.x}");
 			Vector2 moveAlongGround = new Vector2(groundNormal.y, -groundNormal.x);
 			Vector2 move = moveAlongGround * deltaPosition.x;
 			

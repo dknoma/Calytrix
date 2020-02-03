@@ -133,7 +133,7 @@ public class BackgroundScroll : MonoBehaviour {
             GameObject clone = Instantiate(originalObject, transform, true);
             Vector3 clonePos = new Vector3(position.x + renderWidth * i, position.y, position.z);
             
-            Debug.Log($"{name} - position={position}, clonePos={clonePos}");
+//            Debug.Log($"{name} - position={position}, clonePos={clonePos}");
             
             clone.transform.position = clonePos;
             backgrounds.AddLast(clone);
@@ -167,15 +167,15 @@ public class BackgroundScroll : MonoBehaviour {
         Vector3 camPos = bgCamTransform.position;
         float hPara = camPos.x - previousPos.x * hScroll;
         float vPara = camPos.y - previousPos.y * vScroll;
-        Debug.Log($"{name}: camPos.y - vPara + verticalOffset = {camPos.y - vPara + verticalOffset}");
-        Debug.Log($"{name}: camPos.y - vPara = {Mathf.Abs(camPos.y - vPara) < Mathf.Epsilon}");
+//        Debug.Log($"{name}: camPos.y - vPara + verticalOffset = {camPos.y - vPara + verticalOffset}");
+//        Debug.Log($"{name}: camPos.y - vPara = {Mathf.Abs(camPos.y - vPara) < Mathf.Epsilon}");
         
 //        Debug.Log($"{name} - camPos={camPos}, vpara={vPara}, camPos.y - vPara = {camPos.y - vPara}");
 
         Transform thisTransform = transform;
 //        thisTransform.position = new Vector3(camPos.x - hPara, camPos.y - vPara + verticalOffset, thisTransform.position.z);
         thisTransform.position = new Vector3(camPos.x - hPara, camPos.y - vPara + verticalOffset, thisTransform.position.z);
-        Debug.Log($"{name}: thisTransform.position = {thisTransform.position}");
+//        Debug.Log($"{name}: thisTransform.position = {thisTransform.position}");
         this.previousPos = camPos;
     }
 
