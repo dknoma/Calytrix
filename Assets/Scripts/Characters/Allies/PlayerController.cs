@@ -24,6 +24,8 @@ namespace Characters.Allies {
 
 		private Vector2 move;
 		private InputAngleState inputDirection;
+		
+		private Vector2 previousPos;
 
 		private bool dpadMovement;
 		private bool leftStickMovement;
@@ -61,7 +63,9 @@ namespace Characters.Allies {
 			pcInputActions.Player.Jump.canceled += OnJumpRelease;
 			
 			pcInputActions.Player.Action1.performed += OnAction1;
+			
 			pcInputActions.Player.Action2.performed += OnAction2;
+			
 			pcInputActions.Player.Action3.performed += OnAction3;
 			
 			pcInputActions.Player.Menu.performed += OnMenu;
@@ -70,17 +74,43 @@ namespace Characters.Allies {
 		}
 		
 		private void OnDPadMove(CallbackContext ctx) {
-			if(leftStickMovement) return;
-			
-			dpadMovement = true;
-			Vector2 input = ctx.ReadValue<Vector2>().normalized;
-			this.inputDirection = CalculateInputAngle(input.x, input.y);
-			
-			Debug.Log($"inputDirection={inputDirection.ToString()}");
+			switch(state) {
+				case State.DEFAULT:
+				case State.WALKING:
+				case State.JUMPING:
+				case State.FALLING:
+					if(leftStickMovement) return;
 
-//			Vector2 clampedVector = PixelClamp(RawVector(input));
-			Vector2 clampedVector = RawVector(input);
-			(this.move.x, this.move.y) = (clampedVector.x, clampedVector.y);
+					dpadMovement = true;
+					Vector2 input = ctx.ReadValue<Vector2>().normalized;
+					this.inputDirection = CalculateInputAngle(input.x, input.y);
+
+					Debug.Log($"inputDirection={inputDirection.ToString()}");
+
+					//			Vector2 clampedVector = PixelClamp(RawVector(input));
+					Vector2 clampedVector = RawVector(input);
+					(this.move.x, this.move.y) = (clampedVector.x, clampedVector.y);
+					break;
+				case State.CLIMBING_IDLE:
+				case State.CLIMBING_UP:
+				case State.CLIMBING_DOWN:
+					break;
+				case State.KNOCKED_BACK:
+					break;
+				case State.PINNING:
+					break;
+				case State.PIN_RELEASE:
+					break;
+				case State.P_RIGHT_UP:
+				case State.P_RIGHT:
+				case State.P_RIGHT_DOWN:
+				case State.P_LEFT_UP:
+				case State.P_LEFT:
+				case State.P_LEFT_DOWN:
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 
 		private Vector2 PixelClamp(Vector2 input) {
@@ -92,7 +122,7 @@ namespace Characters.Allies {
 		}
 		
 		private void OnMove(CallbackContext ctx) {
-			if(dpadMovement) return;
+			if(dpadMovement || isPinning(state)) return;
 
 			Vector2 input = ctx.ReadValue<Vector2>().normalized;
 			if(input != Vector2.zero) {
@@ -107,7 +137,8 @@ namespace Characters.Allies {
 
 //			Vector2 clampedVector = PixelClamp(RawVector(input));
 			Vector2 clampedVector = RawVector(input);
-			(this.move.x, this.move.y) = (clampedVector.x, clampedVector.y);
+			this.move.x += clampedVector.x;
+			this.move.y += clampedVector.y;
 		}
 
 		private static Vector2 RawVector(Vector2 input) {
@@ -157,11 +188,32 @@ namespace Characters.Allies {
 		}
 		
 		private void OnAction1(CallbackContext ctx) {
-			Debug.Log("action1");
+			Debug.Log("action1"); 
+		}
+
+		private void TestPin() {
+			Debug.Log("testing pin"); 
+			this.previousPos = this.transform.position;
+
+			this.state = State.PINNING;
+
+			this.move.x += 1;
+			this.velocity.y = jumpTakeOffSpeed;
+			this.PlayerJumpSFX();
+			
+//			switch(facingState) {
+//				case FacingState.RIGHT:
+//					break;
+//				case FacingState.LEFT:
+//					break;
+//				default:
+//					throw new ArgumentOutOfRangeException();
+//			}
 		}
 		
 		private void OnAction2(CallbackContext ctx) {
 			Debug.Log("action2");
+			TestPin();
 		}
 		
 		private void OnAction3(CallbackContext ctx) {
@@ -196,7 +248,6 @@ namespace Characters.Allies {
 		}
 
 		private void OnCharacterState() {
-//			Debug.Log($"state={state}");
 			switch(state) {
 				case State.DEFAULT:
 				case State.WALKING:
@@ -216,25 +267,36 @@ namespace Characters.Allies {
 					}
 #endif
 					break;
+				
 				case State.CLIMBING_IDLE:
 					break;
 				case State.CLIMBING_UP:
 					break;
 				case State.CLIMBING_DOWN:
 					break;
+				
 				case State.KNOCKED_BACK:
 					break;
+				
+				case State.PINNING:
+					Debug.Log("pinning");
+					if(transform.position.x >= previousPos.x + 2) {
+						this.state = State.P_RIGHT;
+					}
+					
+					break;
+				case State.PIN_RELEASE:
+					break;
+				
 				case State.P_RIGHT_UP:
-					break;
 				case State.P_RIGHT:
-					break;
 				case State.P_RIGHT_DOWN:
-					break;
 				case State.P_LEFT_UP:
-					break;
 				case State.P_LEFT:
-					break;
 				case State.P_LEFT_DOWN:
+					Debug.Log("pinned");
+					this.move = Vector2.zero;
+					this.velocity.y = 0;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

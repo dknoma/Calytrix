@@ -13,6 +13,9 @@
 			
 			KNOCKED_BACK,
 			
+			PINNING,
+			PIN_RELEASE,
+			
 			P_RIGHT_UP,
 			P_RIGHT,
 			P_RIGHT_DOWN,
@@ -31,6 +34,10 @@
 		
 		public static State Falling() {
 			return State.FALLING;
+		}
+
+		public static bool isPinning(State state) {
+			return state == State.PINNING;
 		}
 
 		public static bool IsGrounded(State state) {

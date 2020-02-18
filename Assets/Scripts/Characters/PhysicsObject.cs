@@ -48,6 +48,7 @@ namespace Characters {
 
 		private void Update() {
 			targetVelocity = Vector2.zero;
+			Debug.Log(this.state);
 		}
 		
 		private void FixedUpdate() {
@@ -57,9 +58,15 @@ namespace Characters {
 			velocity += verticalVelocity;
 			velocity.x = targetVelocity.x;
 
-			if(velocity.y < 0) {
-				this.state = CharacterState.Falling();
+			switch(state) {
+				case CharacterState.State.JUMPING:
+				case CharacterState.State.FALLING:
+					if(velocity.y < 0) {
+						this.state = CharacterState.Falling();
+					}
+					break;
 			}
+			
 			
 //			Debug.Log($"velocity={velocity}, Time.smoothDeltaTime={Time.smoothDeltaTime}");
 			Vector2 deltaPosition = velocity * Time.smoothDeltaTime;

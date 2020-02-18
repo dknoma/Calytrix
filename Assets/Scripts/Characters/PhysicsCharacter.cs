@@ -15,23 +15,28 @@ public class PhysicsCharacter : PhysicsObject {
             case CharacterState.State.FALLING:
                 verticalVelocity = Physics2D.gravity * (gravityModifier * Time.deltaTime);
                 break;
+            
             case CharacterState.State.CLIMBING_IDLE:
                 break;
             case CharacterState.State.CLIMBING_UP:
                 break;
             case CharacterState.State.CLIMBING_DOWN:
                 break;
+            
+            case CharacterState.State.PINNING:
+                verticalVelocity = Physics2D.gravity * (gravityModifier * Time.deltaTime);
+                break;
+            
+            case CharacterState.State.PIN_RELEASE:
+                break;
+            
             case CharacterState.State.P_RIGHT_UP:
-                break;
             case CharacterState.State.P_RIGHT:
-                break;
             case CharacterState.State.P_RIGHT_DOWN:
-                break;
             case CharacterState.State.P_LEFT_UP:
-                break;
             case CharacterState.State.P_LEFT:
-                break;
             case CharacterState.State.P_LEFT_DOWN:
+                verticalVelocity = Vector2.zero;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

@@ -171,10 +171,13 @@ public class BackgroundScroll : MonoBehaviour {
 //        Debug.Log($"{name}: camPos.y - vPara = {Mathf.Abs(camPos.y - vPara) < Mathf.Epsilon}");
         
 //        Debug.Log($"{name} - camPos={camPos}, vpara={vPara}, camPos.y - vPara = {camPos.y - vPara}");
+//        hPara = Math.Abs(hPara % 0.0625f) < float.Epsilon ? hPara : 0;
+        float x = Mathf.Round((camPos.x - hPara) / BASE_MOVE_SPEED) * BASE_MOVE_SPEED;
+        float y = camPos.y - vPara + verticalOffset;
 
         Transform thisTransform = transform;
 //        thisTransform.position = new Vector3(camPos.x - hPara, camPos.y - vPara + verticalOffset, thisTransform.position.z);
-        thisTransform.position = new Vector3(camPos.x - hPara, camPos.y - vPara + verticalOffset, thisTransform.position.z);
+        thisTransform.position = new Vector3(x, y, thisTransform.position.z);
 //        Debug.Log($"{name}: thisTransform.position = {thisTransform.position}");
         this.previousPos = camPos;
     }
@@ -186,7 +189,6 @@ public class BackgroundScroll : MonoBehaviour {
         
         float hPara = BASE_MOVE_SPEED * horizontalScrollRate;
         float vPara = BASE_MOVE_SPEED * verticalScrollRate;
-        
 
         switch(scrollDirection){
             case ScrollType.ScrollDirection.LEFT:
