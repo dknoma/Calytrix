@@ -164,14 +164,16 @@ public class BackgroundScroll : MonoBehaviour {
 
     // Scrolling
     private void NormalScrolling() {
+        // get bg cam position
         Vector3 camPos = bgCamTransform.position;
-        float hPara = camPos.x - previousPos.x * hScroll;
+        float hPara = camPos.x - previousPos.x * hScroll;    // calculate parallax rate from scroll rate
         float vPara = camPos.y - previousPos.y * vScroll;
 //        Debug.Log($"{name}: camPos.y - vPara + verticalOffset = {camPos.y - vPara + verticalOffset}");
 //        Debug.Log($"{name}: camPos.y - vPara = {Mathf.Abs(camPos.y - vPara) < Mathf.Epsilon}");
         
 //        Debug.Log($"{name} - camPos={camPos}, vpara={vPara}, camPos.y - vPara = {camPos.y - vPara}");
 //        hPara = Math.Abs(hPara % 0.0625f) < float.Epsilon ? hPara : 0;
+        // calc positions 
         float x = Mathf.Round((camPos.x - hPara) / BASE_MOVE_SPEED) * BASE_MOVE_SPEED;
         float y = camPos.y - vPara + verticalOffset;
 
